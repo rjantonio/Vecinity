@@ -18,7 +18,7 @@ function MainScreen() {
   ];
 
   return (
-    <div className="main-content">
+    <div className="main__content">
       <div className="barrnav">
         <button
           onClick={() => setView("list")}
@@ -43,14 +43,14 @@ function MainScreen() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 500, margin: "2rem auto", background: "#fff", borderRadius: 8, padding: "2rem" }}>
+      <div className="content__event">
         {view === "list" && (
           <>
             <h2>Lista de objetos</h2>
-            <ul style={{ listStyle: "none", padding: 0 }}>
+            <ul className="event__list">
               {items.map(item => (
-                <li key={item.id} style={{ display: "flex", alignItems: "center", marginBottom: "1.5rem" }}>
-                  <img src={item.imagen} alt={item.nombre} style={{ width: 120, height: 120, borderRadius: 8, marginRight: 16 }} />
+                <li className="event__list__item" key={item.id}>
+                  <img className="event__list__img" src={item.imagen} alt={item.nombre}/>
                   <div>
                     <h3 style={{ margin: 0 }}>{item.nombre}</h3>
                     <p style={{ margin: 0 }}>{item.descripcion}</p>
