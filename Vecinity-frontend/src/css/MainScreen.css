@@ -1,23 +1,29 @@
-.main-content{
+:root{
+    --main-color: #f9f1e7;
+    --secondary-color: #183345;
+}
+
+.main__content{
     margin: 0;
     padding: 0;
-    background-color: #f9f1e7;
+    background-color: var(--main-color);
     min-height: 100vh;
+    padding-bottom: 3rem;
 }
 
 .barrnav{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #f9f1e7;
+    background-color: var(--main-color);
     color: #fff;
     padding: 1rem, 2rem;
     min-height: 4rem;
-    border-bottom: 2px solid #183345;
+    border-bottom: 2px solid var(--secondary-color);
 }
 .logo{
     border: none;
-    background-color: #f9f1e7;
+    background-color: var(--main-color);
     cursor: pointer;
     max-width: 3rem;
     max-height: 3rem;
@@ -50,4 +56,30 @@
 .login__icon{
     max-width: 4rem;
     max-height: 4rem;
+}
+.content__event{
+    max-width: 500px;
+    min-height: 250px;
+    margin: 2rem auto;
+    background-color: #c6c6c6;
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.event__list{
+    list-style: none;
+    padding: 0;
+}
+.event__list__item{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.event__list__img{
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    margin-right: 16px;
 }
