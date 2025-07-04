@@ -1,0 +1,13 @@
+package com.example.Vecinity.Repository;
+
+import com.example.Vecinity.Model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    public List<User> findUserByNombreContaining(String nombre);
+    public List<User> findUserByInstructor_Id (Long instructorId);
+}
