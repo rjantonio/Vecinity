@@ -8,7 +8,7 @@ function MainScreen() {
       id: 1,
       nombre: "Ejemplo de objeto",
       descripcion: "Este es un objeto de prueba con una imagen y una descripción.",
-      imagen: "https://via.placeholder.com/120"
+      imagen: "https://google.com"
     }
   ];
 
@@ -190,6 +190,19 @@ function UserProfile({ onBack }) {
         <p style={{ margin: 0, marginBottom: 16 }}>{user.email}</p>
       )}
       <div style={{ display: "flex", gap: "1rem" }}>
+        <button
+          style={{
+            background: "#e57373",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            padding: "0.5rem 1rem",
+            cursor: "pointer"
+          }}
+          // Por ahora no hace nada
+        >
+          Desactivar cuenta
+        </button>
         <button
           style={{
             background: "#1976d2",
