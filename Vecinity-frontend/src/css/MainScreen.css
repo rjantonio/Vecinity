@@ -1,0 +1,53 @@
+.main-content{
+    margin: 0;
+    padding: 0;
+    background-color: #f9f1e7;
+    min-height: 100vh;
+}
+
+.barrnav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9f1e7;
+    color: #fff;
+    padding: 1rem, 2rem;
+    min-height: 4rem;
+    border-bottom: 2px solid #183345;
+}
+.logo{
+    border: none;
+    background-color: #f9f1e7;
+    cursor: pointer;
+    max-width: 3rem;
+    max-height: 3rem;
+}
+
+.logo__img{
+    max-width: 4rem;
+    max-height: 4rem;
+}
+
+.btn__settings{
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0;
+}
+.btn__login{
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.settings__icon{
+    max-height: 4rem;
+    max-width: 4rem;
+}
+.login__icon{
+    max-width: 4rem;
+    max-height: 4rem;
+}

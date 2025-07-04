@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import '../css/MainScreen.css';
+import logo from '../images/logo.png';
+import login__img from '../images/icono-login.png';
+import ajustes__img from '../images/icono-ajustes.png'
+
 
 function MainScreen() {
   const [view, setView] = useState("list");
@@ -13,55 +18,27 @@ function MainScreen() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        background: "#1976d2",
-        color: "#fff",
-        padding: "1rem 2rem"
-      }}>
+    <div className="main-content">
+      <div className="barrnav">
         <button
           onClick={() => setView("list")}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#fff",
-            fontSize: "1.5rem",
-            cursor: "pointer"
-          }}
+          className="logo"
           title="Ir a la lista"
         >
-          <span role="img" aria-label="lista">👤</span>
+          <img className="logo__img" src={logo} alt="" />
         </button>
-        <div>
-          <button
+        <div className="barrnav__rigth">
+          <button className="btn__settings"
             onClick={() => setView("preferences")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#fff",
-              fontSize: "1.5rem",
-              cursor: "pointer",
-              marginRight: "1rem"
-            }}
             title="Preferencias"
           >
-            <span role="img" aria-label="preferencias">⚙️</span>
+            <img className="settings__icon" src={ajustes__img} alt="" />
           </button>
-          <button
+          <button className="btn__login"
             onClick={() => setView("profile")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#fff",
-              fontSize: "1.5rem",
-              cursor: "pointer"
-            }}
             title="Perfil"
           >
-            <span role="img" aria-label="perfil">👤</span>
+            <img className="login__icon" src={login__img} alt="" />
           </button>
         </div>
       </div>
