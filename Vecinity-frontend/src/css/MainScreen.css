@@ -3,7 +3,7 @@
     --secondary-color: #183345;
 }
 
-.main__content{
+.main__screen{
     margin: 0;
     padding: 0;
     background-color: var(--main-color);
@@ -56,11 +56,13 @@
 .login__icon{
     max-width: 4rem;
     max-height: 4rem;
+    border-radius: 50%;
+    transform: scale(0.7);
 }
-.content__event{
+.main__content{
     max-width: 500px;
     min-height: 250px;
-    margin: 2rem auto;
+    margin: 4rem auto;
     background-color: #c6c6c6;
     border-radius: 8px;
     padding: 2rem;
