@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import '../css/MainScreen.css';
+import '../css/Settings.css';
+import '../css/UserProfile.css';
 import logo from '../images/logo.png';
 import login__img from '../images/icono-login.png';
 import ajustes__img from '../images/icono-ajustes.png'
@@ -18,7 +20,7 @@ function MainScreen() {
   ];
 
   return (
-    <div className="main__content">
+    <div className="main__screen">
       <div className="barrnav">
         <button
           onClick={() => setView("list")}
@@ -43,7 +45,7 @@ function MainScreen() {
         </div>
       </div>
 
-      <div className="content__event">
+      <div className="main__content">
         {view === "list" && (
           <>
             <h2>Lista de objetos</h2>
@@ -68,15 +70,7 @@ function MainScreen() {
             <h2>Preferencias</h2>
             <p>Aquí irán las opciones de preferencias.</p>
             <button
-              style={{
-                marginTop: "1rem",
-                background: "#1976d2",
-                color: "#fff",
-                border: "none",
-                borderRadius: "4px",
-                padding: "0.5rem 1rem",
-                cursor: "pointer"
-              }}
+            className="btn__return__list"
               onClick={() => setView("list")}
             >
               Volver a la lista
@@ -113,95 +107,59 @@ function UserProfile({ onBack }) {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="container__user">
       <label style={{ cursor: edit ? "pointer" : "default" }}>
-        <img
+        <img className="user__img"
           src={edit ? temp.foto : user.foto}
           alt="Foto de perfil"
-          style={{ width: 120, height: 120, borderRadius: "50%", marginBottom: 16, objectFit: "cover" }}
         />
         {edit && (
           <input
             type="file"
             name="foto"
             accept="image/*"
-            style={{ display: "none" }}
             onChange={handleChange}
           />
         )}
       </label>
       {edit ? (
         <input
+        className="input__name"
           type="text"
           name="nombre"
           value={temp.nombre}
           onChange={handleChange}
-          style={{
-            marginBottom: 8,
-            fontSize: "1.2rem",
-            textAlign: "center",
-            borderRadius: 4,
-            border: "1px solid #ccc",
-            padding: "0.5rem"
-          }}
+
         />
       ) : (
-        <h3 style={{ margin: 0 }}>{user.nombre}</h3>
+        <h3>{user.nombre}</h3>
       )}
       {edit ? (
         <input
+        className="input__email"
           type="email"
           name="email"
           value={temp.email}
           onChange={handleChange}
-          style={{
-            marginBottom: 16,
-            fontSize: "1rem",
-            textAlign: "center",
-            borderRadius: 4,
-            border: "1px solid #ccc",
-            padding: "0.5rem"
-          }}
         />
       ) : (
-        <p style={{ margin: 0, marginBottom: 16 }}>{user.email}</p>
+        <p>{user.email}</p>
       )}
       <div style={{ display: "flex", gap: "1rem" }}>
         <button
-          style={{
-            background: "#e57373",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            padding: "0.5rem 1rem",
-            cursor: "pointer"
-          }}
+        className="btn__disable__acc"
           // Por ahora no hace nada
         >
           Desactivar cuenta
         </button>
         <button
-          style={{
-            background: "#1976d2",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            padding: "0.5rem 1rem",
-            cursor: "pointer"
-          }}
+        className="btn__save__acc"
           onClick={edit ? handleSave : () => { setTemp(user); setEdit(true); }}
         >
           {edit ? "Guardar" : "Editar"}
         </button>
         <button
-          style={{
-            background: "#e0e0e0",
-            color: "#1976d2",
-            border: "none",
-            borderRadius: "4px",
-            padding: "0.5rem 1rem",
-            cursor: "pointer"
-          }}
+        className="btn__return__list"
           onClick={onBack}
         >
           Volver a la lista

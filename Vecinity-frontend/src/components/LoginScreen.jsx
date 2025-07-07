@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import MainScreen from "./MainScreen";
+import '../css/RegisterScreen.css';
+import '../css/LoginScreen.css';
 
 function RegisterForm({ onBack }) {
   const [form, setForm] = useState({
@@ -32,69 +34,50 @@ function RegisterForm({ onBack }) {
   };
 
   return (
-    <div style={{
-      background: "#fff",
-      padding: "2rem",
-      borderRadius: "8px",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      width: "320px",
-      textAlign: "center"
-    }}>
+    <div
+    className="main__content__register">
       <h2>Registro</h2>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <form onSubmit={handleSubmit}
+      className="form__register">
         <input
+        className="input"
           type="text"
           name="nombre"
           placeholder="Nombre*"
           value={form.nombre}
-          onChange={handleChange}
-          style={{ padding: "0.75rem", borderRadius: "4px", border: "1px solid #ccc" }}/>
+          onChange={handleChange}/>
         {errors.nombre && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.nombre}</span>}
         <input
+        className="input"
           type="file"
           name="foto"
           accept="image/*"
-          onChange={handleChange}
-          style={{ padding: "0.75rem", borderRadius: "4px", border: "1px solid #ccc" }}/>
+          onChange={handleChange}/>
         <input
+        className="input"
           type="email"
           name="email"
           placeholder="Correo electrónico*"
           value={form.email}
-          onChange={handleChange}
-          style={{ padding: "0.75rem", borderRadius: "4px", border: "1px solid #ccc" }}/>
+          onChange={handleChange}/>
         {errors.email && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.email}</span>}
         <input
+        className="input"
           type="password"
           name="password"
           placeholder="Contraseña*"
           value={form.password}
-          onChange={handleChange}
-          style={{ padding: "0.75rem", borderRadius: "4px", border: "1px solid #ccc" }}/>
+          onChange={handleChange}/>
         {errors.password && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.password}</span>}
         <button
-          type="submit"
-          style={{
-            padding: "0.75rem",
-            background: "#1976d2",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}>
+        className="btn__submit"
+          type="submit">
           Registrarse
         </button>
         <button
+        className="btn__return"
           type="button"
-          onClick={onBack}
-          style={{
-            padding: "0.75rem",
-            background: "#e0e0e0",
-            color: "#1976d2",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}>
+          onClick={onBack}>
           Volver
         </button>
       </form>
@@ -111,79 +94,33 @@ function LoginScreen() {
 
   if (showRegister) {
     return (
-      <div style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#f5f5f5"
-      }}>
+      <div className="main__screen__register">
         <RegisterForm onBack={() => setShowRegister(false)} />
       </div>
     );
   }
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "#f5f5f5"
-    }}>
-      <div style={{
-        background: "#fff",
-        padding: "2rem",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        width: "320px",
-        textAlign: "center"
-      }}>
+    <div
+    className="main__screen__login">
+      <div 
+      className="main__content__login">
         <input
+        className="input__login"
           type="email"
-          placeholder="Correo electrónico"
-          style={{
-            width: "90%",
-            padding: "0.75rem",
-            marginBottom: "1rem",
-            borderRadius: "4px",
-            border: "1px solid #ccc"
-          }}/>
+          placeholder="Correo electrónico"/>
         <input
+          className="input__login"
           type="password"
-          placeholder="Contraseña"
-          style={{
-            width: "90%",
-            padding: "0.75rem",
-            marginBottom: "1rem",
-            borderRadius: "4px",
-            border: "1px solid #ccc"
-          }}/>
+          placeholder="Contraseña"/>
         <button
-          style={{
-            width: "100%",
-            padding: "0.75rem",
-            background: "#1976d2",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            marginBottom: "1rem",
-            cursor: "pointer"
-          }}
+          className="input__login input__login__login"
           onClick={() => setLoggedIn(true)}
         >
           Iniciar sesión
         </button>
         <button
-          style={{
-            width: "100%",
-            padding: "0.75rem",
-            background: "#e0e0e0",
-            color: "#1976d2",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}
+          className="input__login input__login__register"
           onClick={() => setShowRegister(true)}
         >
           Registrarte
