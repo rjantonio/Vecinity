@@ -1,9 +1,10 @@
-package com.example.Vecinity.Model;
+package com.example.vecinity.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -38,11 +39,13 @@ public class Event {
     @JoinColumn(name = "id_creador", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonBackReference
     private User creador;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonBackReference
     private Set<EventRegistration> inscripciones = new HashSet<>();
 
     // Constructor por defecto necesario para JPA y para inicializar fechaCreacion

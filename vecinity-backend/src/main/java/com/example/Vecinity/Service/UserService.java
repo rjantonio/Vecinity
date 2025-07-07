@@ -1,7 +1,7 @@
-package com.example.Vecinity.Service;
+package com.example.vecinity.service;
 
-import com.example.Vecinity.Model.User;
-import com.example.Vecinity.Repository.UserRepository;
+import com.example.vecinity.model.User;
+import com.example.vecinity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

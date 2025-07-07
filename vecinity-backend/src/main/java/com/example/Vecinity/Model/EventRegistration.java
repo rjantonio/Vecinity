@@ -1,10 +1,10 @@
-package com.example.Vecinity.Model;
+package com.example.vecinity.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
