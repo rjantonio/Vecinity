@@ -1,6 +1,6 @@
-package com.example.Vecinity.Repository;
+package com.example.vecinity.repository;
 
-import com.example.Vecinity.Model.User;
+import com.example.vecinity.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

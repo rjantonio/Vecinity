@@ -1,13 +1,12 @@
-package com.example.Vecinity.Controller;
+package com.example.vecinity.controller;
 
-import com.example.Vecinity.Model.User;
-import com.example.Vecinity.Repository.UserRepository;
-import com.example.Vecinity.Service.UserService;
+import com.example.vecinity.model.User;
+import com.example.vecinity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")

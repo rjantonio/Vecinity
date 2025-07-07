@@ -1,9 +1,10 @@
-package com.example.Vecinity.Model;
+package com.example.vecinity.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -39,11 +40,13 @@ public class User {
     @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonManagedReference
     private Set<Event> eventosCreados = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonManagedReference
     private Set<EventRegistration> inscripciones = new HashSet<>();
 
     // Constructor por defecto necesario para JPA y para inicializar fechaRegistro

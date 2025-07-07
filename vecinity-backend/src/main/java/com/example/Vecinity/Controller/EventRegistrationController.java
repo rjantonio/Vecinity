@@ -1,18 +1,20 @@
-package com.example.Vecinity.Controller;
+package com.example.vecinity.controller;
 
-import com.example.Vecinity.Model.Event;
-import com.example.Vecinity.Model.EventRegistration;
-import com.example.Vecinity.Model.User;
-import com.example.Vecinity.Service.EventRegistrationService;
-import com.example.Vecinity.Service.EventService;
-import com.example.Vecinity.Service.UserService;
+import com.example.vecinity.model.Event;
+import com.example.vecinity.model.EventRegistration;
+import com.example.vecinity.model.User;
+import com.example.vecinity.service.EventRegistrationService;
+import com.example.vecinity.service.EventService;
+import com.example.vecinity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/event-registration")

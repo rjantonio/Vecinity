@@ -1,9 +1,9 @@
-package com.example.Vecinity.Service;
+package com.example.vecinity.service;
 
-import com.example.Vecinity.Model.Event;
-import com.example.Vecinity.Model.EventRegistration;
-import com.example.Vecinity.Model.User;
-import com.example.Vecinity.Repository.EventRegistrationRepository;
+import com.example.vecinity.model.Event;
+import com.example.vecinity.model.EventRegistration;
+import com.example.vecinity.model.User;
+import com.example.vecinity.repository.EventRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
