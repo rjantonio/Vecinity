@@ -1,4 +1,3 @@
-//nombre, foto, descripcion, Unirse 
 import React from "react";
 
 function Evento({ name = "", images = [], description = "" }){
