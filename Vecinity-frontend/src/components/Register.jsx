@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import '../css/RegisterScreen.css';
 
 function Register({ onBack }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     nombre: "",
     foto: "",
@@ -72,7 +74,7 @@ function Register({ onBack }) {
         <button className="btn__submit" type="submit">
           Registrarse
         </button>
-        <button className="btn__return" type="button" onClick={onBack}>
+        <button className="btn__return" type="button" onClick={() => navigate("/login")}>
           Volver
         </button>
       </form>
