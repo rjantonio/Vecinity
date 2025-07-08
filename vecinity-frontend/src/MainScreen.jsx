@@ -10,6 +10,7 @@ import Settings from "./components/Settings";
 import ErrorScreen from "./components/ErrorScreen";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import CrearEvento from "./components/CrearEvento";
 
 function MainScreen() {
   const navigate = useNavigate();
@@ -64,12 +65,14 @@ function MainScreen() {
                   </li>
                 ))}
               </ul>
+              <button className='event__create' onClick={()=>navigate("/event-creator")}>Crear Evento</button>
             </>
           } />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/event-creator" element={<CrearEvento/>}/>
           <Route path="*" element={<ErrorScreen/>}/>
         </Routes>
       </div>

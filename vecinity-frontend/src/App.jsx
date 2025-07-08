@@ -1,7 +1,10 @@
+import { BrowserRouter } from "react-router-dom";
 import MainScreen from "./MainScreen.jsx";
 function App() {
   return(
-    <MainScreen/>
+    <BrowserRouter>
+      <MainScreen/>
+    </BrowserRouter>
   );
 }
 
