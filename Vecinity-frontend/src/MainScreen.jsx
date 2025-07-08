@@ -1,14 +1,15 @@
-import React from "react";
-import '../css/MainScreen.css';
-import '../css/Settings.css';
-import '../css/UserProfile.css';
-import logo from '../images/logo.png';
-import login__img from '../images/icono-login.png';
-import ajustes__img from '../images/icono-ajustes.png'
+import './css/MainScreen.css';
+import './css/Settings.css';
+import './css/UserProfile.css';
+import logo from './images/logo.png';
+import login__img from './images/icono-login.png';
+import ajustes__img from './images/icono-ajustes.png'
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Profile from "./Profile";
-import Settings from "./Settings";
-import ErrorScreen from "./ErrorScreen"; // <-- Agrega esta línea
+import Profile from "./components/Profile";
+import Settings from "./components/Settings";
+import ErrorScreen from "./components/ErrorScreen";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function MainScreen() {
   const navigate = useNavigate();
@@ -67,6 +68,8 @@ function MainScreen() {
           } />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
           <Route path="*" element={<ErrorScreen/>}/>
         </Routes>
       </div>
