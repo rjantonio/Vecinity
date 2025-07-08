@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../css/RegisterScreen.css';
+import { useAuth } from "../context/AuthContext";
 
 function Register({ onBack }) {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [form, setForm] = useState({
     nombre: "",
     foto: "",
@@ -11,16 +13,29 @@ function Register({ onBack }) {
     password: ""
   });
   const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
 
   const handleChange = e => {
     const { name, value, files } = e.target;
-    setForm(f => ({
-      ...f,
-      [name]: name === "foto" ? files[0] : value
-    }));
+    if (name === "foto" && files && files[0]) {
+      // Convertir imagen a base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm(f => ({
+          ...f,
+          foto: reader.result // base64
+        }));
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      setForm(f => ({
+        ...f,
+        [name]: value
+      }));
+    }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const newErrors = {};
     if (!form.nombre) newErrors.nombre = "El nombre es obligatorio";
@@ -28,8 +43,13 @@ function Register({ onBack }) {
     if (!form.password) newErrors.password = "La contraseña es obligatoria";
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      alert("¡Registro exitoso!");
-      if (onBack) onBack();
+      try {
+        await register(form.email, form.password, form.nombre, form.foto);
+        setMessage("¡Registro exitoso!");
+        setTimeout(() => navigate("/login"), 1500);
+      } catch (error) {
+        setMessage("Error: " + error.message);
+      }
     }
   };
 
@@ -77,6 +97,11 @@ function Register({ onBack }) {
         <button className="btn__return" type="button" onClick={() => navigate("/login")}>
           Volver
         </button>
+        {message && (
+          <div style={{ marginTop: "1rem", color: message.startsWith("¡") ? "green" : "red" }}>
+            {message}
+          </div>
+        )}
       </form>
     </div>
   );
