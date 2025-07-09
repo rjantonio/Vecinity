@@ -1,43 +1,64 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../css/LoginScreen.css';
-import MainScreen from "../MainScreen";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const navigate = useNavigate();
-  
-    if (loggedIn) {
-      return <MainScreen/>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login, logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      if (user) await logout(); // Cierra sesión si ya hay usuario autenticado
+      await login(email, password);
+      navigate("/"); // Redirige a la lista al iniciar sesión
+    } catch (err) {
+      setError("Correo o contraseña incorrectos");
     }
-  
-    return (
-      <div className="main__screen__login">
-        <div className="main__content__login">
+  };
+
+  return (
+    <div className="main__screen__login">
+      <div className="main__content__login">
+        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <input
             className="input__login"
             type="email"
-            placeholder="Correo electrónico"/>
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
           <input
             className="input__login"
             type="password"
-            placeholder="Contraseña"/>
+            placeholder="Contraseña"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+          {error && <div style={{ color: "red", marginBottom: "0.5rem" }}>{error}</div>}
           <button
             className="input__login input__login__login"
-            //onClick={() => setLoggedIn(true)}
-            onClick={() => navigate("/")}
+            type="submit"
           >
             Iniciar sesión
           </button>
-          <button
-            className="input__login input__login__register"
-            onClick={() => navigate("/register")}
-          >
-            Registrarte
-          </button>
-        </div>
+        </form>
+        <button
+          className="input__login input__login__register"
+          onClick={() => navigate("/register")}
+        >
+          Registrarte
+        </button>
       </div>
-    );
-  }
-  
-  export default Login;
+    </div>
+  );
+}
+
+export default Login;

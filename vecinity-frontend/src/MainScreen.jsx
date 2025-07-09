@@ -3,7 +3,9 @@ import './css/Settings.css';
 import './css/UserProfile.css';
 import logo from './images/logo.png';
 import login__img from './images/icono-login.png';
-import ajustes__img from './images/icono-ajustes.png'
+import ajustes__img from './images/icono-ajustes.png';
+import profile__img from './images/icono-profile.png'; // Asegúrate de tener este icono
+import logout__img from './images/icono-logout.png';   // Asegúrate de tener este icono
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
@@ -11,9 +13,54 @@ import ErrorScreen from "./components/ErrorScreen";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import CrearEvento from "./components/CrearEvento";
+import { useAuth } from "./context/AuthContext";
+
+import React, { useEffect, useState } from 'react';
+
+function EventRegistrationsList() {
+  const [registrations, setRegistrations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/event-registration')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error en la respuesta');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setRegistrations(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+    if (loading) return <div>Cargando...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      <h2>Inscripciones a eventos</h2>
+      <ul>
+        {registrations.map(reg => (
+          <li key={reg.id}>
+            Usuario ID: {reg.userId}, Evento ID: {reg.eventId}, Fecha: {reg.fechaInscripcion}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function MainScreen() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const items = [
     {
@@ -41,12 +88,32 @@ function MainScreen() {
           >
             <img className="settings__icon" src={ajustes__img} alt="" />
           </button>
-          <button className="btn__login"
-            onClick={() => navigate("/profile")}
-            title="Perfil"
-          >
-            <img className="login__icon" src={login__img} alt="" />
-          </button>
+          {!user ? (
+            <button
+              className="btn__login"
+              onClick={() => navigate("/login")}
+              title="Iniciar sesión"
+            >
+              <img className="login__icon" src={login__img} alt="Iniciar sesión" />
+            </button>
+          ) : (
+            <>
+              <button
+                className="btn__login"
+                onClick={() => navigate("/profile")}
+                title="Perfil"
+              >
+                <img className="login__icon" src={profile__img} alt="Perfil" />
+              </button>
+              <button
+                className="btn__logout"
+                onClick={logout}
+                title="Cerrar sesión"
+              >
+                <img className="login__icon" src={logout__img} alt="Cerrar sesión" />
+              </button>
+            </>
+          )}
         </div>
       </div>
       <div className="main__content">
@@ -66,6 +133,7 @@ function MainScreen() {
                 ))}
               </ul>
               <button className='event__create' onClick={()=>navigate("/event-creator")}>Crear Evento</button>
+              <EventRegistrationsList />
             </>
           } />
           <Route path="/settings" element={<Settings />} />

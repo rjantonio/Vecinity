@@ -1,37 +1,85 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/UserProfile.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { db } from "../utils/firebase";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 function Profile() {
+  const { user } = useAuth();
   const [edit, setEdit] = useState(false);
-  const [user, setUser] = useState({
-    nombre: "Nombre de Usuario",
-    email: "usuario@correo.com",
-    foto: "https://via.placeholder.com/120"
-  });
-  const [temp, setTemp] = useState(user);
+  const [profile, setProfile] = useState(null);
+  const [temp, setTemp] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+
+  // Cargar datos del usuario desde Firestore
+  useEffect(() => {
+    if (!user) return;
+    const fetchProfile = async () => {
+      setLoading(true);
+      const ref = doc(db, "USER", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        setProfile(snap.data());
+        setTemp(snap.data());
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, [user]);
 
   const handleChange = e => {
     const { name, value, files } = e.target;
-    setTemp(t => ({
-      ...t,
-      [name]: name === "foto" && files[0]
-        ? URL.createObjectURL(files[0])
-        : value
-    }));
+    if (name === "foto" && files && files[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setTemp(t => ({
+          ...t,
+          foto: reader.result // base64
+        }));
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      setTemp(t => ({
+        ...t,
+        [name]: value
+      }));
+    }
   };
 
-  const handleSave = () => {
-    setUser(temp);
-    setEdit(false);
+  const handleSave = async () => {
+    try {
+      const ref = doc(db, "USER", user.uid);
+      await updateDoc(ref, {
+        nombre: temp.nombre,
+        foto: temp.foto
+      });
+      setProfile({ ...temp, email: profile.email }); // Mantén el email original
+      setEdit(false);
+      setMsg("Datos actualizados correctamente");
+      setTimeout(() => setMsg(""), 2000);
+    } catch (err) {
+      setMsg("Error al actualizar datos");
+    }
   };
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 200 }}>
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+  if (!profile) return <div>No hay datos de usuario.</div>;
 
   return (
     <div className="container__user">
       <label style={{ cursor: edit ? "pointer" : "default" }}>
-        <img className="user__img"
-          src={edit ? temp.foto : user.foto}
+        <img
+          className="user__img"
+          src={edit ? temp.foto : profile.foto || "https://via.placeholder.com/120"}
           alt="Foto de perfil"
         />
         {edit && (
@@ -52,28 +100,25 @@ function Profile() {
           onChange={handleChange}
         />
       ) : (
-        <h3>{user.nombre}</h3>
+        <h3>{profile.nombre}</h3>
       )}
-      {edit ? (
-        <input
-          className="input__email"
-          type="email"
-          name="email"
-          value={temp.email}
-          onChange={handleChange}
-        />
-      ) : (
-        <p>{user.email}</p>
-      )}
+      {/* Email solo lectura y deshabilitado */}
+      <input
+        className="input__email"
+        type="email"
+        name="email"
+        value={profile.email}
+        readOnly
+        disabled
+        style={{ background: "#f0f0f0", color: "#888", cursor: "not-allowed" }}
+      />
       <div style={{ display: "flex", gap: "1rem" }}>
-        <button
-          className="btn__disable__acc"
-        >
+        <button className="btn__disable__acc">
           Desactivar cuenta
         </button>
         <button
           className="btn__save__acc"
-          onClick={edit ? handleSave : () => { setTemp(user); setEdit(true); }}
+          onClick={edit ? handleSave : () => setEdit(true)}
         >
           {edit ? "Guardar" : "Editar"}
         </button>
@@ -84,6 +129,7 @@ function Profile() {
           Volver a la lista
         </button>
       </div>
+      {msg && <div style={{ marginTop: 10, color: "green" }}>{msg}</div>}
     </div>
   );
 }
