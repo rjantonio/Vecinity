@@ -2,35 +2,26 @@ package com.example.vecinity.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@NotBlank(message = "El nombre es obligatorio")
-    //@Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    //@NotBlank(message = "El email es obligatorio")
-    //@Email(message = "El formato del email no es válido")
-    //@Size(max = 100, message = "El email no puede exceder los 100 caracteres")
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    //@NotBlank(message = "La contraseña es obligatoria")
-    //@Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
     @Column(name = "contrasena", nullable = false, length = 255)
     private String contrasena;
 
@@ -38,18 +29,14 @@ public class User {
     private LocalDateTime fechaRegistro;
 
     @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @JsonManagedReference
     private Set<Event> eventosCreados = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @JsonManagedReference
     private Set<EventRegistration> inscripciones = new HashSet<>();
 
-    // Constructor por defecto necesario para JPA y para inicializar fechaRegistro
+    // Constructor vacío
     public User() {
         this.fechaRegistro = LocalDateTime.now();
     }
@@ -60,5 +47,86 @@ public class User {
         this.email = email;
         this.contrasena = contrasena;
         this.fechaRegistro = LocalDateTime.now();
+    }
+
+    // Getters y setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public Set<Event> getEventosCreados() {
+        return eventosCreados;
+    }
+
+    public void setEventosCreados(Set<Event> eventosCreados) {
+        this.eventosCreados = eventosCreados;
+    }
+
+    public Set<EventRegistration> getInscripciones() {
+        return inscripciones;
+    }
+
+    public void setInscripciones(Set<EventRegistration> inscripciones) {
+        this.inscripciones = inscripciones;
+    }
+
+    // equals() y hashCode()
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    // toString() sin relaciones para evitar ciclos
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                ", fechaRegistro=" + fechaRegistro +
+                '}';
     }
 }
