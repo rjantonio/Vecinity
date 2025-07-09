@@ -11,6 +11,50 @@ import ErrorScreen from "./components/ErrorScreen";
 import Login from "./components/Login";
 import Register from "./components/Register";
 
+import React, { useEffect, useState } from 'react';
+
+function EventRegistrationsList() {
+  const [registrations, setRegistrations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/event-registration')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error en la respuesta');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setRegistrations(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+    if (loading) return <div>Cargando...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      <h2>Inscripciones a eventos</h2>
+      <ul>
+        {registrations.map(reg => (
+          <li key={reg.id}>
+            Usuario ID: {reg.userId}, Evento ID: {reg.eventId}, Fecha: {reg.fechaInscripcion}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+
 function MainScreen() {
   const navigate = useNavigate();
 
@@ -64,6 +108,7 @@ function MainScreen() {
                   </li>
                 ))}
               </ul>
+              <EventRegistrationsList />
             </>
           } />
           <Route path="/settings" element={<Settings />} />
