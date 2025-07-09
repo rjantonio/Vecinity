@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS event_registrations (
 CREATE TABLE IF NOT EXISTS event_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     event_id INT NOT NULL,
-    imagen_base64 LONGTEXT NOT NULL,
+    imagen_base64 LONGTEXT NULL,
     descripcion VARCHAR(255) NULL,
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
