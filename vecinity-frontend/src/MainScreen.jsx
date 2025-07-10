@@ -69,6 +69,18 @@ function MainScreen() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    const savedColorBlindMode = localStorage.getItem('colorBlindMode') === 'true';
+    
+    if (savedDarkMode) {
+      document.body.classList.add('dark-mode');
+    }
+    if (savedColorBlindMode) {
+      document.body.classList.add('colorblind-mode');
+    }
+  }, []);
+
+  useEffect(() => {
     fetch('http://localhost:8080/event')
       .then(response => {
         if (!response.ok) {
