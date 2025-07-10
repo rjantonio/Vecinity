@@ -15,9 +15,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final List<String> PUBLIC_PATHS = List.of("/auth/", "/public/", "/", "crear-evento");//crear-evento temporal
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        return PUBLIC_PATHS.stream().anyMatch(path::startsWith);
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
