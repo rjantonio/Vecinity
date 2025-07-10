@@ -16,6 +16,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
+    private String firebaseUid;
+
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
@@ -50,12 +53,21 @@ public class User {
     }
 
     // Getters y setters
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFirebaseUid() {
+        return firebaseUid;
+    }
+
+    public void setFirebaseUid(String firebaseUid) {
+        this.firebaseUid = firebaseUid;
     }
 
     public String getNombre() {
@@ -124,6 +136,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", firebaseUid='" + firebaseUid + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", email='" + email + '\'' +
                 ", fechaRegistro=" + fechaRegistro +

@@ -82,6 +82,7 @@ function MainScreen() {
   useEffect(() => {
     signInWithEmailAndPassword(auth, "franpoloflan@gmail.com", "123456")
       .then(userCredential => {
+        console.log(userCredential);
         return userCredential.user.getIdToken();
       })
       .then(token => {
