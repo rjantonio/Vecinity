@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final List<String> PUBLIC_PATHS = List.of("/auth/", "/public/", "/", "crear-evento"); // rutas públicas
+    private static final List<String> PUBLIC_PATHS = List.of(); // rutas públicas
 
     private final UserService userService;
 
