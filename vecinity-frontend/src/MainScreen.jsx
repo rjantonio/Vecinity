@@ -68,11 +68,15 @@ function MainScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Inicializar modo nocturno al cargar el componente
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    const savedColorBlindMode = localStorage.getItem('colorBlindMode') === 'true';
+    
     if (savedDarkMode) {
       document.body.classList.add('dark-mode');
+    }
+    if (savedColorBlindMode) {
+      document.body.classList.add('colorblind-mode');
     }
   }, []);
 

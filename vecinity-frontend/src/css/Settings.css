@@ -30,7 +30,7 @@
     margin: 0;
 }
 
-/* Estilos del switch/slider */
+/* Slider */
 .switch {
     position: relative;
     display: inline-block;
@@ -84,6 +84,15 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
+/* Slider para modo daltónico */
+.colorblind-slider {
+    background-color: #666 !important;
+}
+
+input:checked + .colorblind-slider {
+    background-color: #ff9800 !important;
+}
+
 /* Estilos para modo nocturno */
 .dark-mode .setting__item {
     background-color: #2d2d2d;
@@ -92,4 +101,15 @@ input:checked + .slider:before {
 
 .dark-mode .setting__label {
     color: #ffffff;
+}
+
+/* Estilos para modo daltónico */
+.colorblind-mode .setting__item {
+    background-color: #f5f5f5;
+    border: 2px solid #333;
+}
+
+.colorblind-mode .setting__label {
+    color: #333;
+    font-weight: bold;
 }

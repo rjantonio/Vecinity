@@ -5,6 +5,11 @@
     --dark-secondary: #2d2d2d;
     --dark-text: #ffffff;
     --dark-border: #444;
+    --colorblind-primary: #0066cc;
+    --colorblind-secondary: #ff9800;
+    --colorblind-accent: #4caf50;
+    --colorblind-bg: #f8f8f8;
+    --colorblind-text: #333333;
 }
 
 .main__screen{
@@ -94,7 +99,7 @@
     margin-right: 16px;
 }
 
-/* Estilos para modo nocturno */
+/* Estilos para modo oscuro */
 body.dark-mode .main__screen {
     background-color: var(--dark-bg);
     color: var(--dark-text);
@@ -118,7 +123,6 @@ body.dark-mode .event__list__item {
     color: var(--dark-text);
 }
 
-/* Estilos para texto y títulos en modo nocturno */
 body.dark-mode h1,
 body.dark-mode h2,
 body.dark-mode h3,
@@ -130,4 +134,74 @@ body.dark-mode h6 {
 
 body.dark-mode p {
     color: var(--dark-text);
+}
+
+/* Estilos para modo daltónico */
+body.colorblind-mode .main__screen {
+    background-color: var(--colorblind-bg);
+    color: var(--colorblind-text);
+}
+
+body.colorblind-mode .barrnav {
+    background-color: var(--colorblind-primary);
+    border-bottom: 3px solid var(--colorblind-secondary);
+}
+
+body.colorblind-mode .logo {
+    background-color: var(--colorblind-primary);
+    border: 2px solid var(--colorblind-secondary);
+    border-radius: 4px;
+}
+
+body.colorblind-mode .main__content {
+    background-color: #ffffff;
+    color: var(--colorblind-text);
+    border: 2px solid var(--colorblind-primary);
+}
+
+body.colorblind-mode .event__list__item {
+    background-color: #f0f8ff;
+    border: 1px solid var(--colorblind-primary);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+body.colorblind-mode button {
+    background-color: var(--colorblind-secondary);
+    color: var(--colorblind-text);
+    border: 2px solid var(--colorblind-primary);
+    font-weight: bold;
+}
+
+body.colorblind-mode button:hover {
+    background-color: var(--colorblind-accent);
+    border-color: var(--colorblind-secondary);
+}
+
+body.colorblind-mode h1,
+body.colorblind-mode h2,
+body.colorblind-mode h3,
+body.colorblind-mode h4,
+body.colorblind-mode h5,
+body.colorblind-mode h6 {
+    color: var(--colorblind-primary);
+    font-weight: bold;
+}
+
+/* Combinación de modos nocturno y daltónico */
+body.dark-mode.colorblind-mode .main__screen {
+    background-color: #1a1a2e;
+    color: #ffffff;
+}
+
+body.dark-mode.colorblind-mode .barrnav {
+    background-color: #16213e;
+    border-bottom-color: var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .main__content {
+    background-color: #0f3460;
+    color: #ffffff;
+    border-color: var(--colorblind-secondary);
 }

@@ -5,29 +5,48 @@ import "../css/Settings.css";
 function Settings(){
     const navigate = useNavigate();
     const [darkMode, setDarkMode] = useState(false);
+    const [colorBlindMode, setColorBlindMode] = useState(false);
 
-    // Cargar el modo oscuro desde localStorage al montar el componente
     useEffect(() => {
         const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+        const savedColorBlindMode = localStorage.getItem('colorBlindMode') === 'true';
+
+        //Modo Oscuro
         setDarkMode(savedDarkMode);
+        setColorBlindMode(savedColorBlindMode);
+        
         if (savedDarkMode) {
             document.body.classList.add('dark-mode');
         }
+        if (savedColorBlindMode) {
+            document.body.classList.add('colorblind-mode');
+        }
     }, []);
 
-    // Manejar el cambio del modo oscuro
     const handleDarkModeToggle = () => {
         const newDarkMode = !darkMode;
         setDarkMode(newDarkMode);
         
-        // Guardar en localStorage
         localStorage.setItem('darkMode', newDarkMode.toString());
         
-        // Aplicar/remover la clase dark-mode del body
         if (newDarkMode) {
             document.body.classList.add('dark-mode');
         } else {
             document.body.classList.remove('dark-mode');
+        }
+    };
+
+    // Modo daltónico
+    const handleColorBlindModeToggle = () => {
+        const newColorBlindMode = !colorBlindMode;
+        setColorBlindMode(newColorBlindMode);
+        
+        localStorage.setItem('colorBlindMode', newColorBlindMode.toString());
+        
+        if (newColorBlindMode) {
+            document.body.classList.add('colorblind-mode');
+        } else {
+            document.body.classList.remove('colorblind-mode');
         }
     };
 
@@ -47,6 +66,21 @@ function Settings(){
                   onChange={handleDarkModeToggle}
                 />
                 <span className="slider"></span>
+              </label>
+            </div>
+            
+            <div className="setting__item">
+              <label htmlFor="colorBlindModeToggle" className="setting__label">
+                Modo daltónico
+              </label>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  id="colorBlindModeToggle"
+                  checked={colorBlindMode}
+                  onChange={handleColorBlindModeToggle}
+                />
+                <span className="slider colorblind-slider"></span>
               </label>
             </div>
           </div>
