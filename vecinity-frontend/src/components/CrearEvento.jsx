@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
 
-function CrearEvento(){
+function CrearEvento({ token }){
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         titulo: '',
@@ -12,6 +12,25 @@ function CrearEvento(){
     });
     
     const [loading, setLoading] = useState(false);
+
+    // Función para decodificar el token JWT y extraer el UID de Firebase
+    const getUserIdFromToken = (token) => {
+        try {
+            // Decodificar el token JWT de Firebase
+            const base64Payload = token.split('.')[1];
+            const payload = JSON.parse(atob(base64Payload));
+            console.log('Payload completo del token:', payload);
+            
+            // En Firebase, el UID del usuario está en el campo 'sub'
+            const uid = payload.sub;
+            console.log('UID extraído de Firebase:', uid);
+            
+            return uid;
+        } catch (error) {
+            console.error('Error decodificando token:', error);
+            return null;
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -34,11 +53,107 @@ function CrearEvento(){
         setLoading(true);
         
         try {
-            // Aquí iría la lógica para enviar el evento al backend
-            console.log('Datos del evento:', formData);
+            if (!token) {
+                throw new Error('No hay token de autenticación disponible');
+            }
             
-            // Simular envío
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            console.log('=== DEBUG INFO ===');
+            console.log('Token recibido:', token);
+            
+            // Extraer el UID del usuario del token de Firebase
+            const uid = getUserIdFromToken(token);
+            console.log('UID del usuario extraído:', uid);
+            
+            if (!uid) {
+                throw new Error('No se pudo extraer el UID del usuario del token');
+            }
+            
+            // Obtener información del usuario usando el UID correcto
+            console.log('Obteniendo información del usuario...');
+            try {
+                const userInfoResponse = await fetch(`http://localhost:8080/user/${uid}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+                
+                if (userInfoResponse.ok) {
+                    const userInfo = await userInfoResponse.json();
+                    console.log('Información del usuario:', userInfo);
+                    console.log('Rol del usuario:', userInfo.role || userInfo.roles || 'No se encontró rol');
+                } else {
+                    console.log('No se pudo obtener info del usuario:', userInfoResponse.status);
+                    console.log('Posiblemente el usuario no existe en la base de datos del backend');
+                }
+            } catch (userError) {
+                console.log('Error obteniendo info del usuario:', userError);
+            }
+
+            // Verificar si podemos hacer GET (para confirmar que el token funciona)
+            console.log('Probando GET para verificar que el token funciona...');
+            try {
+                const getResponse = await fetch('http://localhost:8080/event', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+                console.log('Respuesta GET:', getResponse.status);
+                if (getResponse.ok) {
+                    console.log('✅ El token funciona para GET');
+                } else {
+                    console.log('❌ El token NO funciona para GET');
+                }
+            } catch (getError) {
+                console.log('Error en GET:', getError);
+            }
+            
+            const dataToSend = {
+                titulo: formData.titulo,
+                descripcion: formData.descripcion,
+                fechaEvento: formData.fechaEvento,
+                ubicacion: formData.ubicacion
+            };
+
+            console.log('Datos a enviar:', dataToSend);
+
+            const response = await fetch('http://localhost:8080/event', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+
+            console.log('Respuesta POST:', response.status);
+            
+            if (!response.ok) {
+                if (response.status === 403) {
+                    throw new Error(`❌ No tienes permisos para crear eventos.
+
+🔧 Para solucionarlo:
+1. Verifica que el usuario con UID: ${uid} tenga rol ADMIN en la base de datos
+2. O modifica el backend para permitir usuarios normales crear eventos
+3. Asegúrate de que el usuario esté registrado en tu sistema
+
+📝 UID de Firebase: ${uid}
+📝 Error técnico: ${response.status} - Forbidden`);
+                }
+                
+                let errorText = '';
+                try {
+                    errorText = await response.text();
+                } catch (readError) {
+                    errorText = 'No se pudo leer el error del servidor';
+                }
+                throw new Error(`Error ${response.status}: ${errorText}`);
+            }
+
+            const result = await response.json();
+            console.log('Evento creado exitosamente:', result);
             
             // Limpiar formulario después del envío exitoso
             setFormData({
@@ -49,15 +164,21 @@ function CrearEvento(){
                 imagenes: []
             });
             
-            alert('Evento creado exitosamente!');
+            alert('¡Evento creado exitosamente!');
+            navigate('/');
             
         } catch (error) {
-            console.error('Error al crear evento:', error);
-            alert('Error al crear el evento');
+            console.error('Error completo al crear evento:', error);
+            alert(`Error al crear el evento: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
+
+    // Si no hay token, mostrar mensaje
+    if (!token) {
+        return <div>Cargando autenticación...</div>;
+    }
 
     return(
         <div>

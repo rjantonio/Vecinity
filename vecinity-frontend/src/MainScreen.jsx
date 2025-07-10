@@ -214,7 +214,7 @@ function MainScreen() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
-          <Route path="/crear-evento" element={<CrearEvento/>}/>
+          <Route path="/crear-evento" element={<CrearEvento token={token} />} />
           <Route path="/editar-evento" element={<Editarevento/>}/>
           <Route path="*" element={<ErrorScreen/>}/>
         </Routes>
