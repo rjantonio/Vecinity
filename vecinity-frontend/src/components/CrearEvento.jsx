@@ -61,17 +61,18 @@ function CrearEvento({ token }){
             console.log('Token recibido:', token);
             
             // Extraer el UID del usuario del token de Firebase
-            const uid = getUserIdFromToken(token);
-            console.log('UID del usuario extraído:', uid);
+            const firebaseUid = getUserIdFromToken(token);
+            console.log('Firebase UID extraído:', firebaseUid);
             
-            if (!uid) {
+            if (!firebaseUid) {
                 throw new Error('No se pudo extraer el UID del usuario del token');
             }
             
-            // Obtener información del usuario usando el UID correcto
-            console.log('Obteniendo información del usuario...');
+            // Obtener información del usuario usando el firebaseUid
+            console.log('Obteniendo información del usuario por Firebase UID...');
+            let userInfo = null;
             try {
-                const userInfoResponse = await fetch(`http://localhost:8080/user/${uid}`, {
+                const userInfoResponse = await fetch(`http://localhost:8080/user/${firebaseUid}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -79,12 +80,21 @@ function CrearEvento({ token }){
                 });
                 
                 if (userInfoResponse.ok) {
-                    const userInfo = await userInfoResponse.json();
-                    console.log('Información del usuario:', userInfo);
-                    console.log('Rol del usuario:', userInfo.role || userInfo.roles || 'No se encontró rol');
+                    userInfo = await userInfoResponse.json();
+                    console.log('✅ Información del usuario encontrada:', userInfo);
+                    console.log('Rol del usuario:', userInfo.role || userInfo.roles || 'USER');
+                    
+                    // Verificar si el usuario tiene permisos para crear eventos
+                    const userRole = userInfo.role || userInfo.roles || 'USER';
+                    if (userRole !== 'ADMIN') {
+                        console.warn('⚠️ El usuario no tiene rol ADMIN, pero intentando crear evento...');
+                    }
+                } else if (userInfoResponse.status === 404) {
+                    console.warn('⚠️ Usuario no encontrado en la base de datos con Firebase UID:', firebaseUid);
+                    // El usuario existe en Firebase pero no en tu base de datos
+                    // Podrías crear el usuario automáticamente aquí si quieres
                 } else {
-                    console.log('No se pudo obtener info del usuario:', userInfoResponse.status);
-                    console.log('Posiblemente el usuario no existe en la base de datos del backend');
+                    console.log('❌ Error al obtener info del usuario:', userInfoResponse.status);
                 }
             } catch (userError) {
                 console.log('Error obteniendo info del usuario:', userError);
@@ -132,14 +142,18 @@ function CrearEvento({ token }){
             
             if (!response.ok) {
                 if (response.status === 403) {
+                    const userRoleInfo = userInfo ? 
+                        `\n📝 Usuario encontrado: ${userInfo.email || userInfo.nombre || 'N/A'}\n📝 Rol actual: ${userInfo.role || userInfo.roles || 'USER'}` :
+                        '\n❌ Usuario no encontrado en la base de datos';
+                    
                     throw new Error(`❌ No tienes permisos para crear eventos.
 
 🔧 Para solucionarlo:
-1. Verifica que el usuario con UID: ${uid} tenga rol ADMIN en la base de datos
-2. O modifica el backend para permitir usuarios normales crear eventos
-3. Asegúrate de que el usuario esté registrado en tu sistema
+1. Asegúrate de que el usuario esté registrado en tu sistema
+2. Verifica que tenga rol ADMIN en la base de datos
+3. O modifica el backend para permitir usuarios normales crear eventos
 
-📝 UID de Firebase: ${uid}
+📝 Firebase UID: ${firebaseUid}${userRoleInfo}
 📝 Error técnico: ${response.status} - Forbidden`);
                 }
                 
@@ -153,7 +167,7 @@ function CrearEvento({ token }){
             }
 
             const result = await response.json();
-            console.log('Evento creado exitosamente:', result);
+            console.log('✅ Evento creado exitosamente:', result);
             
             // Limpiar formulario después del envío exitoso
             setFormData({
