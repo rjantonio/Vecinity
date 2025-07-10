@@ -6,6 +6,8 @@ target/
 
 node_modules/
 /src/main/resources/application.properties
+**/token.json
+
 
 ### STS ###
 .apt_generated
