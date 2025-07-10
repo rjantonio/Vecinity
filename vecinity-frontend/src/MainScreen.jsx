@@ -68,6 +68,14 @@ function MainScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Inicializar modo nocturno al cargar el componente
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (savedDarkMode) {
+      document.body.classList.add('dark-mode');
+    }
+  }, []);
+
   useEffect(() => {
     fetch('http://localhost:8080/event')
       .then(response => {

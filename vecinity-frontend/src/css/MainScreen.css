@@ -1,6 +1,10 @@
 :root{
     --main-color: #f9f1e7;
     --secondary-color: #183345;
+    --dark-bg: #1a1a1a;
+    --dark-secondary: #2d2d2d;
+    --dark-text: #ffffff;
+    --dark-border: #444;
 }
 
 .main__screen{
@@ -9,6 +13,7 @@
     background-color: var(--main-color);
     min-height: 100vh;
     padding-bottom: 3rem;
+    transition: background-color 0.3s ease;
 }
 
 .barrnav{
@@ -20,6 +25,7 @@
     padding: 1rem, 2rem;
     min-height: 4rem;
     border-bottom: 2px solid var(--secondary-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 .logo{
     border: none;
@@ -27,6 +33,7 @@
     cursor: pointer;
     max-width: 3rem;
     max-height: 3rem;
+    transition: background-color 0.3s ease;
 }
 
 .logo__img{
@@ -69,6 +76,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 .event__list{
     list-style: none;
@@ -84,4 +92,42 @@
     height: 120px;
     border-radius: 8px;
     margin-right: 16px;
+}
+
+/* Estilos para modo nocturno */
+body.dark-mode .main__screen {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+body.dark-mode .barrnav {
+    background-color: var(--dark-secondary);
+    border-bottom-color: var(--dark-border);
+}
+
+body.dark-mode .logo {
+    background-color: var(--dark-secondary);
+}
+
+body.dark-mode .main__content {
+    background-color: var(--dark-secondary);
+    color: var(--dark-text);
+}
+
+body.dark-mode .event__list__item {
+    color: var(--dark-text);
+}
+
+/* Estilos para texto y títulos en modo nocturno */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: var(--dark-text);
+}
+
+body.dark-mode p {
+    color: var(--dark-text);
 }
