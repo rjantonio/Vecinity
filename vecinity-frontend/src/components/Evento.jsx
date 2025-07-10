@@ -1,15 +1,23 @@
 function Evento({ name = "", images = [], description = "", fechaEvento = "", ubicacion = "", showJoinButton = true }){
     return(
-        <div>
-            <h1>{name}</h1>
-            <h2>{ubicacion}</h2>
-            <h5>{fechaEvento}</h5>
-            {images.length > 0 && images.map((img, i) => (
-                <img key={i} src={img} alt={`Imagen del evento ${i + 1}`} style={{width: '200px', margin: '5px'}} />
-            ))}
-            <p>{description}</p>
-            {showJoinButton && <button>Unirse al Evento</button>}
-        </div>
+        <li className="event__list__item">
+            <h3 className="event__title">{name}</h3>
+            <h4 className="event__location">{ubicacion}</h4>
+            <p className="event__date">{fechaEvento}</p>
+            {images.length > 0 && images[0] && (
+                <img 
+                    className="event__image" 
+                    src={images[0]} 
+                    alt={`Imagen del evento ${name}`} 
+                />
+            )}
+            <p className="event__description">{description}</p>
+            {showJoinButton && (
+                <button className="event__join__btn">
+                    Unirse al Evento
+                </button>
+            )}
+        </li>
     );
 }
 
