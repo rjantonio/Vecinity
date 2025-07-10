@@ -21,13 +21,20 @@ import CrearEvento from './components/CrearEvento';
 import Editarevento from './components/EditarEvento';
 import Evento from './components/Evento';
 
-function EventRegistrationsList() {
+function EventRegistrationsList({ token }) {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/event-registration')
+    if (!token) return; // No hacer la petición sin token
+
+    fetch('http://localhost:8080/event-registration', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Error en la respuesta');
@@ -43,8 +50,9 @@ function EventRegistrationsList() {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [token]);
 
+  if (!token) return <div>Esperando autenticación...</div>;
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -68,17 +76,24 @@ function MainScreen() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
   
-  signInWithEmailAndPassword(auth, "franpoloflan@gmail.com", "123456")
-  .then(userCredential => {
-    return userCredential.user.getIdToken();
-  })
-  .then(token => {
-    console.log("Token:", token);
-  })
-  .catch(error => {
-    console.error("Error signing in:", error);
-  });
+  // Autenticación para obtener el token
+  useEffect(() => {
+    signInWithEmailAndPassword(auth, "franpoloflan@gmail.com", "123456")
+      .then(userCredential => {
+        return userCredential.user.getIdToken();
+      })
+      .then(token => {
+        console.log("Token:", token);
+        setToken(token);
+      })
+      .catch(error => {
+        console.error("Error signing in:", error);
+        setError("Error de autenticación");
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -92,8 +107,16 @@ function MainScreen() {
     }
   }, []);
 
+  // Fetch de eventos con autenticación
   useEffect(() => {
-    fetch('http://localhost:8080/event')
+    if (!token) return; // No hacer la petición sin token
+
+    fetch('http://localhost:8080/event', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener los eventos');
@@ -110,7 +133,7 @@ function MainScreen() {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [token]);
 
   return (
     <div className="main__screen">
@@ -162,7 +185,9 @@ function MainScreen() {
           <Route path="/" element={
             <>
               <h2>Lista de objetos</h2>
-              {loading ? (
+              {!token ? (
+                <div>Autenticando...</div>
+              ) : loading ? (
                 <div>Cargando eventos...</div>
               ) : error ? (
                 <div>Error: {error}</div>
@@ -182,7 +207,7 @@ function MainScreen() {
               )}
               <button onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
               <button onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
-              <EventRegistrationsList />
+              <EventRegistrationsList token={token} />
             </>
           } />
           <Route path="/settings" element={<Settings />} />
