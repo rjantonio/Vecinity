@@ -45,7 +45,7 @@ function EventRegistrationsList() {
       });
   }, []);
 
-    if (loading) return <div>Cargando...</div>;
+  if (loading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -62,10 +62,12 @@ function EventRegistrationsList() {
   );
 }
 
-
 function MainScreen() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
   signInWithEmailAndPassword(auth, "franpoloflan@gmail.com", "123456")
   .then(userCredential => {
@@ -77,194 +79,6 @@ function MainScreen() {
   .catch(error => {
     console.error("Error signing in:", error);
   });
-
-/*   const items = [
-    {
-      id: 1,
-      nombre: "Ejemplo de objeto",
-      descripcion: "Este es un objeto de prueba con una imagen y una descripción.",
-      imagen: "https://google.com"
-    }
-  ]; */
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch('http://localhost:8080/event')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al obtener los eventos');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Eventos obtenidos:', data);
-        setItems(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error al obtener eventos:', err);
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
-  return (
-    <div className="main__screen">
-      <div className="barrnav">
-        <button
-          onClick={() => navigate("/")}
-          className="logo"
-          title="Ir a la lista"
-        >
-          <img className="logo__img" src={logo} alt="" />
-        </button>
-        <div className="barrnav__rigth">
-          <button className="btn__settings"
-            onClick={() => navigate("/settings")}
-            title="Preferencias"
-          >
-            <img className="settings__icon" src={ajustes__img} alt="" />
-          </button>
-          {!user ? (
-            <button
-              className="btn__login"
-              onClick={() => navigate("/login")}
-              title="Iniciar sesión"
-            >
-              <img className="login__icon" src={login__img} alt="Iniciar sesión" />
-            </button>
-          ) : (
-            <>
-              <button
-                className="btn__login"
-                onClick={() => navigate("/profile")}
-                title="Perfil"
-              >
-                <img className="login__icon" src={profile__img} alt="Perfil" />
-              </button>
-              <button
-                className="btn__logout"
-                onClick={logout}
-                title="Cerrar sesión"
-              >
-                <img className="login__icon" src={logout__img} alt="Cerrar sesión" />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-      <div className="main__content">
-        <Routes>
-          <Route path="/" element={
-            <>
-              <h2>Lista de objetos</h2>
-              {loading ? (
-                <div>Cargando eventos...</div>
-              ) : error ? (
-                <div>Error: {error}</div>
-              ) : (
-                <ul className="event__list">
-                  {items.map(item => (
-                    <Evento
-                      key={item.id}
-                      name={item.titulo}
-                      fechaEvento={item.fechaEvento}
-                      images={[item.imagen]}
-                      description={item.descripcion}
-                      ubicacion={item.ubicacion}
-                    />
-                  ))}
-                </ul>
-              )}
-              <button onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
-              <button onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
-              <EventRegistrationsList />
-            </>
-          } />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/register" element={<Register/>}/>
-          <Route path="/crear-evento" element={<CrearEvento/>}/>
-          <Route path="/editar-evento" element={<Editarevento/>}/>
-          <Route path="*" element={<ErrorScreen/>}/>
-        </Routes>
-      </div>
-    </div>
-  );
-}
-
-export default MainScreen;import './css/MainScreen.css';
-import './css/Settings.css';
-import './css/UserProfile.css';
-import logo from './images/logo.png';
-import login__img from './images/icono-login.png';
-import ajustes__img from './images/icono-ajustes.png';
-import profile__img from './images/icono-profile.png';
-import logout__img from './images/icono-logout.png';
-import { Routes, Route, useNavigate } from "react-router-dom";
-import Profile from "./components/Profile";
-import Settings from "./components/Settings";
-import ErrorScreen from "./components/ErrorScreen";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import { useAuth } from "./context/AuthContext";
-
-import React, { useEffect, useState } from 'react';
-import CrearEvento from './components/CrearEvento';
-import Editarevento from './components/EditarEvento';
-import Evento from './components/Evento';
-
-function EventRegistrationsList() {
-  const [registrations, setRegistrations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch('http://localhost:8080/event-registration')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la respuesta');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log(data);
-        setRegistrations(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
-    if (loading) return <div>Cargando...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  return (
-    <div>
-      <h2>Inscripciones a eventos</h2>
-      <ul>
-        {registrations.map(reg => (
-          <li key={reg.id}>
-            Usuario ID: {reg.userId}, Evento ID: {reg.eventId}, Fecha: {reg.fechaInscripcion}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-
-function MainScreen() {
-  const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
