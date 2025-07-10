@@ -13,6 +13,8 @@ import ErrorScreen from "./components/ErrorScreen";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { useAuth } from "./context/AuthContext";
+import { auth } from "./utils/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import React, { useEffect, useState } from 'react';
 import CrearEvento from './components/CrearEvento';
@@ -64,6 +66,26 @@ function EventRegistrationsList() {
 function MainScreen() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  
+  signInWithEmailAndPassword(auth, "franpoloflan@gmail.com", "123456")
+  .then(userCredential => {
+    return userCredential.user.getIdToken();
+  })
+  .then(token => {
+    console.log("Token:", token);
+  })
+  .catch(error => {
+    console.error("Error signing in:", error);
+  });
+
+  const items = [
+    {
+      id: 1,
+      nombre: "Ejemplo de objeto",
+      descripcion: "Este es un objeto de prueba con una imagen y una descripción.",
+      imagen: "https://google.com"
+    }
+  ];
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
