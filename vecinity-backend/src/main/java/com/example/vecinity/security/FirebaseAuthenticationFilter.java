@@ -7,10 +7,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
@@ -32,8 +36,18 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+
+            // Autenticación manual para Spring Security
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(decodedToken.getUid(), null, Collections.emptyList());
+
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // También puedes guardar el UID en el request si lo necesitas
             request.setAttribute("firebaseUid", decodedToken.getUid());
-            filterChain.doFilter(request, response); // continuar con el flujo
+
+            filterChain.doFilter(request, response);
         } catch (FirebaseAuthException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido: " + e.getMessage());
         }

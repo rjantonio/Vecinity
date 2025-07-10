@@ -12,7 +12,7 @@ public class FirebaseConfig {
     @PostConstruct
     public void init() throws Exception {
         //ruta donde se guarda el archivo de credenciales de Firebase
-        FileInputStream serviceAccount = new FileInputStream("C:\\Users\\daniv\\Desktop\\Vecinity\\vecinity-backend\\src\\main\\java\\com\\example\\vecinity\\config\\vecinity-65494-firebase-adminsdk-fbsvc-91cbebf9b0.json");
+        FileInputStream serviceAccount = new FileInputStream("src/main/java/com/example/vecinity/config/token.json");
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();

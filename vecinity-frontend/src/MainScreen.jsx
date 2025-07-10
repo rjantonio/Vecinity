@@ -78,14 +78,14 @@ function MainScreen() {
     console.error("Error signing in:", error);
   });
 
-  const items = [
+/*   const items = [
     {
       id: 1,
       nombre: "Ejemplo de objeto",
       descripcion: "Este es un objeto de prueba con una imagen y una descripción.",
       imagen: "https://google.com"
     }
-  ];
+  ]; */
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
