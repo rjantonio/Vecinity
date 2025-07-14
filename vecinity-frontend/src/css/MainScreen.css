@@ -164,6 +164,87 @@
     transform: translateY(-2px);
 }
 
+/* Estilos para resultados de búsqueda */
+.search-results {
+  width: 100%;
+  margin: 1rem 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+}
+
+.no-results {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+/* Estilos para el contenedor de búsqueda y acciones */
+.search-and-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .search-and-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .search-and-actions .search-bar {
+    flex: 1;
+    margin: 0;
+  }
+  
+  .search-and-actions .event-buttons-container {
+    margin: 0;
+  }
+}
+
+/* Ajustes para los botones en el nuevo contenedor */
+.search-and-actions .event-buttons-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+body.dark-mode .search-and-actions {
+  border-color: var(--dark-border);
+}
+
+body.colorblind-mode .search-and-actions {
+  border-color: var(--colorblind-primary);
+}
+
+/* Adaptaciones para modo oscuro */
+body.dark-mode .search-results {
+  color: #aaa;
+}
+
+body.dark-mode .no-results {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #bbb;
+}
+
+/* Adaptaciones para modo daltónico */
+body.colorblind-mode .search-results {
+  color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .no-results {
+  color: var(--colorblind-primary);
+  border: 1px solid var(--colorblind-secondary);
+}
+
 /* Estilos para modo oscuro */
 body.dark-mode .main__screen {
     background-color: var(--dark-bg);
