@@ -219,3 +219,27 @@ body.dark-mode.colorblind-mode .input::placeholder {
         margin: 1rem;
     }
 }
+
+.register__tittle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--last-color);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode .register__tittle {
+    color: var(--dark-text);
+}
+
+/* Estilos para modo daltónico */
+body.colorblind-mode .register__tittle {
+    color: var(--colorblind-primary);
+    font-weight: bold;
+}
+
+/* Combinación de modos nocturno y daltónico */
+body.dark-mode.colorblind-mode .register__tittle {
+    color: var(--colorblind-secondary);
+}

@@ -185,7 +185,7 @@ function MainScreen() {
         <Routes>
           <Route path="/" element={
             <>
-              <h2>Lista de objetos</h2>
+              <h2 className='tittle'>Lista de objetos</h2>
               {!token ? (
                 <div>Autenticando...</div>
               ) : loading ? (

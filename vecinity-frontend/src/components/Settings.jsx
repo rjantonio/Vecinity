@@ -56,7 +56,7 @@ function Settings(){
           <div className="settings__container">
             <div className="setting__item">
               <label htmlFor="darkModeToggle" className="setting__label">
-                Modo nocturno
+                Modo oscuro
               </label>
               <label className="switch">
                 <input
