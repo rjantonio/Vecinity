@@ -129,9 +129,36 @@ function MainScreen() {
         }
         return response.json();
       })
-      .then(data => {
+      .then(async data => {
         console.log('Eventos obtenidos:', data);
-        setItems(data);
+        
+        // Obtener imágenes para cada evento
+        const eventosConImagenes = await Promise.all(
+          data.map(async evento => {
+            try {
+              const imageResponse = await fetch(`http://localhost:8080/event-images/${evento.id}`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                }
+              });
+              
+              if (imageResponse.ok) {
+                const imagenes = await imageResponse.json();
+                return {
+                  ...evento,
+                  imagenes: imagenes.map(img => `data:image/jpeg;base64,${img.imagenBase64}`)
+                };
+              }
+              return evento;
+            } catch (error) {
+              console.error(`Error obteniendo imágenes para evento ${evento.id}:`, error);
+              return evento;
+            }
+          })
+        );
+        
+        setItems(eventosConImagenes);
         setLoading(false);
       })
       .catch(err => {
@@ -206,7 +233,7 @@ function MainScreen() {
                       key={item.id}
                       name={item.titulo}
                       fechaEvento={item.fechaEvento}
-                      images={[item.imagen]}
+                      images={item.imagenes || []}
                       description={item.descripcion}
                       ubicacion={item.ubicacion}
                     />

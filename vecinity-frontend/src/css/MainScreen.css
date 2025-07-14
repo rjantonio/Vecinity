@@ -133,12 +133,137 @@
 }
 
 .event__image {
-    width: 100%;
-    height: 200px;
+    max-width: 150px;
+    max-height: 150px;
     object-fit: cover;
     border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
+.event__images {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    align-items: flex-end; /* Alineación abajo */
+}
+
+/* Si quieres que solo se muestre una imagen principal y las demás en miniatura */
+.event__images .event__image:first-child {
+    width: 300px;
+    height: 200px;
+    z-index: 1;
+}
+
+.event__images .event__image:not(:first-child) {
+    width: 80px;
+    height: 80px;
+    z-index: 2;
+}
+
+.event__image {
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Transición más lenta */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform-origin: bottom; /* Agranda desde abajo hacia arriba */
+}
+
+/* Efecto hover - imagen principal se agranda más (sin cambio de borde) */
+.event__images .event__image:first-child:hover {
+    transform: scale(1.15);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    /* Removido border-color */
+}
+
+/* Efecto hover - imágenes secundarias se agrandan considerablemente (sin cambio de borde) */
+.event__images .event__image:not(:first-child):hover {
+    transform: scale(2.5);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    /* Removido border-color */
+}
+
+/* Asegurar que las imágenes con hover aparezcan por encima */
+.event__images .event__image:hover {
+    position: relative;
+}
+
+/* Efecto para cuando no se hace hover - las otras imágenes se atenúan ligeramente */
+.event__images:hover .event__image:not(:hover) {
+    opacity: 0.8;
+    transform: scale(0.98);
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode .event__image {
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .event__images .event__image:hover {
+    border-color: #4a9ca3;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para modo daltónico */
+body.colorblind-mode .event__image {
+    border-color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .event__images .event__image:hover {
+    border-color: var(--colorblind-secondary);
+}
+
+/* Combinación modo oscuro y daltónico */
+body.dark-mode.colorblind-mode .event__image {
+    border-color: var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .event__images .event__image:hover {
+    border-color: var(--colorblind-accent);
+}
+
+/* Responsive - en pantallas pequeñas ajustar tamaños */
+@media (max-width: 768px) {
+    .event__images .event__image:first-child {
+        width: 250px;
+        height: 160px;
+    }
+    
+    .event__images .event__image:not(:first-child) {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .event__images .event__image:not(:first-child):hover {
+        transform: scale(2.0);
+    }
+}
+
+@media (max-width: 480px) {
+    .event__images {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .event__images .event__image:first-child {
+        width: 200px;
+        height: 130px;
+    }
+    
+    .event__images .event__image:not(:first-child) {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .event__images .event__image:not(:first-child):hover {
+        transform: scale(1.8);
+    }
+}
 .event__description {
     font-size: 0.95rem;
     line-height: 1.5;
