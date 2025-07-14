@@ -6,6 +6,8 @@ import login__img from './images/icono-login.png';
 import ajustes__img from './images/icono-ajustes.png';
 import profile__img from './images/icono-profile.png';
 import logout__img from './images/icono-logout.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarPlus, faEdit, faHandshake } from '@fortawesome/free-solid-svg-icons';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
@@ -206,8 +208,12 @@ function MainScreen() {
                   ))}
                 </ul>
               )}
-              <button className="create__event__btn" onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
-              <button className="edit__event__btn" onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
+              <button className="create__event__btn" onClick={()=>navigate("/crear-evento")}>
+                <FontAwesomeIcon icon={faCalendarPlus} className="btn-icon" /> Crear Evento
+              </button>
+              <button className="edit__event__btn" onClick={()=>navigate("/editar-evento")}>
+                <FontAwesomeIcon icon={faEdit} className="btn-icon" /> Editar Evento
+              </button>
               <EventRegistrationsList token={token} />
             </>
           } />

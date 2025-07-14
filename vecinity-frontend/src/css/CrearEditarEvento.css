@@ -196,51 +196,78 @@
 
 /* Botones */
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.7rem;
   font-size: 1rem;
-  font-weight: 500;
-  border-radius: 4px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   border: none;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.btn:hover::before {
+  left: 100%;
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: translateY(3px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Botón primario (verde/azul) */
 .btn-primary {
-  background-color: var(--last-color);
+  background: linear-gradient(135deg, var(--last-color), #2a8a90);
   color: white;
+  border-bottom: 3px solid #11474b;
 }
 
 .btn-primary:hover {
-  background-color: #146a70;
-  box-shadow: 0 2px 8px rgba(20, 106, 112, 0.3);
+  background: linear-gradient(135deg, #2a8a90, var(--last-color));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(26, 94, 99, 0.3);
 }
 
-/* Botón secundario (gris) */
+/* Botón secundario (gris-azulado) */
 .btn-secondary {
-  background-color: #f2f2f2;
-  color: #333;
-  border: 1px solid #ddd;
+  background: linear-gradient(135deg, #8e8fa7, var(--secondary-color));
+  color: white;
+  border-bottom: 3px solid #5d5e74;
 }
 
 .btn-secondary:hover {
-  background-color: #e5e5e5;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--secondary-color), #8e8fa7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(126, 127, 154, 0.25);
 }
 
 /* Botón de peligro (rojo) */
 .btn-danger {
-  background-color: #e53935;
+  background: linear-gradient(135deg, #e53935, #f44336);
   color: white;
+  border-bottom: 3px solid #b71c1c;
 }
 
 .btn-danger:hover {
-  background-color: #c62828;
-  box-shadow: 0 2px 8px rgba(198, 40, 40, 0.3);
+  background: linear-gradient(135deg, #f44336, #e53935);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(229, 57, 53, 0.35);
 }
 
 /* Estado deshabilitado de botones */
@@ -316,10 +343,58 @@ body.dark-mode .error-message {
   border-color: #772222;
 }
 
+body.dark-mode .btn {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .btn-primary {
+  background: linear-gradient(135deg, #3a8f93, #207378);
+  border-bottom-color: #0d3f42;
+}
+
+body.dark-mode .btn-primary:hover {
+  background: linear-gradient(135deg, #207378, #3a8f93);
+  box-shadow: 0 6px 12px rgba(58, 143, 147, 0.4);
+}
+
 body.dark-mode .btn-secondary {
-  background-color: #333;
-  color: #ddd;
-  border-color: #555;
+  background: linear-gradient(135deg, #5d5e74, #4a4a5e);
+  color: #eee;
+  border-bottom-color: #363647;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background: linear-gradient(135deg, #4a4a5e, #5d5e74);
+  box-shadow: 0 6px 12px rgba(74, 74, 94, 0.4);
+}
+
+body.dark-mode .btn-danger {
+  background: linear-gradient(135deg, #c62828, #d32f2f);
+  border-bottom-color: #8e0000;
+}
+
+body.dark-mode .btn-danger:hover {
+  background: linear-gradient(135deg, #d32f2f, #c62828);
+}
+
+body.dark-mode .btn-crear-evento {
+  background: linear-gradient(135deg, #1a8d82, #11696d);
+  border-bottom-color: #0a4a4e;
+}
+
+body.dark-mode .btn-crear-evento:hover {
+  background: linear-gradient(135deg, #11696d, #1a8d82);
+  box-shadow: 0 6px 12px rgba(17, 105, 109, 0.4);
+}
+
+body.dark-mode .btn-volver {
+  background: linear-gradient(135deg, #575868, #4a4a5e);
+  border-bottom-color: #323242;
+}
+
+body.dark-mode .btn-volver:hover {
+  background: linear-gradient(135deg, #4a4a5e, #575868);
+  box-shadow: 0 6px 12px rgba(74, 74, 94, 0.4);
 }
 
 /* Modo daltónico */
@@ -337,14 +412,6 @@ body.colorblind-mode .file-input-label {
   background-color: var(--colorblind-secondary);
 }
 
-body.colorblind-mode .btn-primary {
-  background-color: var(--colorblind-primary);
-}
-
-body.colorblind-mode .btn-danger {
-  background-color: var(--colorblind-secondary);
-}
-
 body.colorblind-mode .error-message {
   background-color: #fff8e1;
   color: #ff6f00;
@@ -353,6 +420,64 @@ body.colorblind-mode .error-message {
 
 body.colorblind-mode .success-message h2 {
   color: var(--colorblind-accent);
+}
+
+/* Estilos para botones en modo daltónico */
+body.colorblind-mode .btn {
+  border-width: 2px;
+}
+
+body.colorblind-mode .btn-primary {
+  background: linear-gradient(135deg, var(--colorblind-primary), #0077e6);
+  border: 2px solid #004c99;
+  border-bottom-width: 4px;
+}
+
+body.colorblind-mode .btn-primary:hover {
+  background: linear-gradient(135deg, #0077e6, var(--colorblind-primary));
+  box-shadow: 0 6px 12px rgba(0, 102, 204, 0.3);
+}
+
+body.colorblind-mode .btn-secondary {
+  background: linear-gradient(135deg, #777, #555);
+  border: 2px solid #444;
+  border-bottom-width: 4px;
+}
+
+body.colorblind-mode .btn-secondary:hover {
+  background: linear-gradient(135deg, #555, #777);
+}
+
+body.colorblind-mode .btn-danger {
+  background: linear-gradient(135deg, var(--colorblind-secondary), #ffad33);
+  border: 2px solid #cc7a00;
+  border-bottom-width: 4px;
+}
+
+body.colorblind-mode .btn-danger:hover {
+  background: linear-gradient(135deg, #ffad33, var(--colorblind-secondary));
+  box-shadow: 0 6px 12px rgba(255, 152, 0, 0.3);
+}
+
+body.colorblind-mode .btn-crear-evento {
+  background: linear-gradient(135deg, var(--colorblind-accent), #5fd35f);
+  border: 2px solid #2e8b2e;
+  border-bottom-width: 4px;
+}
+
+body.colorblind-mode .btn-crear-evento:hover {
+  background: linear-gradient(135deg, #5fd35f, var(--colorblind-accent));
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+}
+
+body.colorblind-mode .btn-volver {
+  background: linear-gradient(135deg, var(--colorblind-primary), #0077e6);
+  border: 2px solid #004c99;
+  border-bottom-width: 4px;
+}
+
+body.colorblind-mode .btn-volver:hover {
+  background: linear-gradient(135deg, #0077e6, var(--colorblind-primary));
 }
 
 /*===========================================
@@ -428,83 +553,6 @@ body.colorblind-mode .success-message h2 {
   gap: 1.25rem;
 }
 
-/* Contenedor para cada campo del formulario */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-/* Etiquetas de los campos */
-.form-label {
-  font-weight: 500;
-  color: #333;
-  font-size: 1rem;
-}
-
-/* Campos de entrada de texto */
-.form-input {
-  padding: 0.75rem 1rem;
-  border: 1.5px solid var(--secondary-color);
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--last-color);
-  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
-}
-
-/* Área de texto para la descripción */
-.form-textarea {
-  padding: 0.75rem 1rem;
-  border: 1.5px solid var(--secondary-color);
-  border-radius: 4px;
-  font-size: 1rem;
-  min-height: 120px;
-  resize: vertical;
-  transition: border-color 0.3s ease;
-}
-
-.form-textarea:focus {
-  outline: none;
-  border-color: var(--last-color);
-  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
-}
-
-/* Selector de archivos personalizado */
-.file-input-container {
-  position: relative;
-  margin-top: 0.5rem;
-}
-
-.file-input-label {
-  display: inline-block;
-  padding: 0.75rem 1.25rem;
-  background-color: var(--secondary-color);
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.file-input-label:hover {
-  background-color: #6a6b83;
-}
-
-.file-input {
-  position: absolute;
-  left: -9999px;
-}
-
-.file-input-text {
-  margin-left: 0.5rem;
-  color: #666;
-  font-size: 0.875rem;
-}
-
 /* Contenedor de vista previa de imágenes */
 .image-preview-container {
   display: flex;
@@ -551,68 +599,119 @@ body.colorblind-mode .success-message h2 {
   background-color: rgba(220, 0, 0, 0.9);
 }
 
-/* Contenedor de botones */
+/* Formulario de botones */
 .form-buttons {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 1.5rem;
+  margin-top: 2rem;
   justify-content: center;
 }
 
-/* Botón principal */
-.btn-primary {
-  background-color: var(--last-color);
+/* Botón de crear evento - estilo especial */
+.btn-crear-evento {
+  background: linear-gradient(135deg, #26a69a, var(--last-color));
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.8rem;
   font-size: 1rem;
-  font-weight: 500;
-  border-radius: 4px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(38, 166, 154, 0.25);
+  border-bottom: 3px solid #1a5e63;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-primary:hover {
-  background-color: #146a70;
+.btn-crear-evento::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.btn-crear-evento:hover {
+  background: linear-gradient(135deg, #2a8a90, #26a69a);
   transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(38, 166, 154, 0.35);
 }
 
-.btn-primary:active {
-  transform: translateY(0);
+.btn-crear-evento:hover::before {
+  left: 100%;
 }
 
-.btn-primary:disabled {
-  background-color: #cccccc;
+.btn-crear-evento:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(38, 166, 154, 0.25);
+}
+
+.btn-crear-evento:disabled {
+  background: linear-gradient(135deg, #b2dfdb, #80cbc4);
+  border-bottom-color: #80cbc4;
   cursor: not-allowed;
+  box-shadow: none;
   transform: none;
 }
 
-/* Botón secundario */
-.btn-secondary {
-  background-color: #f2f2f2;
-  color: #333;
-  border: 1px solid #ddd;
-  padding: 0.75rem 1.5rem;
+/* Botón secundario - volver */
+.btn-volver {
+  background: linear-gradient(135deg, #9e9eb3, var(--secondary-color));
+  color: white;
+  border: none;
+  padding: 0.85rem 1.8rem;
   font-size: 1rem;
-  font-weight: 500;
-  border-radius: 4px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(126, 127, 154, 0.2);
+  border-bottom: 3px solid #6a6b83;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-secondary:hover {
-  background-color: #e5e5e5;
+.btn-volver::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.btn-volver:hover {
+  background: linear-gradient(135deg, var(--secondary-color), #9e9eb3);
   transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(126, 127, 154, 0.3);
 }
 
-.btn-secondary:active {
-  transform: translateY(0);
+.btn-volver:hover::before {
+  left: 100%;
 }
 
-.btn-secondary:disabled {
-  background-color: #f7f7f7;
-  color: #aaa;
+.btn-volver:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(126, 127, 154, 0.2);
+}
+
+.btn-volver:disabled {
+  background: linear-gradient(135deg, #bdbdce, #a5a6bd);
+  border-bottom-color: #a5a6bd;
   cursor: not-allowed;
+  box-shadow: none;
   transform: none;
 }
 
@@ -631,76 +730,6 @@ body.dark-mode .crear-evento-title {
   border-bottom-color: #4a4a4a;
 }
 
-body.dark-mode .form-label {
-  color: var(--dark-text);
-}
-
-body.dark-mode .form-input,
-body.dark-mode .form-textarea {
-  background-color: var(--dark-bg);
-  border-color: #444;
-  color: var(--dark-text);
-}
-
-body.dark-mode .form-input:focus,
-body.dark-mode .form-textarea:focus {
-  border-color: #4aacb3;
-  box-shadow: 0 0 0 2px rgba(74, 172, 179, 0.2);
-}
-
-body.dark-mode .file-input-label {
-  background-color: #4a4a4a;
-}
-
-body.dark-mode .file-input-label:hover {
-  background-color: #5a5a5a;
-}
-
-body.dark-mode .file-input-text {
-  color: #aaa;
-}
-
-body.dark-mode .btn-secondary {
-  background-color: #333;
-  color: #ddd;
-  border-color: #555;
-}
-
-body.dark-mode .btn-secondary:hover {
-  background-color: #3d3d3d;
-}
-
-/* Modo daltónico */
-body.colorblind-mode .crear-evento-title {
-  color: var(--colorblind-primary);
-}
-
-body.colorblind-mode .form-input:focus,
-body.colorblind-mode .form-textarea:focus {
-  border-color: var(--colorblind-primary);
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
-}
-
-body.colorblind-mode .file-input-label {
-  background-color: var(--colorblind-secondary);
-}
-
-body.colorblind-mode .btn-primary {
-  background-color: var(--colorblind-primary);
-}
-
-body.colorblind-mode .btn-primary:hover {
-  background-color: #0055aa;
-}
-
-body.colorblind-mode .image-delete-btn {
-  background-color: var(--colorblind-secondary);
-}
-
-/*===========================================
-  DISEÑO RESPONSIVE
-=============================================*/
-
 @media (max-width: 768px) {
   .crear-evento-container {
     margin: 1rem;
@@ -716,7 +745,9 @@ body.colorblind-mode .image-delete-btn {
   }
   
   .btn-primary, 
-  .btn-secondary {
+  .btn-secondary,
+  .btn-crear-evento,
+  .btn-volver {
     width: 100%;
   }
 }
@@ -729,10 +760,5 @@ body.colorblind-mode .image-delete-btn {
   
   .crear-evento-title {
     font-size: 1.5rem;
-  }
-  
-  .form-input,
-  .form-textarea {
-    font-size: 0.9rem;
   }
 }

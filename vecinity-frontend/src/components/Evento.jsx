@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHandshake } from '@fortawesome/free-solid-svg-icons';
+
 function Evento({ name = "", images = [], description = "", fechaEvento = "", ubicacion = "", showJoinButton = true }){
     return(
         <li className="event__list__item">
@@ -14,7 +17,7 @@ function Evento({ name = "", images = [], description = "", fechaEvento = "", ub
             <p className="event__description">{description}</p>
             {showJoinButton && (
                 <button className="event__join__btn">
-                    Unirse al Evento
+                    <FontAwesomeIcon icon={faHandshake} className="btn-icon" /> Unirse al Evento
                 </button>
             )}
         </li>

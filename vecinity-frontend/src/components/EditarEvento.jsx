@@ -171,7 +171,7 @@ function Editarevento(){
                     </div>
                     <div className="action-buttons">
                         <button 
-                            className="btn btn-primary"
+                            className="btn-crear-evento"
                             onClick={() => setModoEdicion(true)}
                             disabled={loading}
                         >
@@ -185,7 +185,7 @@ function Editarevento(){
                             {loading ? 'Eliminando...' : 'Eliminar Evento'}
                         </button>
                         <button 
-                            className="btn btn-secondary"
+                            className="btn-volver"
                             onClick={() => navigate('/')} 
                             disabled={loading}
                         >
@@ -295,7 +295,7 @@ function Editarevento(){
                             {loading ? 'Guardando...' : 'Guardar Cambios'}
                         </button>
                         <button 
-                            className="btn btn-secondary"
+                            className="btn-volver"
                             type="button" 
                             onClick={handleCancelarEdicion}
                             disabled={loading}

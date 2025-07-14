@@ -163,14 +163,14 @@ function CrearEvento(){
                 
                 <div className="form-buttons">
                     <button 
-                        className="btn-primary"
+                        className="btn-crear-evento"
                         type="submit" 
                         disabled={!formData.titulo.trim() || !formData.descripcion.trim() || !formData.fechaEvento || loading}
                     >
                         {loading ? 'Creando...' : 'Crear Evento'}
                     </button>
                     <button 
-                        className="btn-secondary"
+                        className="btn-volver"
                         type="button" 
                         onClick={()=>navigate("/")} 
                         disabled={loading}
