@@ -42,10 +42,32 @@ function Register({ onBack }) {
     if (!form.email) newErrors.email = "El correo es obligatorio";
     if (!form.password) newErrors.password = "La contraseña es obligatoria";
     setErrors(newErrors);
+    
     if (Object.keys(newErrors).length === 0) {
       try {
-        await register(form.email, form.password, form.nombre, form.foto);
-        setMessage("¡Registro exitoso!");
+        // 1. Registrar en Firebase primero
+        const userCredential = await register(form.email, form.password, form.nombre, form.foto);
+        
+        // 2. Si Firebase fue exitoso, obtener el token y registrar en Spring Boot
+        if (userCredential?.user) {
+          const token = await userCredential.user.getIdToken();
+          
+          // 3. Enviar datos al backend de Spring Boot
+          await fetch("http://localhost:8080/user", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              nombre: form.nombre,
+              email: form.email,
+              foto: form.foto
+            })
+          });
+        }
+        
+        console.log("¡Registro exitoso!");
         setTimeout(() => navigate("/login"), 1500);
       } catch (error) {
         setMessage("Error: " + error.message);
@@ -106,5 +128,4 @@ function Register({ onBack }) {
     </div>
   );
 }
-
 export default Register;

@@ -44,12 +44,20 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // También puedes guardar el UID en el request si lo necesitas
             request.setAttribute("firebaseUid", decodedToken.getUid());
 
             filterChain.doFilter(request, response);
         } catch (FirebaseAuthException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido: " + e.getMessage());
         }
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        String method = request.getMethod();
+
+        // Permitir POST /user sin autenticación (crear usuario)
+        return path.equals("/user") && method.equalsIgnoreCase("POST");
     }
 }
