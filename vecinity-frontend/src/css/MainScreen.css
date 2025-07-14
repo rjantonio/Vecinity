@@ -1,5 +1,4 @@
 :root{
-    /* posible color main #edf6f9 */
     --main-color: #ECF8F8;
     --secondary-color: #7e7f9a;
     --last-color: #1a5e63;
@@ -185,20 +184,56 @@ body.dark-mode .main__content {
 }
 
 body.dark-mode .event__list__item {
+    background-color: var(--dark-border);
     color: var(--dark-text);
 }
 
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3,
-body.dark-mode h4,
-body.dark-mode h5,
-body.dark-mode h6 {
+body.dark-mode .event__title {
     color: var(--dark-text);
 }
 
-body.dark-mode p {
+body.dark-mode .event__location {
+    color: #b0b0b0;
+}
+
+body.dark-mode .event__date {
+    color: #a0a0a0;
+}
+
+body.dark-mode .event__description {
+    color: #d0d0d0;
+}
+
+body.dark-mode .event__join__btn {
+    background: linear-gradient(135deg, var(--dark-border), #555);
     color: var(--dark-text);
+}
+
+body.dark-mode .event__join__btn:hover {
+    background: linear-gradient(135deg, #555, var(--dark-border));
+}
+
+body.dark-mode .create__event__btn,
+body.dark-mode .edit__event__btn {
+    background: linear-gradient(135deg, var(--dark-border), #555);
+    color: var(--dark-text);
+    border: 1px solid var(--dark-text);
+}
+
+body.dark-mode .create__event__btn:hover,
+body.dark-mode .edit__event__btn:hover {
+    background: linear-gradient(135deg, #555, var(--dark-border));
+}
+
+body.dark-mode .enrolled__events__list {
+    background-color: var(--dark-secondary);
+    color: var(--dark-text);
+}
+
+body.dark-mode .enrolled__event__item {
+    background-color: var(--dark-border);
+    color: var(--dark-text);
+    border: 1px solid #555;
 }
 
 /* Estilos para modo daltónico */
@@ -270,6 +305,65 @@ body.dark-mode.colorblind-mode .main__content {
     color: #ffffff;
     border-color: var(--colorblind-secondary);
 }
+
+body.dark-mode.colorblind-mode .event__list__item {
+    background-color: #16213e;
+    color: #ffffff;
+    border: 1px solid var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .event__title {
+    color: #ffffff;
+}
+
+body.dark-mode.colorblind-mode .event__location {
+    color: var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .event__date {
+    color: #cccccc;
+}
+
+body.dark-mode.colorblind-mode .event__description {
+    color: #e0e0e0;
+}
+
+body.dark-mode.colorblind-mode .event__join__btn {
+    background-color: var(--colorblind-accent);
+    color: #ffffff;
+    border: 2px solid var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .event__join__btn:hover {
+    background-color: var(--colorblind-secondary);
+    border-color: var(--colorblind-accent);
+}
+
+body.dark-mode.colorblind-mode .create__event__btn,
+body.dark-mode.colorblind-mode .edit__event__btn {
+    background-color: #0f3460;
+    color: #ffffff;
+    border: 2px solid var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .create__event__btn:hover,
+body.dark-mode.colorblind-mode .edit__event__btn:hover {
+    background-color: var(--colorblind-accent);
+    border-color: var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .enrolled__events__list {
+    background-color: #16213e;
+    border: 2px solid var(--colorblind-secondary);
+    color: #ffffff;
+}
+
+body.dark-mode.colorblind-mode .enrolled__event__item {
+    background-color: #1a1a2e;
+    border: 1px solid var(--colorblind-secondary);
+    color: #ffffff;
+}
+
 /* 
  Estilo para botones 
 button {

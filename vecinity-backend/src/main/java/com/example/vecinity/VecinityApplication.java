@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VecinityApplication {
+public class 	VecinityApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(VecinityApplication.class, args);
