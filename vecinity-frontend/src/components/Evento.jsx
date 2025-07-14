@@ -8,7 +8,12 @@ function Evento({ name = "", images = [], description = "", fechaEvento = "", ub
                 <img 
                     className="event__image" 
                     src={images[0]} 
-                    alt={`Imagen del evento ${name}`} 
+                    alt={`Imagen del evento ${name}`}
+                    onError={(e) => {
+                        e.target.style.display = 'none';
+                        console.log('Error cargando imagen:', images[0]);
+                    }}
+                    onLoad={() => console.log('Imagen cargada correctamente:', images[0])}
                 />
             )}
             <p className="event__description">{description}</p>

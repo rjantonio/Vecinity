@@ -58,6 +58,8 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // Permitir POST /user sin autenticación (crear usuario)
-        return path.equals("/user") && method.equalsIgnoreCase("POST");
+        // Permitir acceso a rutas públicas
+        return (path.equals("/user") && method.equalsIgnoreCase("POST")) ||
+                path.equals("/event-images");
     }
 }
