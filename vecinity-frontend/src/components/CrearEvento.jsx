@@ -57,7 +57,7 @@ function CrearEvento({ token }){
                 throw new Error('No hay token de autenticación disponible');
             }
             
-            console.log('=== DEBUG INFO ===');
+            console.log('=== CREANDO EVENTO ===');
             console.log('Token recibido:', token);
             
             // Extraer el UID del usuario del token de Firebase
@@ -66,82 +66,6 @@ function CrearEvento({ token }){
             
             if (!firebaseUid) {
                 throw new Error('No se pudo extraer el UID del usuario del token');
-            }
-            
-            // Obtener o crear información del usuario
-            console.log('Obteniendo información del usuario por Firebase UID...');
-            let userInfo = null;
-            try {
-                const userInfoResponse = await fetch(`http://localhost:8080/user/${firebaseUid}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    }
-                });
-                
-                if (userInfoResponse.ok) {
-                    userInfo = await userInfoResponse.json();
-                    console.log('✅ Información del usuario encontrada:', userInfo);
-                    console.log('Rol del usuario:', userInfo.role || userInfo.roles || 'USER');
-                } else if (userInfoResponse.status === 404) {
-                    console.warn('⚠️ Usuario no encontrado, creando automáticamente...');
-                    
-                    // Obtener información del usuario de Firebase del token
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    console.log('Payload del token para crear usuario:', payload);
-                    
-                    // Crear usuario automáticamente con información del payload y defaults
-                    const userData = {
-                        firebaseUid: firebaseUid,
-                        email: payload.email || 'franpoloflan@gmail.com', // Usar el email que conocemos
-                        nombre: payload.name || payload.display_name || 'Francisco Polo', // Usar un nombre por defecto
-                        role: 'ADMIN' // Cambiar a ADMIN para que pueda crear eventos
-                    };
-                    
-                    console.log('Datos del usuario a crear:', userData);
-                    
-                    const createUserResponse = await fetch('http://localhost:8080/user', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(userData)
-                    });
-                    
-                    if (createUserResponse.ok) {
-                        userInfo = await createUserResponse.json();
-                        console.log('✅ Usuario creado automáticamente con rol ADMIN:', userInfo);
-                    } else {
-                        console.error('❌ Error creando usuario:', createUserResponse.status);
-                        const errorText = await createUserResponse.text();
-                        console.error('Error texto:', errorText);
-                        throw new Error('No se pudo crear el usuario en el sistema');
-                    }
-                } else {
-                    console.log('❌ Error al obtener info del usuario:', userInfoResponse.status);
-                }
-            } catch (userError) {
-                console.log('Error obteniendo/creando info del usuario:', userError);
-            }
-
-            // Verificar si podemos hacer GET (para confirmar que el token funciona)
-            console.log('Probando GET para verificar que el token funciona...');
-            try {
-                const getResponse = await fetch('http://localhost:8080/event', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    }
-                });
-                console.log('Respuesta GET:', getResponse.status);
-                if (getResponse.ok) {
-                    console.log('✅ El token funciona para GET');
-                } else {
-                    console.log('❌ El token NO funciona para GET');
-                }
-            } catch (getError) {
-                console.log('Error en GET:', getError);
             }
             
             const dataToSend = {
@@ -166,24 +90,6 @@ function CrearEvento({ token }){
             console.log('Respuesta POST:', response.status);
             
             if (!response.ok) {
-                if (response.status === 403) {
-                    const userRoleInfo = userInfo ? 
-                        `\n📝 Usuario: ${userInfo.email || userInfo.nombre || 'N/A'}\n📝 Rol actual: ${userInfo.role || userInfo.roles || 'USER'}` :
-                        '\n❌ Usuario no encontrado en la base de datos';
-                    
-                    throw new Error(`❌ No tienes permisos para crear eventos.
-
-🔧 Para solucionarlo:
-1. El usuario ha sido creado con rol ADMIN
-2. Si aún falla, verifica la configuración de Spring Security
-3. Asegúrate de que el endpoint POST /event permita rol ADMIN
-
-📝 Firebase UID: ${firebaseUid}${userRoleInfo}
-📝 Error técnico: ${response.status} - Forbidden
-
-💡 El usuario debería tener permisos ahora. Si persiste el error, es un problema de configuración del backend.`);
-                }
-                
                 let errorText = '';
                 try {
                     errorText = await response.text();
