@@ -25,6 +25,7 @@ function Login() {
   return (
     <div className="main__screen__login">
       <div className="main__content__login">
+        <h1>Inicio de sesión</h1>
         <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <input
             className="input__login"

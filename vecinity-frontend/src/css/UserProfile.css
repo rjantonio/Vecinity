@@ -42,15 +42,7 @@
     padding: .5rem 1rem;
     cursor: pointer;
 }
-.btn__return__list{
-    background: #e0e0e0;
-    color: #1976d2;
-    border: none;
-    border-radius: 4px;
-    padding: .5rem 1rem;
-    cursor: pointer;
-    margin: 0;
-}
+
 .spinner {
   border: 4px solid #eee;
   border-top: 4px solid #1976d2;

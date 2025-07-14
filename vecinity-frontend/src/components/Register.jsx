@@ -77,7 +77,7 @@ function Register({ onBack }) {
 
   return (
     <div className="main__content__register">
-      <h2>Registro</h2>
+      <h2 className="register__tittle">Registro</h2>
       <form onSubmit={handleSubmit} className="form__register">
         <input
           className="input"
