@@ -25,10 +25,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user").permitAll()  // <- Aquí permites POST /user sin token
+                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .anyRequest().authenticated()
                 )
-
                 .addFilterBefore(firebaseAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
