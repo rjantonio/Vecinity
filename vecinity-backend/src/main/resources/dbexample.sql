@@ -5,7 +5,7 @@ USE vecinitydb;
 
 -- Tabla de usuarios
 CREATE TABLE IF NOT EXISTS users (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL, -- Para almacenar hash de contraseña
@@ -15,12 +15,12 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Tabla de eventos
 CREATE TABLE IF NOT EXISTS events (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     descripcion TEXT,
     fecha_evento DATETIME NOT NULL,
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    id_creador INT UNSIGNED NOT NULL,
+    id_creador BIGINT UNSIGNED NOT NULL,
     ubicacion VARCHAR(200),
     imagen_portada LONGTEXT, -- Imagen principal en base64
     FOREIGN KEY (id_creador) REFERENCES users(id)
@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS events (
 
 -- Tabla de inscripciones a eventos
 CREATE TABLE IF NOT EXISTS event_registrations (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT UNSIGNED NOT NULL,
-    id_evento INT UNSIGNED NOT NULL,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_usuario BIGINT UNSIGNED NOT NULL,
+    id_evento BIGINT UNSIGNED NOT NULL,
     fecha_inscripcion DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES users(id),
     FOREIGN KEY (id_evento) REFERENCES events(id),
@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS event_registrations (
 
 -- Tabla para almacenar múltiples imágenes por evento
 CREATE TABLE IF NOT EXISTS event_images (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    event_id INT UNSIGNED NOT NULL,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    event_id BIGINT UNSIGNED NOT NULL,
     imagen_base64 LONGTEXT NULL,
     descripcion VARCHAR(255) NULL,
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE

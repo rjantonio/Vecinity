@@ -19,7 +19,7 @@ public class EventImageController {
         this.eventImageService = eventImageService;
     }
 
-    @GetMapping("/event/{eventId}")
+    @GetMapping("/{eventId}")
     public List<EventImageDto> getImagesByEvent(@PathVariable Long eventId) {
         List<EventImage> images = eventImageService.getImagesByEventId(eventId);
         return images.stream()
@@ -32,7 +32,7 @@ public class EventImageController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/event/{eventId}")
+    @PostMapping("/{eventId}")
     public ResponseEntity<EventImageDto> addImageToEvent(@PathVariable Long eventId,
                                                          @RequestParam String imagenBase64,
                                                          @RequestParam(required = false) String descripcion) {
@@ -41,7 +41,7 @@ public class EventImageController {
         return ResponseEntity.status(201).body(dto);
     }
 
-    @DeleteMapping("/event/{eventId}")
+    @DeleteMapping("/{eventId}")
     public ResponseEntity<Void> deleteImagesByEvent(@PathVariable Long eventId) {
         eventImageService.deleteImagesByEventId(eventId);
         return ResponseEntity.noContent().build();

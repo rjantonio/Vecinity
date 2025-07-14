@@ -1,7 +1,9 @@
 package com.example.vecinity.controller;
 
+import com.example.vecinity.dtos.UserEventDto;
 import com.example.vecinity.model.Event;
 import com.example.vecinity.model.User;
+import com.example.vecinity.repository.EventRegistrationRepository;
 import com.example.vecinity.repository.UserRepository;
 import com.example.vecinity.service.EventService;
 import com.google.firebase.auth.FirebaseToken;
@@ -67,4 +69,22 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @Autowired
+    private EventRegistrationRepository eventRegistrationRepository;
+
+    @GetMapping("/{id}/usuarios")
+    public ResponseEntity<List<UserEventDto>> obtenerUsuariosRegistrados(@PathVariable Long id) {
+        List<UserEventDto> dtos = eventRegistrationRepository.findByEventoId(id).stream()
+                .map(ue -> new UserEventDto(
+                        ue.getId(),
+                        ue.getUsuario().getId(),
+                        ue.getEvento().getId(),
+                        ue.getFechaInscripcion()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
 }
