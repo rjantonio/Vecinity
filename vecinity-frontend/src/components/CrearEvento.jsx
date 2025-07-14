@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
+import "../css/CrearEditarEvento.css";
 
 function CrearEvento(){
     const navigate = useNavigate()
@@ -60,82 +61,124 @@ function CrearEvento(){
     };
 
     return(
-        <div>
-            <form onSubmit={handleSubmit}>
-                <h2>Crear Evento</h2>
-                <input 
-                    type="text" 
-                    name="titulo"
-                    placeholder="Título del evento" 
-                    value={formData.titulo}
-                    onChange={handleInputChange}
-                    required
-                />
-                <input 
-                    type="datetime-local" 
-                    name="fechaEvento"
-                    placeholder="Fecha y hora del evento"
-                    value={formData.fechaEvento}
-                    onChange={handleInputChange}
-                    required
-                />
-                <input 
-                    type="text" 
-                    name="ubicacion"
-                    placeholder="Ubicación del evento"
-                    value={formData.ubicacion}
-                    onChange={handleInputChange}
-                    required
-                />
-                <textarea 
-                    name="descripcion"
-                    placeholder="Descripción del evento"
-                    value={formData.descripcion}
-                    onChange={handleInputChange}
-                    required
-                ></textarea>
-                <input 
-                    type="file" 
-                    multiple 
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
-                <button 
-                    type="submit" 
-                    disabled={!formData.titulo.trim() || !formData.descripcion.trim() || !formData.fechaEvento || loading}
-                >
-                    {loading ? 'Creando...' : 'Crear Evento'}
-                </button>
-                <button type="button" onClick={()=>navigate("/")} disabled={loading}>
-                    Volver
-                </button>
-            </form>
-            
-            {formData.imagenes.length > 0 && (
-                <div>
-                    <h4>Imágenes seleccionadas:</h4>
-                    {formData.imagenes.map((file, index) => (
-                        <div key={index} style={{ display: 'inline-block', margin: '5px' }}>
-                            <img 
-                                src={URL.createObjectURL(file)} 
-                                alt={`Preview ${index}`} 
-                                style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
-                            />
-                            <button 
-                                type="button" 
-                                onClick={() => {
-                                    setFormData(prev => ({
-                                        ...prev,
-                                        imagenes: prev.imagenes.filter((_, i) => i !== index)
-                                    }));
-                                }}
-                            >
-                                Eliminar
-                            </button>
-                        </div>
-                    ))}
+        <div className="crear-evento-container">
+            <h2 className="crear-evento-title">Crear Evento</h2>
+            <form className="crear-evento-form" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label className="form-label">Título del evento</label>
+                    <input 
+                        className="form-input"
+                        type="text" 
+                        name="titulo"
+                        placeholder="Título del evento" 
+                        value={formData.titulo}
+                        onChange={handleInputChange}
+                        required
+                    />
                 </div>
-            )}
+                
+                <div className="form-group">
+                    <label className="form-label">Fecha y hora</label>
+                    <input 
+                        className="form-input"
+                        type="datetime-local" 
+                        name="fechaEvento"
+                        value={formData.fechaEvento}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                
+                <div className="form-group">
+                    <label className="form-label">Ubicación</label>
+                    <input 
+                        className="form-input"
+                        type="text" 
+                        name="ubicacion"
+                        placeholder="Ubicación del evento"
+                        value={formData.ubicacion}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                
+                <div className="form-group">
+                    <label className="form-label">Descripción</label>
+                    <textarea 
+                        className="form-textarea"
+                        name="descripcion"
+                        placeholder="Descripción del evento"
+                        value={formData.descripcion}
+                        onChange={handleInputChange}
+                        required
+                    ></textarea>
+                </div>
+                
+                <div className="form-group">
+                    <label className="form-label">Imágenes</label>
+                    <div className="file-input-container">
+                        <label className="file-input-label">
+                            <span>Seleccionar imágenes</span>
+                            <input 
+                                className="file-input"
+                                type="file" 
+                                multiple 
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
+                        </label>
+                        <span className="file-input-text">
+                            {formData.imagenes.length > 0 
+                                ? `${formData.imagenes.length} ${formData.imagenes.length === 1 ? 'imagen seleccionada' : 'imágenes seleccionadas'}` 
+                                : 'Ninguna imagen seleccionada'}
+                        </span>
+                    </div>
+                </div>
+                
+                {formData.imagenes.length > 0 && (
+                    <div className="image-preview-container">
+                        {formData.imagenes.map((file, index) => (
+                            <div key={index} className="image-preview-card">
+                                <img 
+                                    className="image-preview"
+                                    src={URL.createObjectURL(file)} 
+                                    alt={`Preview ${index}`} 
+                                />
+                                <button 
+                                    className="image-delete-btn"
+                                    type="button" 
+                                    onClick={() => {
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            imagenes: prev.imagenes.filter((_, i) => i !== index)
+                                        }));
+                                    }}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                
+                <div className="form-buttons">
+                    <button 
+                        className="btn-primary"
+                        type="submit" 
+                        disabled={!formData.titulo.trim() || !formData.descripcion.trim() || !formData.fechaEvento || loading}
+                    >
+                        {loading ? 'Creando...' : 'Crear Evento'}
+                    </button>
+                    <button 
+                        className="btn-secondary"
+                        type="button" 
+                        onClick={()=>navigate("/")} 
+                        disabled={loading}
+                    >
+                        Volver
+                    </button>
+                </div>
+            </form>
         </div>
     );
 }

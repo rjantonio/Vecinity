@@ -1,0 +1,738 @@
+/*===========================================
+  ESTILOS PARA EL COMPONENTE DE EDITAR EVENTO
+=============================================*/
+
+/* Contenedor principal */
+.editar-evento-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Título del formulario */
+.editar-evento-title {
+  color: var(--last-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 0.75rem;
+}
+
+/* Mensaje de error */
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  border: 1px solid #ffcdd2;
+  display: flex;
+  align-items: center;
+}
+
+.error-message::before {
+  content: "⚠️";
+  font-size: 1.25rem;
+  margin-right: 0.75rem;
+}
+
+/* Vista previa del evento */
+.event-preview {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* Contenedor de botones de acción */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Formulario */
+.editar-evento-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Contenedor para cada campo del formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Etiquetas de los campos */
+.form-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Campos de entrada de texto */
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--secondary-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--last-color);
+  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
+}
+
+/* Área de texto para la descripción */
+.form-textarea {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--secondary-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  min-height: 120px;
+  resize: vertical;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--last-color);
+  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
+}
+
+/* Selector de archivos personalizado */
+.file-input-container {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.file-input-label {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--secondary-color);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.file-input-label:hover {
+  background-color: #6a6b83;
+}
+
+.file-input {
+  position: absolute;
+  left: -9999px;
+}
+
+.file-input-text {
+  margin-left: 0.5rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+/* Contenedor de vista previa de imágenes */
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Tarjeta de vista previa de imagen */
+.image-card {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.image-card:hover {
+  transform: scale(1.05);
+}
+
+.event-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.delete-image-btn {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-image-btn:hover {
+  background-color: rgba(220, 0, 0, 0.9);
+}
+
+/* Botones */
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  border: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Botón primario (verde/azul) */
+.btn-primary {
+  background-color: var(--last-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #146a70;
+  box-shadow: 0 2px 8px rgba(20, 106, 112, 0.3);
+}
+
+/* Botón secundario (gris) */
+.btn-secondary {
+  background-color: #f2f2f2;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón de peligro (rojo) */
+.btn-danger {
+  background-color: #e53935;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c62828;
+  box-shadow: 0 2px 8px rgba(198, 40, 40, 0.3);
+}
+
+/* Estado deshabilitado de botones */
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Mensaje de éxito */
+.success-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.success-message h2 {
+  color: #43a047;
+}
+
+/*===========================================
+  ADAPTACIONES PARA MODOS ALTERNATIVOS
+=============================================*/
+
+/* Modo oscuro */
+body.dark-mode .editar-evento-container {
+  background-color: var(--dark-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .editar-evento-title {
+  color: #4aacb3;
+  border-bottom-color: #4a4a4a;
+}
+
+body.dark-mode .event-preview {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .form-label {
+  color: var(--dark-text);
+}
+
+body.dark-mode .form-input,
+body.dark-mode .form-textarea {
+  background-color: var(--dark-bg);
+  border-color: #444;
+  color: var(--dark-text);
+}
+
+body.dark-mode .form-input:focus,
+body.dark-mode .form-textarea:focus {
+  border-color: #4aacb3;
+  box-shadow: 0 0 0 2px rgba(74, 172, 179, 0.2);
+}
+
+body.dark-mode .file-input-label {
+  background-color: #4a4a4a;
+}
+
+body.dark-mode .file-input-text {
+  color: #aaa;
+}
+
+body.dark-mode .error-message {
+  background-color: #421a1a;
+  color: #ff8a80;
+  border-color: #772222;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #333;
+  color: #ddd;
+  border-color: #555;
+}
+
+/* Modo daltónico */
+body.colorblind-mode .editar-evento-title {
+  color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .form-input:focus,
+body.colorblind-mode .form-textarea:focus {
+  border-color: var(--colorblind-primary);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+body.colorblind-mode .file-input-label {
+  background-color: var(--colorblind-secondary);
+}
+
+body.colorblind-mode .btn-primary {
+  background-color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .btn-danger {
+  background-color: var(--colorblind-secondary);
+}
+
+body.colorblind-mode .error-message {
+  background-color: #fff8e1;
+  color: #ff6f00;
+  border-color: #ffd54f;
+}
+
+body.colorblind-mode .success-message h2 {
+  color: var(--colorblind-accent);
+}
+
+/*===========================================
+  DISEÑO RESPONSIVE
+=============================================*/
+
+@media (max-width: 768px) {
+  .editar-evento-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .editar-evento-title {
+    font-size: 1.75rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .editar-evento-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .editar-evento-title {
+    font-size: 1.5rem;
+  }
+  
+  .form-input,
+  .form-textarea {
+    font-size: 0.9rem;
+  }
+}
+
+/*===========================================
+  ESTILOS PARA EL COMPONENTE DE CREAR EVENTO
+=============================================*/
+
+/* Contenedor principal */
+.crear-evento-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Título del formulario */
+.crear-evento-title {
+  color: var(--last-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 0.75rem;
+}
+
+/* Formulario */
+.crear-evento-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Contenedor para cada campo del formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Etiquetas de los campos */
+.form-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Campos de entrada de texto */
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--secondary-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--last-color);
+  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
+}
+
+/* Área de texto para la descripción */
+.form-textarea {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--secondary-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  min-height: 120px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--last-color);
+  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
+}
+
+/* Selector de archivos personalizado */
+.file-input-container {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.file-input-label {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--secondary-color);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.file-input-label:hover {
+  background-color: #6a6b83;
+}
+
+.file-input {
+  position: absolute;
+  left: -9999px;
+}
+
+.file-input-text {
+  margin-left: 0.5rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+/* Contenedor de vista previa de imágenes */
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Tarjeta de vista previa de imagen */
+.image-preview-card {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-delete-btn {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.image-delete-btn:hover {
+  background-color: rgba(220, 0, 0, 0.9);
+}
+
+/* Contenedor de botones */
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+/* Botón principal */
+.btn-primary {
+  background-color: var(--last-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #146a70;
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Botón secundario */
+.btn-secondary {
+  background-color: #f2f2f2;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e5e5;
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary:disabled {
+  background-color: #f7f7f7;
+  color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/*===========================================
+  ADAPTACIONES PARA MODOS ALTERNATIVOS
+=============================================*/
+
+/* Modo oscuro */
+body.dark-mode .crear-evento-container {
+  background-color: var(--dark-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .crear-evento-title {
+  color: #4aacb3;
+  border-bottom-color: #4a4a4a;
+}
+
+body.dark-mode .form-label {
+  color: var(--dark-text);
+}
+
+body.dark-mode .form-input,
+body.dark-mode .form-textarea {
+  background-color: var(--dark-bg);
+  border-color: #444;
+  color: var(--dark-text);
+}
+
+body.dark-mode .form-input:focus,
+body.dark-mode .form-textarea:focus {
+  border-color: #4aacb3;
+  box-shadow: 0 0 0 2px rgba(74, 172, 179, 0.2);
+}
+
+body.dark-mode .file-input-label {
+  background-color: #4a4a4a;
+}
+
+body.dark-mode .file-input-label:hover {
+  background-color: #5a5a5a;
+}
+
+body.dark-mode .file-input-text {
+  color: #aaa;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #333;
+  color: #ddd;
+  border-color: #555;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background-color: #3d3d3d;
+}
+
+/* Modo daltónico */
+body.colorblind-mode .crear-evento-title {
+  color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .form-input:focus,
+body.colorblind-mode .form-textarea:focus {
+  border-color: var(--colorblind-primary);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+body.colorblind-mode .file-input-label {
+  background-color: var(--colorblind-secondary);
+}
+
+body.colorblind-mode .btn-primary {
+  background-color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .btn-primary:hover {
+  background-color: #0055aa;
+}
+
+body.colorblind-mode .image-delete-btn {
+  background-color: var(--colorblind-secondary);
+}
+
+/*===========================================
+  DISEÑO RESPONSIVE
+=============================================*/
+
+@media (max-width: 768px) {
+  .crear-evento-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .crear-evento-title {
+    font-size: 1.75rem;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-primary, 
+  .btn-secondary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .crear-evento-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .crear-evento-title {
+    font-size: 1.5rem;
+  }
+  
+  .form-input,
+  .form-textarea {
+    font-size: 0.9rem;
+  }
+}
