@@ -1,6 +1,7 @@
 package com.example.vecinity.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -37,8 +38,13 @@ public class Event {
     private User creador;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference("event-registration")
     private Set<EventRegistration> inscripciones = new HashSet<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonManagedReference("event-image")
+    private Set<EventImage> images = new HashSet<>();
+
 
     // Constructor vacío
     public Event() {

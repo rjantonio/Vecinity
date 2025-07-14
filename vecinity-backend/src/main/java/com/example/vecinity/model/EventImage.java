@@ -19,7 +19,7 @@ public class EventImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
-    @JsonBackReference  // Para evitar recursión serializando Event -> EventImage -> Event ...
+    @JsonBackReference("event-image")  // Para evitar recursión serializando Event -> EventImage -> Event ...
     private Event event;
 
     public EventImage() {}

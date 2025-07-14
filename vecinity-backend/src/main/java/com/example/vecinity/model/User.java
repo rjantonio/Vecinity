@@ -32,11 +32,11 @@ public class User {
     private LocalDateTime fechaRegistro;
 
     @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("user-event")
     private Set<Event> eventosCreados = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("user-registration")
     private Set<EventRegistration> inscripciones = new HashSet<>();
 
     // Constructor vacío
