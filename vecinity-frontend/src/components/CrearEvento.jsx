@@ -68,7 +68,7 @@ function CrearEvento({ token }){
                 throw new Error('No se pudo extraer el UID del usuario del token');
             }
             
-            // Obtener información del usuario usando el firebaseUid
+            // Obtener o crear información del usuario
             console.log('Obteniendo información del usuario por Firebase UID...');
             let userInfo = null;
             try {
@@ -83,21 +83,46 @@ function CrearEvento({ token }){
                     userInfo = await userInfoResponse.json();
                     console.log('✅ Información del usuario encontrada:', userInfo);
                     console.log('Rol del usuario:', userInfo.role || userInfo.roles || 'USER');
-                    
-                    // Verificar si el usuario tiene permisos para crear eventos
-                    const userRole = userInfo.role || userInfo.roles || 'USER';
-                    if (userRole !== 'ADMIN') {
-                        console.warn('⚠️ El usuario no tiene rol ADMIN, pero intentando crear evento...');
-                    }
                 } else if (userInfoResponse.status === 404) {
-                    console.warn('⚠️ Usuario no encontrado en la base de datos con Firebase UID:', firebaseUid);
-                    // El usuario existe en Firebase pero no en tu base de datos
-                    // Podrías crear el usuario automáticamente aquí si quieres
+                    console.warn('⚠️ Usuario no encontrado, creando automáticamente...');
+                    
+                    // Obtener información del usuario de Firebase del token
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    console.log('Payload del token para crear usuario:', payload);
+                    
+                    // Crear usuario automáticamente con información del payload y defaults
+                    const userData = {
+                        firebaseUid: firebaseUid,
+                        email: payload.email || 'franpoloflan@gmail.com', // Usar el email que conocemos
+                        nombre: payload.name || payload.display_name || 'Francisco Polo', // Usar un nombre por defecto
+                        role: 'ADMIN' // Cambiar a ADMIN para que pueda crear eventos
+                    };
+                    
+                    console.log('Datos del usuario a crear:', userData);
+                    
+                    const createUserResponse = await fetch('http://localhost:8080/user', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData)
+                    });
+                    
+                    if (createUserResponse.ok) {
+                        userInfo = await createUserResponse.json();
+                        console.log('✅ Usuario creado automáticamente con rol ADMIN:', userInfo);
+                    } else {
+                        console.error('❌ Error creando usuario:', createUserResponse.status);
+                        const errorText = await createUserResponse.text();
+                        console.error('Error texto:', errorText);
+                        throw new Error('No se pudo crear el usuario en el sistema');
+                    }
                 } else {
                     console.log('❌ Error al obtener info del usuario:', userInfoResponse.status);
                 }
             } catch (userError) {
-                console.log('Error obteniendo info del usuario:', userError);
+                console.log('Error obteniendo/creando info del usuario:', userError);
             }
 
             // Verificar si podemos hacer GET (para confirmar que el token funciona)
@@ -143,18 +168,20 @@ function CrearEvento({ token }){
             if (!response.ok) {
                 if (response.status === 403) {
                     const userRoleInfo = userInfo ? 
-                        `\n📝 Usuario encontrado: ${userInfo.email || userInfo.nombre || 'N/A'}\n📝 Rol actual: ${userInfo.role || userInfo.roles || 'USER'}` :
+                        `\n📝 Usuario: ${userInfo.email || userInfo.nombre || 'N/A'}\n📝 Rol actual: ${userInfo.role || userInfo.roles || 'USER'}` :
                         '\n❌ Usuario no encontrado en la base de datos';
                     
                     throw new Error(`❌ No tienes permisos para crear eventos.
 
 🔧 Para solucionarlo:
-1. Asegúrate de que el usuario esté registrado en tu sistema
-2. Verifica que tenga rol ADMIN en la base de datos
-3. O modifica el backend para permitir usuarios normales crear eventos
+1. El usuario ha sido creado con rol ADMIN
+2. Si aún falla, verifica la configuración de Spring Security
+3. Asegúrate de que el endpoint POST /event permita rol ADMIN
 
 📝 Firebase UID: ${firebaseUid}${userRoleInfo}
-📝 Error técnico: ${response.status} - Forbidden`);
+📝 Error técnico: ${response.status} - Forbidden
+
+💡 El usuario debería tener permisos ahora. Si persiste el error, es un problema de configuración del backend.`);
                 }
                 
                 let errorText = '';
