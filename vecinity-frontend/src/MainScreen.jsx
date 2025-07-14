@@ -6,7 +6,7 @@ import login__img from './images/icono-login.png';
 import ajustes__img from './images/icono-ajustes.png';
 import profile__img from './images/icono-profile.png';
 import logout__img from './images/icono-logout.png';
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import ErrorScreen from "./components/ErrorScreen";
@@ -72,6 +72,7 @@ function EventRegistrationsList({ token }) {
 
 function MainScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -114,6 +115,8 @@ function MainScreen() {
   useEffect(() => {
     if (!token) return; // No hacer la petición sin token
 
+    setLoading(true); // Resetear loading cuando se hace una nueva petición
+    
     fetch('http://localhost:8080/event', {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -136,7 +139,7 @@ function MainScreen() {
         setError(err.message);
         setLoading(false);
       });
-  }, [token]);
+  }, [token, location.pathname]); // Agregar location.pathname como dependencia
 
   return (
     <div className="main__screen">
