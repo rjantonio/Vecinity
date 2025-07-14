@@ -80,21 +80,23 @@ function MainScreen() {
   
   // Autenticación para obtener el token
   useEffect(() => {
-    signInWithEmailAndPassword(auth, "franpoloflan@gmail.com", "123456")
-      .then(userCredential => {
-        console.log(userCredential);
-        return userCredential.user.getIdToken();
-      })
-      .then(token => {
-        console.log("Token:", token);
-        setToken(token);
-      })
-      .catch(error => {
-        console.error("Error signing in:", error);
-        setError("Error de autenticación");
-        setLoading(false);
-      });
-  }, []);
+    if (user) {
+      user.getIdToken()
+        .then(token => {
+          console.log("Token:", token);
+          setToken(token);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error("Error getting token:", error);
+          setError("Error al obtener el token");
+          setLoading(false);
+        });
+    } else {
+      setToken(null);
+      setLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -186,7 +188,9 @@ function MainScreen() {
           <Route path="/" element={
             <>
               <h2 className='tittle'>Lista de objetos</h2>
-              {!token ? (
+              {!user ? (
+                <div>Por favor, inicia sesión para ver los eventos</div>
+              ) : !token ? (
                 <div>Autenticando...</div>
               ) : loading ? (
                 <div>Cargando eventos...</div>
@@ -206,9 +210,13 @@ function MainScreen() {
                   ))}
                 </ul>
               )}
-              <button className="create__event__btn" onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
-              <button className="edit__event__btn" onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
-              <EventRegistrationsList token={token} />
+              {user && (
+                <>
+                  <button className="create__event__btn" onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
+                  <button className="edit__event__btn" onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
+                  <EventRegistrationsList token={token} />
+                </>
+              )}
             </>
           } />
           <Route path="/settings" element={<Settings />} />
