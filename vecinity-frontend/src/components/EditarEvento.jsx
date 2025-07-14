@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import Evento from "./Evento";
+import "../css/EditarEvento.css";
 
 function Editarevento(){
     const navigate = useNavigate();
@@ -137,57 +138,58 @@ function Editarevento(){
 
     if (eventoEliminado) {
         return (
-            <div>
-                <h2>Evento eliminado</h2>
-                <button onClick={() => navigate('/')}>Volver al inicio</button>
+            <div className="editar-evento-container">
+                <div className="success-message">
+                    <h2>Evento eliminado correctamente</h2>
+                    <button className="btn btn-primary" onClick={() => navigate('/')}>
+                        Volver al inicio
+                    </button>
+                </div>
             </div>
         );
     }
 
     return(
-        <div>
-            <h1>Editar Evento</h1>
+        <div className="editar-evento-container">
+            <h1 className="editar-evento-title">Editar Evento</h1>
             
             {error && (
-                <div style={{ 
-                    backgroundColor: '#ffebee', 
-                    color: '#c62828', 
-                    padding: '10px', 
-                    marginBottom: '20px',
-                    borderRadius: '4px',
-                    border: '1px solid #ffcdd2'
-                }}>
+                <div className="error-message">
                     Error: {error}
                 </div>
             )}
             
             {!modoEdicion ? (
                 <div>
-                    <Evento 
-                        name={formData.nombre}
-                        images={formData.imagenes}
-                        description={formData.descripcion}
-                        fechaEvento={formData.fechaEvento}
-                        ubicacion={formData.ubicacion}
-                        showJoinButton={false}
-                    />
-                    <div style={{ marginTop: '20px' }}>
+                    <div className="event-preview">
+                        <Evento 
+                            name={formData.nombre}
+                            images={formData.imagenes}
+                            description={formData.descripcion}
+                            fechaEvento={formData.fechaEvento}
+                            ubicacion={formData.ubicacion}
+                            showJoinButton={false}
+                        />
+                    </div>
+                    
+                    <div className="action-buttons">
                         <button 
+                            className="btn btn-primary"
                             onClick={() => setModoEdicion(true)}
                             disabled={loading}
                         >
                             Editar Evento
                         </button>
                         <button 
+                            className="btn btn-danger"
                             onClick={handleEliminarEvento}
                             disabled={loading}
-                            style={{ backgroundColor: 'red', color: 'white', marginLeft: '10px' }}
                         >
                             {loading ? 'Eliminando...' : 'Eliminar Evento'}
                         </button>
                         <button 
+                            className="btn btn-secondary"
                             onClick={() => navigate('/')} 
-                            style={{ marginLeft: '10px' }}
                             disabled={loading}
                         >
                             Volver
@@ -195,10 +197,12 @@ function Editarevento(){
                     </div>
                 </div>
             ) : (
-                <form onSubmit={handleGuardarCambios}>
-                    <div>
-                        <label>Nombre del evento:</label>
+                <form className="editar-evento-form" onSubmit={handleGuardarCambios}>
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="nombre">Nombre del evento:</label>
                         <input 
+                            id="nombre"
+                            className="form-input"
                             type="text" 
                             name="nombre"
                             value={formData.nombre}
@@ -207,9 +211,11 @@ function Editarevento(){
                         />
                     </div>
                     
-                    <div>
-                        <label>Descripción:</label>
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="descripcion">Descripción:</label>
                         <textarea 
+                            id="descripcion"
+                            className="form-textarea"
                             name="descripcion"
                             value={formData.descripcion}
                             onChange={handleInputChange}
@@ -217,9 +223,11 @@ function Editarevento(){
                         />
                     </div>
                     
-                    <div>
-                        <label>Fecha del evento:</label>
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="fechaEvento">Fecha del evento:</label>
                         <input 
+                            id="fechaEvento"
+                            className="form-input"
                             type="datetime-local"
                             name="fechaEvento"
                             value={formData.fechaEvento}
@@ -228,9 +236,11 @@ function Editarevento(){
                         />
                     </div>
                     
-                    <div>
-                        <label>Ubicación:</label>
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="ubicacion">Ubicación:</label>
                         <input 
+                            id="ubicacion"
+                            className="form-input"
                             type="text"
                             name="ubicacion"
                             value={formData.ubicacion}
@@ -240,49 +250,61 @@ function Editarevento(){
                         />
                     </div>
                     
-                    <div>
-                        <label>Agregar imágenes:</label>
-                        <input 
-                            type="file" 
-                            multiple 
-                            accept="image/*"
-                            onChange={handleFileChange}
-                        />
+                    <div className="form-group">
+                        <label className="form-label">Agregar imágenes:</label>
+                        <div className="file-input-container">
+                            <label className="file-input-label" htmlFor="imagenes">
+                                Seleccionar imágenes
+                            </label>
+                            <input 
+                                id="imagenes"
+                                className="file-input"
+                                type="file" 
+                                multiple 
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
+                            <span className="file-input-text">Selecciona archivos para agregar</span>
+                        </div>
                     </div>
 
                     {formData.imagenes.length > 0 && (
-                        <div>
+                        <div className="form-group">
                             <h4>Imágenes actuales:</h4>
-                            {formData.imagenes.map((imagen, index) => (
-                                <div key={index} style={{ display: 'inline-block', margin: '5px' }}>
-                                    <img 
-                                        src={imagen} 
-                                        alt={`Imagen ${index + 1}`} 
-                                        style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
-                                    />
-                                    <button 
-                                        type="button" 
-                                        onClick={() => eliminarImagen(index)}
-                                        style={{ display: 'block', backgroundColor: 'red', color: 'white' }}
-                                    >
-                                        Eliminar
-                                    </button>
-                                </div>
-                            ))}
+                            <div className="image-gallery">
+                                {formData.imagenes.map((imagen, index) => (
+                                    <div key={index} className="image-card">
+                                        <img 
+                                            className="event-image"
+                                            src={imagen} 
+                                            alt={`Imagen ${index + 1}`}
+                                        />
+                                        <button 
+                                            className="delete-image-btn"
+                                            type="button" 
+                                            onClick={() => eliminarImagen(index)}
+                                            title="Eliminar imagen"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
                     
-                    <div style={{ marginTop: '20px' }}>
+                    <div className="action-buttons">
                         <button 
+                            className="btn btn-primary"
                             type="submit"
                             disabled={!formData.nombre.trim() || !formData.descripcion.trim() || !formData.fechaEvento.trim() || !formData.ubicacion.trim() || loading}
                         >
                             {loading ? 'Guardando...' : 'Guardar Cambios'}
                         </button>
                         <button 
+                            className="btn btn-secondary"
                             type="button" 
                             onClick={handleCancelarEdicion}
-                            style={{ marginLeft: '10px' }}
                             disabled={loading}
                         >
                             Cancelar

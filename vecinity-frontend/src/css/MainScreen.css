@@ -163,6 +163,124 @@
     transform: translateY(-2px);
 }
 
+/* Estilos para resultados de búsqueda */
+.search-results {
+  width: 100%;
+  margin: 1rem 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--secondary-color);
+}
+
+.no-results {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+/* Estilos para el contenedor de búsqueda y acciones */
+.search-and-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .search-and-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .search-and-actions .search-bar {
+    flex: 1;
+    margin: 0;
+  }
+  
+  .search-and-actions .event-buttons-container {
+    margin: 0;
+  }
+}
+
+/* Ajustes para los botones en el nuevo contenedor */
+.search-and-actions .event-buttons-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Estilos para los nuevos botones de eventos */
+.event-button {
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--last-color);
+  color: white;
+}
+
+.event-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-button.create-event {
+  background-color: var(--last-color);
+}
+
+.event-button.edit-event {
+  background-color: var(--secondary-color);
+}
+
+.event-button-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.event-button-text {
+  font-size: 0.95rem;
+}
+
+body.dark-mode .search-and-actions {
+  border-color: var(--dark-border);
+}
+
+body.colorblind-mode .search-and-actions {
+  border-color: var(--colorblind-primary);
+}
+
+/* Adaptaciones para modo oscuro */
+body.dark-mode .search-results {
+  color: #aaa;
+}
+
+body.dark-mode .no-results {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #bbb;
+}
+
+/* Adaptaciones para modo daltónico */
+body.colorblind-mode .search-results {
+  color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .no-results {
+  color: var(--colorblind-primary);
+  border: 1px solid var(--colorblind-secondary);
+}
+
 /* Estilos para modo oscuro */
 body.dark-mode .main__screen {
     background-color: var(--dark-bg);
@@ -213,15 +331,20 @@ body.dark-mode .event__join__btn:hover {
     background: linear-gradient(135deg, #555, var(--dark-border));
 }
 
+/* Estilos para los botones de eventos - modo oscuro */
 body.dark-mode .create__event__btn,
-body.dark-mode .edit__event__btn {
+body.dark-mode .edit__event__btn,
+body.dark-mode .event-button.create-event,
+body.dark-mode .event-button.edit-event {
     background: linear-gradient(135deg, var(--dark-border), #555);
     color: var(--dark-text);
     border: 1px solid var(--dark-text);
 }
 
 body.dark-mode .create__event__btn:hover,
-body.dark-mode .edit__event__btn:hover {
+body.dark-mode .edit__event__btn:hover,
+body.dark-mode .event-button.create-event:hover,
+body.dark-mode .event-button.edit-event:hover {
     background: linear-gradient(135deg, #555, var(--dark-border));
 }
 
@@ -267,6 +390,7 @@ body.colorblind-mode .event__list__item {
     margin-bottom: 1rem;
 }
 
+/* Estilos para los botones - modo daltónico */
 body.colorblind-mode button {
     background-color: var(--colorblind-secondary);
     color: var(--colorblind-text);
@@ -277,6 +401,24 @@ body.colorblind-mode button {
 body.colorblind-mode button:hover {
     background-color: var(--colorblind-accent);
     border-color: var(--colorblind-secondary);
+}
+
+/* Estilos específicos para botones de eventos - modo daltónico */
+body.colorblind-mode .event-button {
+    background-color: var(--colorblind-secondary);
+    color: var(--colorblind-text);
+    border: 2px solid var(--colorblind-primary);
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+body.colorblind-mode .event-button:hover {
+    background-color: var(--colorblind-accent);
+    border-color: var(--colorblind-secondary);
+    transform: translateY(-2px);
 }
 
 body.colorblind-mode h1,
@@ -339,15 +481,20 @@ body.dark-mode.colorblind-mode .event__join__btn:hover {
     border-color: var(--colorblind-accent);
 }
 
+/* Estilos para botones de eventos - combinación de modos oscuro y daltónico */
 body.dark-mode.colorblind-mode .create__event__btn,
-body.dark-mode.colorblind-mode .edit__event__btn {
+body.dark-mode.colorblind-mode .edit__event__btn,
+body.dark-mode.colorblind-mode .event-button.create-event,
+body.dark-mode.colorblind-mode .event-button.edit-event {
     background-color: #0f3460;
     color: #ffffff;
     border: 2px solid var(--colorblind-secondary);
 }
 
 body.dark-mode.colorblind-mode .create__event__btn:hover,
-body.dark-mode.colorblind-mode .edit__event__btn:hover {
+body.dark-mode.colorblind-mode .edit__event__btn:hover,
+body.dark-mode.colorblind-mode .event-button.create-event:hover,
+body.dark-mode.colorblind-mode .event-button.edit-event:hover {
     background-color: var(--colorblind-accent);
     border-color: var(--colorblind-secondary);
 }

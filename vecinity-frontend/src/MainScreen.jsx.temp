@@ -15,7 +15,6 @@ import Register from "./components/Register";
 import { useAuth } from "./context/AuthContext";
 import { auth } from "./utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-// Importación del componente SearchBar para la funcionalidad de búsqueda
 import SearchBar from "./components/SearchBar";
 
 import React, { useEffect, useState } from 'react';
@@ -29,7 +28,7 @@ function EventRegistrationsList({ token }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) return; // No hacer la petición sin token
 
     fetch('http://localhost:8080/event-registration', {
       headers: {
@@ -59,11 +58,11 @@ function EventRegistrationsList({ token }) {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="enrolled__events__list">
+    <div>
       <h2>Inscripciones a eventos</h2>
       <ul>
         {registrations.map(reg => (
-          <li key={reg.id} className="enrolled__event__item">
+          <li key={reg.id}>
             Usuario ID: {reg.userId}, Evento ID: {reg.eventId}, Fecha: {reg.fechaInscripcion}
           </li>
         ))}
@@ -141,10 +140,9 @@ function MainScreen() {
       });
   }, [token]);
 
-  // FUNCIONALIDAD DE BÚSQUEDA - INICIO
   // Función para manejar la búsqueda
   const handleSearch = (term) => {
-    setSearchTerm(term); // Guarda el término de búsqueda actual
+    setSearchTerm(term);
     
     if (!term.trim()) {
       // Si el término de búsqueda está vacío, mostrar todos los elementos
@@ -152,14 +150,15 @@ function MainScreen() {
       return;
     }
     
-    // Filtrar los elementos que coincidan con el término de búsqueda (solo por título)
+    // Filtrar los elementos que coincidan con el término de búsqueda
     const filtered = items.filter(item => 
-      item.titulo && item.titulo.toLowerCase().includes(term.toLowerCase())
+      item.titulo.toLowerCase().includes(term.toLowerCase()) || 
+      item.descripcion.toLowerCase().includes(term.toLowerCase()) ||
+      item.ubicacion.toLowerCase().includes(term.toLowerCase())
     );
     
-    setFilteredItems(filtered); // Actualiza la lista filtrada que se muestra
+    setFilteredItems(filtered);
   };
-  // FUNCIONALIDAD DE BÚSQUEDA - FIN
 
   return (
     <div className="main__screen">
@@ -211,30 +210,7 @@ function MainScreen() {
           <Route path="/" element={
             <>
               <h2>Lista de eventos</h2>
-              
-              {/* BARRA DE BÚSQUEDA Y BOTONES DE ACCIÓN - INICIO */}
-              <div className="search-and-actions">
-                {/* Componente SearchBar que recibe la función de búsqueda */}
-                <SearchBar onSearch={handleSearch} placeholder="Buscar eventos por título..." />
-                
-                <div className="event-buttons-container">
-                  <button 
-                    className="event-button create-event" 
-                    onClick={() => navigate("/crear-evento")}
-                  >
-                    <span className="event-button-icon">+</span>
-                    <span className="event-button-text">Crear Evento</span>
-                  </button>
-                  <button 
-                    className="event-button edit-event" 
-                    onClick={() => navigate("/editar-evento")}
-                  >
-                    <span className="event-button-icon">✎</span>
-                    <span className="event-button-text">Editar Evento</span>
-                  </button>
-                </div>
-              </div>
-              {/* BARRA DE BÚSQUEDA Y BOTONES DE ACCIÓN - FIN */}
+              <SearchBar onSearch={handleSearch} placeholder="Buscar eventos por título, descripción o ubicación..." />
               
               {!token ? (
                 <div>Autenticando...</div>
@@ -244,37 +220,47 @@ function MainScreen() {
                 <div>Error: {error}</div>
               ) : (
                 <>
-                  {/* RESULTADOS DE BÚSQUEDA - INICIO */}
-                  {/* Muestra el número de resultados cuando hay un término de búsqueda */}
-                  {searchTerm && (
-                    <p className="search-results">Resultados para "{searchTerm}": {filteredItems.length} eventos</p>
-                  )}
+                  <div className="search-results">
+                    {searchTerm ? (
+                      <p>Se encontraron {filteredItems.length} resultados para "{searchTerm}"</p>
+                    ) : null}
+                  </div>
                   
-                  {/* Lista de eventos filtrada por la búsqueda */}
-                  <ul className="event__list">
-                    {filteredItems.map(item => (
-                      <Evento
-                        key={item.id}
-                        name={item.titulo}
-                        fechaEvento={item.fechaEvento}
-                        images={[item.imagen]}
-                        description={item.descripcion}
-                        ubicacion={item.ubicacion}
-                      />
-                    ))}
-                  </ul>
+                  {filteredItems.length > 0 ? (
+                    <ul className="event__list">
+                      {filteredItems.map(item => (
+                        <Evento
+                          key={item.id}
+                          name={item.titulo}
+                          fechaEvento={item.fechaEvento}
+                          images={[item.imagen]}
+                          description={item.descripcion}
+                          ubicacion={item.ubicacion}
+                        />
+                      ))}
+                    </ul>
+                  ) : searchTerm ? (
+                    <div className="no-results">
+                      <p>No se encontraron eventos que coincidan con tu búsqueda</p>
+                    </div>
+                  ) : null}
                   
-                  {/* Mensaje cuando no hay resultados para la búsqueda */}
-                  {searchTerm && filteredItems.length === 0 && (
-                    <p className="no-results">No se encontraron eventos que coincidan con tu búsqueda</p>
-                  )}
-                  {/* RESULTADOS DE BÚSQUEDA - FIN */}
-                  
-                  {/* Nota: Estas líneas eran parte de un conflicto git. Los botones se movieron arriba junto con la barra de búsqueda 
-                  para una mejor experiencia de usuario
-                  <button className="create__event__btn" onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
-                  <button className="edit__event__btn" onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
-                  */}
+                  <div className="event-buttons-container">
+                    <button 
+                      className="event-button create-event" 
+                      onClick={() => navigate("/crear-evento")}
+                    >
+                      <span className="event-button-icon">+</span>
+                      <span className="event-button-text">Crear Evento</span>
+                    </button>
+                    <button 
+                      className="event-button edit-event" 
+                      onClick={() => navigate("/editar-evento")}
+                    >
+                      <span className="event-button-icon">✎</span>
+                      <span className="event-button-text">Editar Evento</span>
+                    </button>
+                  </div>
                   
                   <EventRegistrationsList token={token} />
                 </>

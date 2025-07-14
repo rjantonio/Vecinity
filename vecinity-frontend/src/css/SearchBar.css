@@ -1,0 +1,84 @@
+/*===========================================
+  ESTILOS PARA EL COMPONENTE DE BÚSQUEDA
+=============================================*/
+
+/* Contenedor principal del buscador */
+.search-bar {
+  width: 100%;
+  max-width: 600px;
+  margin: 1rem auto;
+}
+
+/* Formulario del buscador con disposición flex */
+.search-bar form {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Campo de texto para la búsqueda */
+.search-input {
+  flex-grow: 1;           /* Ocupa todo el espacio disponible */
+  padding: 8px 12px;      /* Espaciado interior */
+  border-radius: 4px;     /* Bordes redondeados */
+  border: 1px solid var(--secondary-color);
+  font-size: 1rem;
+  background-color: white;
+}
+
+/* Estado de foco del campo de búsqueda */
+.search-input:focus {
+  outline: none;
+  border-color: var(--last-color);  /* Cambia el color del borde al enfocar */
+}
+
+/* Botón de búsqueda */
+.search-button {
+  background-color: var(--last-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;        /* Cambia el cursor a pointer al pasar por encima */
+}
+
+/* Estado hover del botón de búsqueda */
+.search-button:hover {
+  background-color: #2a8a90;  /* Cambia el color al pasar el cursor */
+}
+
+/*===========================================
+  ADAPTACIONES PARA MODOS ALTERNATIVOS
+=============================================*/
+
+/* Adaptación para modo oscuro */
+body.dark-mode .search-input {
+  background-color: var(--dark-bg);      /* Fondo oscuro para el input */
+  color: var(--dark-text);               /* Texto claro */
+  border-color: var(--dark-border);      /* Borde específico para modo oscuro */
+}
+
+body.dark-mode .search-button {
+  background-color: #2a6b6f;             /* Color de botón para modo oscuro */
+}
+
+/* Adaptación para modo daltónico */
+body.colorblind-mode .search-input {
+  border-color: var(--colorblind-primary);  /* Borde con color visible para daltónicos */
+}
+
+body.colorblind-mode .search-button {
+  background-color: var(--colorblind-primary); /* Color distinguible para daltónicos */
+}
+
+/*===========================================
+  DISEÑO RESPONSIVE
+=============================================*/
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  .search-bar {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+}
