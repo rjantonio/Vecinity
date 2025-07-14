@@ -27,7 +27,7 @@ public class UserController {
         return userService.listAll();
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<User> crear(HttpServletRequest request, @RequestBody User userFromClient) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

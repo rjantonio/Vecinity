@@ -34,7 +34,7 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "id_creador", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("user-event")
     private User creador;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
