@@ -1,6 +1,5 @@
 package com.example.vecinity.security;
 
-import com.example.vecinity.service.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -16,24 +15,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 @Component
 public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
-
-    private static final List<String> PUBLIC_PATHS = List.of("/auth/", "/public/", "/", "crear-evento"); // rutas públicas
-
-    private final UserService userService;
-
-    public FirebaseAuthenticationFilter(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getServletPath();
-        return PUBLIC_PATHS.stream().anyMatch(path::startsWith);
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -53,25 +37,17 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
 
-            // Crear o actualizar usuario en la base de datos según token Firebase
-            String firebaseUid = decodedToken.getUid();
-            String email = decodedToken.getEmail();
-            String nombre = decodedToken.getName();
-
-            userService.createUserIfNotExists(firebaseUid, email, nombre);
-
             // Autenticación manual para Spring Security
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(firebaseUid, null, Collections.emptyList());
+                    new UsernamePasswordAuthenticationToken(decodedToken.getUid(), null, Collections.emptyList());
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Guardar UID en request si se necesita en controladores
-            request.setAttribute("firebaseUid", firebaseUid);
+            // También puedes guardar el UID en el request si lo necesitas
+            request.setAttribute("firebaseUid", decodedToken.getUid());
 
             filterChain.doFilter(request, response);
-
         } catch (FirebaseAuthException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido: " + e.getMessage());
         }
