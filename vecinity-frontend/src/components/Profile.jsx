@@ -37,7 +37,7 @@ function Profile() {
       reader.onloadend = () => {
         setTemp(t => ({
           ...t,
-          foto: reader.result // base64
+          foto: reader.result
         }));
       };
       reader.readAsDataURL(files[0]);
@@ -56,7 +56,7 @@ function Profile() {
         nombre: temp.nombre,
         foto: temp.foto
       });
-      setProfile({ ...temp, email: profile.email }); // Mantén el email original
+      setProfile({ ...temp, email: profile.email });
       setEdit(false);
       setMsg("Datos actualizados correctamente");
       setTimeout(() => setMsg(""), 2000);
@@ -110,7 +110,6 @@ function Profile() {
         value={profile.email}
         readOnly
         disabled
-        style={{ background: "#f0f0f0", color: "#888", cursor: "not-allowed" }}
       />
       <div style={{ display: "flex", gap: "1rem" }}>
         <button className="btn__disable__acc">
@@ -129,7 +128,7 @@ function Profile() {
           Volver a la lista
         </button>
       </div>
-      {msg && <div style={{ marginTop: 10, color: "green" }}>{msg}</div>}
+      {msg && <div >{msg}</div>}
     </div>
   );
 }

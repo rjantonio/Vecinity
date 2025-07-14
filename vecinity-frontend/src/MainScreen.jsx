@@ -27,7 +27,7 @@ function EventRegistrationsList({ token }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!token) return; // No hacer la petición sin token
+    if (!token) return;
 
     fetch('http://localhost:8080/event-registration', {
       headers: {
@@ -57,11 +57,11 @@ function EventRegistrationsList({ token }) {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="enrolled__events__list">
       <h2>Inscripciones a eventos</h2>
       <ul>
         {registrations.map(reg => (
-          <li key={reg.id}>
+          <li key={reg.id} className="enrolled__event__item">
             Usuario ID: {reg.userId}, Evento ID: {reg.eventId}, Fecha: {reg.fechaInscripcion}
           </li>
         ))}
@@ -185,7 +185,7 @@ function MainScreen() {
         <Routes>
           <Route path="/" element={
             <>
-              <h2>Lista de objetos</h2>
+              <h2 className='tittle'>Lista de objetos</h2>
               {!token ? (
                 <div>Autenticando...</div>
               ) : loading ? (
@@ -206,8 +206,8 @@ function MainScreen() {
                   ))}
                 </ul>
               )}
-              <button onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
-              <button onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
+              <button className="create__event__btn" onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
+              <button className="edit__event__btn" onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
               <EventRegistrationsList token={token} />
             </>
           } />

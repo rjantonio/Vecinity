@@ -1,41 +1,245 @@
-.main__content__register{
-    background: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
-    width: 20rem;
-    text-align: center;
+.main__content__register {
+    max-width: 400px;
+    width: 90%;
+    min-height: 250px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(126, 127, 154, 0.1);
 }
-.form__register{
+
+.main__content__register:hover {
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.form__register {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
-.input{
-    padding: .5rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+
+.input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid rgba(126, 127, 154, 0.3);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    box-sizing: border-box;
 }
-.btn__submit{
-    padding: .75rem;
-    background: #1976d2;
-    color: #fff;
+
+.input:focus {
+    outline: none;
+    border-color: var(--last-color);
+    box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.1);
+}
+
+.input::placeholder {
+    color: var(--secondary-color);
+}
+
+.btn__submit {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--last-color), #2a8a90);
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
 }
-.btn__return{
-    padding: .75rem;
-    background: #e0e0e0;
-    color: #1976d2;
+
+.btn__submit:hover {
+    background: linear-gradient(135deg, #2a8a90, var(--last-color));
+    transform: translateY(-2px);
+}
+
+.btn__return {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--secondary-color), #6b6c87);
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
-.main__screen__register{
-    height: 100vh;
+
+.btn__return:hover {
+    background: linear-gradient(135deg, #6b6c87, var(--secondary-color));
+    transform: translateY(-2px);
+}
+
+.main__screen__register {
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-color);
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f5f5f5;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode .main__screen__register {
+    background-color: var(--dark-bg);
+}
+
+body.dark-mode .main__content__register {
+    background-color: var(--dark-secondary);
+    color: var(--dark-text);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .main__content__register:hover {
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .input {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .input::placeholder {
+    color: #bbb;
+}
+
+body.dark-mode .input:focus {
+    border-color: #4a9fa4;
+    box-shadow: 0 0 0 2px rgba(74, 159, 164, 0.2);
+}
+
+/* Estilos para modo daltónico */
+body.colorblind-mode .main__screen__register {
+    background-color: var(--colorblind-bg);
+    color: var(--colorblind-text);
+}
+
+body.colorblind-mode .main__content__register {
+    background-color: #ffffff;
+    color: var(--colorblind-text);
+    border: 2px solid var(--colorblind-primary);
+    box-shadow: 0 2px 15px rgba(0, 102, 204, 0.1);
+}
+
+body.colorblind-mode .input {
+    border-color: var(--colorblind-primary);
+    background-color: #f8f9fa;
+}
+
+body.colorblind-mode .input:focus {
+    border-color: var(--colorblind-secondary);
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+}
+
+body.colorblind-mode .btn__submit {
+    background-color: var(--colorblind-secondary);
+    color: var(--colorblind-text);
+    border: 2px solid var(--colorblind-primary);
+    font-weight: bold;
+}
+
+body.colorblind-mode .btn__submit:hover {
+    background-color: var(--colorblind-accent);
+    border-color: var(--colorblind-secondary);
+}
+
+body.colorblind-mode .btn__return {
+    background-color: var(--colorblind-primary);
+    color: #ffffff;
+    border: 2px solid var(--colorblind-secondary);
+    font-weight: bold;
+}
+
+body.colorblind-mode .btn__return:hover {
+    background-color: var(--colorblind-accent);
+    border-color: var(--colorblind-primary);
+}
+
+/* Combinación de modos nocturno y daltónico */
+body.dark-mode.colorblind-mode .main__screen__register {
+    background-color: #1a1a2e;
+    color: #ffffff;
+}
+
+body.dark-mode.colorblind-mode .main__content__register {
+    background-color: #0f3460;
+    color: #ffffff;
+    border-color: var(--colorblind-secondary);
+    box-shadow: 0 2px 20px rgba(255, 152, 0, 0.2);
+}
+
+body.dark-mode.colorblind-mode .input {
+    background-color: #16213e;
+    color: #ffffff;
+    border-color: var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .input::placeholder {
+    color: #cccccc;
+}
+
+/* Animación de entrada */
+.main__content__register {
+    animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+    .main__content__register {
+        padding: 2rem;
+        margin: 1rem;
+    }
+}
+
+.register__tittle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--last-color);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode .register__tittle {
+    color: var(--dark-text);
+}
+
+/* Estilos para modo daltónico */
+body.colorblind-mode .register__tittle {
+    color: var(--colorblind-primary);
+    font-weight: bold;
+}
+
+/* Combinación de modos nocturno y daltónico */
+body.dark-mode.colorblind-mode .register__tittle {
+    color: var(--colorblind-secondary);
 }
