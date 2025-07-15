@@ -167,7 +167,7 @@ function MainScreen() {
         setLoading(false);
       });
   }, [token, location.pathname]); // Agregar location.pathname como dependencia
-
+      
   return (
     <div className="main__screen">
       <div className="barrnav">
@@ -263,3 +263,5 @@ function MainScreen() {
 }
 
 export default MainScreen;
+
+//randmo comment
