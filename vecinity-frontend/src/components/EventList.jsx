@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Evento from "./Evento";
 import EventRegistrationsList from "./EventRegistrationsList";
-import SearchBar from "./SearchBar"; // 👈 Asegúrate de tener este componente funcionando
+import SearchBar from "./SearchBar"; 
 
 function EventList({ user, token }) {
   const navigate = useNavigate();
