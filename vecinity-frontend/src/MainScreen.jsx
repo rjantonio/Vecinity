@@ -2,10 +2,6 @@ import './css/MainScreen.css';
 import './css/Settings.css';
 import './css/UserProfile.css';
 import logo from './images/logo.svg';
-import login__img from './images/icono-login.png';
-import ajustes__img from './images/icono-ajustes.png';
-import profile__img from './images/icono-profile.png';
-import logout__img from './images/icono-logout.png';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
@@ -21,11 +17,20 @@ import HomePage from "./components/HomePage";
 import { useAuth } from "./context/AuthContext";
 import React, { useEffect, useState } from 'react';
 
+// ✅ FontAwesome icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faUserCircle,
+  faSignInAlt,
+  faSignOutAlt,
+  faCogs
+} from '@fortawesome/free-solid-svg-icons';
+
 function MainScreen() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [token, setToken] = useState(null);
-  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false); // ✅ Necesario para el dropdown
+  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
 
   // Obtener token del usuario autenticado
   useEffect(() => {
@@ -60,31 +65,46 @@ function MainScreen() {
         >
           <img className="logo__img" src={logo} alt="Logo" />
         </button>
+
         <div className="barrnav__rigth">
-          <div 
+          {/* Ajustes con dropdown */}
+          <div
             className="settings__container"
             onMouseEnter={() => setShowSettingsDropdown(true)}
             onMouseLeave={() => setShowSettingsDropdown(false)}
           >
-            <button 
+            <button
               className="btn__settings"
               title="Preferencias"
             >
-              <img className="settings__icon" src={ajustes__img} alt="Ajustes" />
+              <FontAwesomeIcon icon={faCogs} className="nav-icon" />
             </button>
             <SettingsDropdown isVisible={showSettingsDropdown} />
           </div>
+
           {!user ? (
-            <button className="btn__login" onClick={() => navigate("/login")} title="Iniciar sesión">
-              <img className="login__icon" src={login__img} alt="Iniciar sesión" />
+            <button
+              className="btn__login"
+              onClick={() => navigate("/login")}
+              title="Iniciar sesión"
+            >
+              <FontAwesomeIcon icon={faSignInAlt} className="nav-icon" />
             </button>
           ) : (
             <>
-              <button className="btn__login" onClick={() => navigate("/profile")} title="Perfil">
-                <img className="login__icon" src={profile__img} alt="Perfil" />
+              <button
+                className="btn__login"
+                onClick={() => navigate("/profile")}
+                title="Perfil"
+              >
+                <FontAwesomeIcon icon={faUserCircle} className="nav-icon" />
               </button>
-              <button className="btn__logout" onClick={logout} title="Cerrar sesión">
-                <img className="login__icon" src={logout__img} alt="Cerrar sesión" />
+              <button
+                className="btn__logout"
+                onClick={logout}
+                title="Cerrar sesión"
+              >
+                <FontAwesomeIcon icon={faSignOutAlt} className="nav-icon" />
               </button>
             </>
           )}

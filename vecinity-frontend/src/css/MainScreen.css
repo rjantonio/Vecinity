@@ -629,3 +629,89 @@ body.dark-mode.colorblind-mode .enrolled__event__item:hover {
     align-items: center;
     gap: 1rem;
 }
+
+.nav-icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
+  color: var(--last-color);
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.event__location i,
+.event__date i,
+.event__description i {
+  color: var(--secondary-color);
+}
+
+
+.event__join__btn:hover .nav-icon {
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Estilo base para todos los iconos de navegación */
+.nav-icon {
+  font-size: 1.6rem;
+  color: var(--last-color);
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover general: cambio sutil */
+.btn__settings:hover .nav-icon,
+.btn__login:hover .nav-icon,
+.btn__logout:hover .nav-icon {
+  color: #2a8a90;
+  transform: scale(1.1);
+}
+
+/* Iconos dentro del modo oscuro */
+body.dark-mode .nav-icon {
+  color: var(--dark-text);
+}
+
+body.dark-mode .btn__settings:hover .nav-icon,
+body.dark-mode .btn__login:hover .nav-icon,
+body.dark-mode .btn__logout:hover .nav-icon {
+  color: #4a9ca3;
+}
+
+/* Iconos en modo daltónico */
+body.colorblind-mode .nav-icon {
+  color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .btn__settings:hover .nav-icon,
+body.colorblind-mode .btn__login:hover .nav-icon,
+body.colorblind-mode .btn__logout:hover .nav-icon {
+  color: var(--colorblind-secondary);
+}
+
+/* Iconos en combinación de modo oscuro + daltónico */
+body.dark-mode.colorblind-mode .nav-icon {
+  color: #ffffff;
+}
+
+body.dark-mode.colorblind-mode .btn__settings:hover .nav-icon,
+body.dark-mode.colorblind-mode .btn__login:hover .nav-icon,
+body.dark-mode.colorblind-mode .btn__logout:hover .nav-icon {
+  color: var(--colorblind-accent);
+}
+
+/* Iconos dentro del contenido de eventos (fecha, ubicación, etc.) */
+.event__location i,
+.event__date i,
+.event__description i {
+  color: var(--secondary-color);
+}
+
+body.dark-mode .event__location i,
+body.dark-mode .event__date i,
+body.dark-mode .event__description i {
+  color: #b0b0b0;
+}
+
+body.colorblind-mode .event__location i,
+body.colorblind-mode .event__date i,
+body.colorblind-mode .event__description i {
+  color: var(--colorblind-secondary);
+}
