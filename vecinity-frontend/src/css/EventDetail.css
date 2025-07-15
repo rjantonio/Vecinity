@@ -1,0 +1,16 @@
+.event-detail {
+  padding: 1rem;
+}
+
+.event-detail-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.event-detail-img {
+  max-width: 250px;
+  border-radius: 8px;
+  object-fit: cover;
+}
