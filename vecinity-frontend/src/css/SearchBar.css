@@ -6,7 +6,11 @@
 .search-bar {
   width: 100%;
   max-width: 600px;
-  margin: 1rem auto;
+  margin: 1rem auto 2rem auto; /* Márgenes normales, arriba y abajo */
+  position: relative;
+  z-index: 10;         /* z-index normal */
+  display: block;      /* Mantiene block para ocupar su propio espacio */
+  text-align: center;  /* Mantiene centrado horizontal */
 }
 
 /* Formulario del buscador con disposición flex */
@@ -14,16 +18,26 @@
   display: flex;
   gap: 10px;
   width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  padding: 12px;
+  background-color: white;
+  border-radius: 10px;
+  margin: 0 auto; /* Centra el formulario horizontalmente */
+  box-sizing: border-box;
+  border: 1px solid rgba(126, 127, 154, 0.15);
 }
+
+
 
 /* Campo de texto para la búsqueda */
 .search-input {
   flex-grow: 1;           /* Ocupa todo el espacio disponible */
-  padding: 8px 12px;      /* Espaciado interior */
-  border-radius: 4px;     /* Bordes redondeados */
+  padding: 12px 16px;     /* Espaciado interior aumentado para mejor UX */
+  border-radius: 6px;     /* Bordes más redondeados */
   border: 1px solid var(--secondary-color);
   font-size: 1rem;
   background-color: white;
+  transition: all 0.2s ease;
 }
 
 /* Estado de foco del campo de búsqueda */
@@ -34,17 +48,22 @@
 
 /* Botón de búsqueda */
 .search-button {
-  background-color: var(--last-color);
+  background: linear-gradient(135deg, var(--last-color), #2a8a90);
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 8px 15px;
+  border-radius: 6px;
+  padding: 12px 20px;
   cursor: pointer;        /* Cambia el cursor a pointer al pasar por encima */
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(42, 138, 144, 0.2);
 }
 
 /* Estado hover del botón de búsqueda */
 .search-button:hover {
-  background-color: #2a8a90;  /* Cambia el color al pasar el cursor */
+  background: linear-gradient(135deg, #2a8a90, var(--last-color));
+  transform: translateY(-2px);  /* Efecto de elevación */
+  box-shadow: 0 4px 12px rgba(42, 138, 144, 0.3);
 }
 
 /*===========================================
@@ -52,6 +71,12 @@
 =============================================*/
 
 /* Adaptación para modo oscuro */
+body.dark-mode .search-bar form {
+  background-color: var(--dark-secondary);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--dark-border);
+}
+
 body.dark-mode .search-input {
   background-color: var(--dark-bg);      /* Fondo oscuro para el input */
   color: var(--dark-text);               /* Texto claro */
@@ -59,16 +84,34 @@ body.dark-mode .search-input {
 }
 
 body.dark-mode .search-button {
-  background-color: #2a6b6f;             /* Color de botón para modo oscuro */
+  background: linear-gradient(135deg, #2a6b6f, #1a4b4f);   /* Gradiente más oscuro */
+  box-shadow: 0 2px 6px rgba(26, 75, 79, 0.3);
+}
+
+body.dark-mode .search-button:hover {
+  background: linear-gradient(135deg, #1a4b4f, #2a6b6f);
 }
 
 /* Adaptación para modo daltónico */
+body.colorblind-mode .search-bar form {
+  background-color: #ffffff;
+  border: 2px solid var(--colorblind-primary);
+}
+
 body.colorblind-mode .search-input {
   border-color: var(--colorblind-primary);  /* Borde con color visible para daltónicos */
 }
 
 body.colorblind-mode .search-button {
-  background-color: var(--colorblind-primary); /* Color distinguible para daltónicos */
+  background: var(--colorblind-secondary); /* Color distinguible para daltónicos */
+  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+  border: 2px solid var(--colorblind-primary);
+  color: var(--colorblind-text);
+  font-weight: bold;
+}
+
+body.colorblind-mode .search-button:hover {
+  background: var(--colorblind-accent);
 }
 
 /*===========================================
@@ -78,7 +121,22 @@ body.colorblind-mode .search-button {
 /* Ajustes para pantallas pequeñas */
 @media (max-width: 600px) {
   .search-bar {
-    max-width: 100%;
-    padding: 0 10px;
+    max-width: 90%;
+    padding: 0 15px;
+    margin: 0.5rem auto 1.5rem auto; /* Margen normal en móviles */
+  }
+  
+  .search-bar form {
+    padding: 8px;
+    flex-direction: column;  /* Apila elementos verticalmente en móviles */
+  }
+  
+  .search-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .search-button {
+    width: 100%;
   }
 }

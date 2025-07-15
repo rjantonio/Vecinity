@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../utils/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserSlash, faSave, faEdit, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 function Profile() {
   const { user } = useAuth();
@@ -113,19 +115,19 @@ function Profile() {
       />
       <div style={{ display: "flex", gap: "1rem" }}>
         <button className="btn__disable__acc">
-          Desactivar cuenta
+          <FontAwesomeIcon icon={faUserSlash} className="profile-btn-icon" /> Desactivar cuenta
         </button>
         <button
           className="btn__save__acc"
           onClick={edit ? handleSave : () => setEdit(true)}
         >
-          {edit ? "Guardar" : "Editar"}
+          <FontAwesomeIcon icon={edit ? faSave : faEdit} className="profile-btn-icon" /> {edit ? "Guardar" : "Editar"}
         </button>
         <button
           className="btn__return__list"
           onClick={() => navigate("/")}
         >
-          Volver a la lista
+          <FontAwesomeIcon icon={faArrowLeft} className="profile-btn-icon" /> Volver a la lista
         </button>
       </div>
       {msg && <div >{msg}</div>}

@@ -2,10 +2,6 @@ import './css/MainScreen.css';
 import './css/Settings.css';
 import './css/UserProfile.css';
 import logo from './images/logo.png';
-import login__img from './images/icono-login.png';
-import ajustes__img from './images/icono-ajustes.png';
-import profile__img from './images/icono-profile.png';
-import logout__img from './images/icono-logout.png';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
@@ -17,6 +13,16 @@ import { auth } from "./utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 // Importación del componente SearchBar para la funcionalidad de búsqueda
 import SearchBar from "./components/SearchBar";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faUserCircle, 
+  faSignInAlt, 
+  faSignOutAlt, 
+  faCogs,
+  faCalendarPlus, 
+  faEdit,
+  faHandshake 
+} from '@fortawesome/free-solid-svg-icons';
 
 import React, { useEffect, useState } from 'react';
 import CrearEvento from './components/CrearEvento';
@@ -176,7 +182,7 @@ function MainScreen() {
             onClick={() => navigate("/settings")}
             title="Preferencias"
           >
-            <img className="settings__icon" src={ajustes__img} alt="" />
+            <FontAwesomeIcon className="nav-icon" icon={faCogs} />
           </button>
           {!user ? (
             <button
@@ -184,7 +190,7 @@ function MainScreen() {
               onClick={() => navigate("/login")}
               title="Iniciar sesión"
             >
-              <img className="login__icon" src={login__img} alt="Iniciar sesión" />
+              <FontAwesomeIcon className="nav-icon" icon={faSignInAlt} />
             </button>
           ) : (
             <>
@@ -193,18 +199,23 @@ function MainScreen() {
                 onClick={() => navigate("/profile")}
                 title="Perfil"
               >
-                <img className="login__icon" src={profile__img} alt="Perfil" />
+                <FontAwesomeIcon className="nav-icon" icon={faUserCircle} />
               </button>
               <button
                 className="btn__logout"
                 onClick={logout}
                 title="Cerrar sesión"
               >
-                <img className="login__icon" src={logout__img} alt="Cerrar sesión" />
+                <FontAwesomeIcon className="nav-icon" icon={faSignOutAlt} />
               </button>
             </>
           )}
         </div>
+      </div>
+      
+      {/* Barra de búsqueda en la zona superior de la página */}
+      <div className="search-area">
+        <SearchBar onSearch={handleSearch} placeholder="Buscar eventos por título..." />
       </div>
       <div className="main__content">
         <Routes>
@@ -212,29 +223,23 @@ function MainScreen() {
             <>
               <h2>Lista de eventos</h2>
               
-              {/* BARRA DE BÚSQUEDA Y BOTONES DE ACCIÓN - INICIO */}
-              <div className="search-and-actions">
-                {/* Componente SearchBar que recibe la función de búsqueda */}
-                <SearchBar onSearch={handleSearch} placeholder="Buscar eventos por título..." />
-                
-                <div className="event-buttons-container">
-                  <button 
-                    className="event-button create-event" 
-                    onClick={() => navigate("/crear-evento")}
-                  >
-                    <span className="event-button-icon">+</span>
-                    <span className="event-button-text">Crear Evento</span>
-                  </button>
-                  <button 
-                    className="event-button edit-event" 
-                    onClick={() => navigate("/editar-evento")}
-                  >
-                    <span className="event-button-icon">✎</span>
-                    <span className="event-button-text">Editar Evento</span>
-                  </button>
-                </div>
+              {/* BOTONES DE ACCIÓN */}
+              <div className="event-buttons-container">
+                <button 
+                  className="event-button create-event" 
+                  onClick={() => navigate("/crear-evento")}
+                >
+                  <span className="event-button-icon">+</span>
+                  <span className="event-button-text">Crear Evento</span>
+                </button>
+                <button 
+                  className="event-button edit-event" 
+                  onClick={() => navigate("/editar-evento")}
+                >
+                  <span className="event-button-icon">✎</span>
+                  <span className="event-button-text">Editar Evento</span>
+                </button>
               </div>
-              {/* BARRA DE BÚSQUEDA Y BOTONES DE ACCIÓN - FIN */}
               
               {!token ? (
                 <div>Autenticando...</div>

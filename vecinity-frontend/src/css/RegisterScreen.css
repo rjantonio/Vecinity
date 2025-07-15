@@ -133,7 +133,7 @@ body.colorblind-mode .main__screen__register {
 }
 
 body.colorblind-mode .main__content__register {
-    background-color: #ffffff;
+    background-color: var(--colorblind-bg);
     color: var(--colorblind-text);
     border: 2px solid var(--colorblind-primary);
     box-shadow: 0 2px 15px rgba(0, 102, 204, 0.1);
@@ -150,7 +150,7 @@ body.colorblind-mode .input:focus {
 }
 
 body.colorblind-mode .btn__submit {
-    background-color: var(--colorblind-secondary);
+    background: var(--colorblind-secondary);
     color: var(--colorblind-text);
     border: 2px solid var(--colorblind-primary);
     font-weight: bold;
@@ -163,7 +163,7 @@ body.colorblind-mode .btn__submit:hover {
 
 body.colorblind-mode .btn__return {
     background-color: var(--colorblind-primary);
-    color: #ffffff;
+    color: var(--colorblind-bg);
     border: 2px solid var(--colorblind-secondary);
     font-weight: bold;
 }
@@ -171,29 +171,30 @@ body.colorblind-mode .btn__return {
 body.colorblind-mode .btn__return:hover {
     background-color: var(--colorblind-accent);
     border-color: var(--colorblind-primary);
+    color: var(--colorblind-text);
 }
 
 /* Combinación de modos nocturno y daltónico */
 body.dark-mode.colorblind-mode .main__screen__register {
-    background-color: #1a1a2e;
-    color: #ffffff;
+    background-color: var(--dark-colorblind-bg);
+    color: var(--dark-colorblind-text);
 }
 
 body.dark-mode.colorblind-mode .main__content__register {
-    background-color: #0f3460;
-    color: #ffffff;
+    background-color: var(--dark-colorblind-secondary);
+    color: var(--dark-colorblind-text);
     border-color: var(--colorblind-secondary);
     box-shadow: 0 2px 20px rgba(255, 152, 0, 0.2);
 }
 
 body.dark-mode.colorblind-mode .input {
-    background-color: #16213e;
-    color: #ffffff;
+    background-color: var(--dark-colorblind-bg);
+    color: var(--dark-colorblind-text);
     border-color: var(--colorblind-secondary);
 }
 
 body.dark-mode.colorblind-mode .input::placeholder {
-    color: #cccccc;
+    color: var(--dark-colorblind-placeholder);
 }
 
 /* Animación de entrada */

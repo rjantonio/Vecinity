@@ -1,4 +1,4 @@
-:root{
+:root {
     --main-color: #ECF8F8;
     --secondary-color: #7e7f9a;
     --last-color: #1a5e63;
@@ -11,6 +11,10 @@
     --colorblind-accent: #4caf50;
     --colorblind-bg: #f8f8f8;
     --colorblind-text: #333333;
+    --dark-colorblind-bg: #1a1a2e;
+    --dark-colorblind-secondary: #0f3460;
+    --dark-colorblind-text: #ffffff;
+    --dark-colorblind-placeholder: #cccccc;
 }
 
 .main__screen{
@@ -22,13 +26,23 @@
     transition: background-color 0.3s ease;
 }
 
+/* Zona superior para el buscador */
+.search-area {
+    width: 100%;
+    padding: 1.5rem 0 1rem 0;
+    background-color: var(--main-color);
+    display: flex;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
 .barrnav{
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: var(--main-color);
     color: #fff;
-    padding: 1rem, 2rem;
+    padding: 1rem 2rem; /* Corregido el padding que tenía una coma en lugar de espacio */
     min-height: 4rem;
     border-bottom: 2px solid var(--secondary-color);
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -62,20 +76,37 @@
     padding: 0;
 }
 
-.settings__icon{
-    max-height: 4rem;
-    max-width: 4rem;
-}
-.login__icon{
-    max-width: 4rem;
-    max-height: 4rem;
+.nav-icon {
+    font-size: 1.8rem;
+    color: var(--last-color);
+    transition: all 0.3s ease;
+    padding: 0.5rem;
     border-radius: 50%;
-    transform: scale(0.7);
+}
+
+.btn__settings:hover .nav-icon,
+.btn__login:hover .nav-icon,
+.btn__logout:hover .nav-icon {
+    color: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+/* Estilos específicos para cada ícono */
+.btn__settings .nav-icon {
+    color: var(--last-color);
+}
+
+.btn__login .nav-icon {
+    color: var(--last-color);
+}
+
+.btn__logout .nav-icon {
+    color: #c62828;
 }
 .main__content{
     max-width: 75vw;
     min-height: 250px;
-    margin: 4rem auto;
+    margin: 0 auto 4rem auto; /* Elimina el margen superior para que el buscador quede justo encima */
     background-color: #ffffff;
     border-radius: 12px;
     padding: 2rem;
@@ -163,6 +194,12 @@
     transform: translateY(-2px);
 }
 
+/* Estilos para la barra de búsqueda dentro del contenedor */
+.search-and-actions .search-bar {
+  width: 100%;
+  margin: 0 auto;
+}
+
 /* Estilos para resultados de búsqueda */
 .search-results {
   width: 100%;
@@ -188,32 +225,19 @@
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-@media (min-width: 768px) {
-  .search-and-actions {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .search-and-actions .search-bar {
-    flex: 1;
-    margin: 0;
-  }
-  
-  .search-and-actions .event-buttons-container {
-    margin: 0;
-  }
-}
+/* Los botones siempre estarán debajo de la barra de búsqueda */
 
-/* Ajustes para los botones en el nuevo contenedor */
-.search-and-actions .event-buttons-container {
+/* Contenedor de botones de eventos */
+.event-buttons-container {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  margin: 1.5rem 0;
 }
 
 /* Estilos para los nuevos botones de eventos */
@@ -262,29 +286,13 @@ body.colorblind-mode .search-and-actions {
 }
 
 /* Adaptaciones para modo oscuro */
-body.dark-mode .search-results {
-  color: #aaa;
-}
-
-body.dark-mode .no-results {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #bbb;
-}
-
-/* Adaptaciones para modo daltónico */
-body.colorblind-mode .search-results {
-  color: var(--colorblind-primary);
-}
-
-body.colorblind-mode .no-results {
-  color: var(--colorblind-primary);
-  border: 1px solid var(--colorblind-secondary);
-}
-
-/* Estilos para modo oscuro */
 body.dark-mode .main__screen {
     background-color: var(--dark-bg);
     color: var(--dark-text);
+}
+
+body.dark-mode .search-area {
+    background-color: var(--dark-bg);
 }
 
 body.dark-mode .barrnav {
@@ -363,6 +371,10 @@ body.dark-mode .enrolled__event__item {
 body.colorblind-mode .main__screen {
     background-color: var(--colorblind-bg);
     color: var(--colorblind-text);
+}
+
+body.colorblind-mode .search-area {
+    background-color: var(--colorblind-bg);
 }
 
 body.colorblind-mode .barrnav {
@@ -547,3 +559,43 @@ button:hover {
     box-shadow: 0 10px 20px rgba(24, 51, 69, 0.3);
     background: linear-gradient(135deg, #2a4a5c, var(--secondary-color));
 } */
+
+/* Estilos para íconos de navegación en modo oscuro */
+body.dark-mode .nav-icon {
+    color: #a0c1c3;
+}
+
+body.dark-mode .btn__settings:hover .nav-icon,
+body.dark-mode .btn__login:hover .nav-icon {
+    color: #d1e8ea;
+    transform: scale(1.1);
+}
+
+body.dark-mode .btn__logout .nav-icon {
+    color: #f44336;
+}
+
+body.dark-mode .btn__logout:hover .nav-icon {
+    color: #ef5350;
+    transform: scale(1.1);
+}
+
+/* Estilos para íconos de navegación en modo daltónico */
+body.colorblind-mode .nav-icon {
+    color: var(--colorblind-primary);
+}
+
+body.colorblind-mode .btn__settings:hover .nav-icon,
+body.colorblind-mode .btn__login:hover .nav-icon {
+    color: var(--colorblind-secondary);
+    transform: scale(1.1);
+}
+
+body.colorblind-mode .btn__logout .nav-icon {
+    color: var(--colorblind-secondary);
+}
+
+body.colorblind-mode .btn__logout:hover .nav-icon {
+    color: #e65100;
+    transform: scale(1.1);
+}

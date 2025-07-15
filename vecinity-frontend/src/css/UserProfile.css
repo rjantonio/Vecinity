@@ -42,6 +42,14 @@
     padding: .5rem 1rem;
     cursor: pointer;
 }
+.btn__return__list {
+    background: #616161;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: .5rem 1rem;
+    cursor: pointer;
+}
 
 .spinner {
   border: 4px solid #eee;
@@ -54,4 +62,101 @@
 @keyframes spin {
   0% { transform: rotate(0deg);}
   100% { transform: rotate(360deg);}
+}
+
+/* Mejorando estilos de botones del perfil */
+.btn__disable__acc,
+.btn__save__acc,
+.btn__return__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.btn__disable__acc {
+    background: linear-gradient(135deg, #e57373, #ef5350);
+    border-bottom: 2px solid #c62828;
+}
+
+.btn__save__acc {
+    background: linear-gradient(135deg, #4ecdc4, #26a69a);
+    border-bottom: 2px solid #00897b;
+}
+
+.btn__return__list {
+    background: linear-gradient(135deg, #a389cc, #8e6ac8);
+    border-bottom: 2px solid #673ab7;
+}
+
+.btn__disable__acc:hover,
+.btn__save__acc:hover,
+.btn__return__list:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn__disable__acc:hover {
+    background: linear-gradient(135deg, #ef5350, #e57373);
+}
+
+.btn__save__acc:hover {
+    background: linear-gradient(135deg, #26a69a, #4ecdc4);
+}
+
+.btn__return__list:hover {
+    background: linear-gradient(135deg, #8e6ac8, #a389cc);
+}
+
+.btn__disable__acc:active,
+.btn__save__acc:active,
+.btn__return__list:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode .btn__disable__acc {
+    background: linear-gradient(135deg, #c62828, #b71c1c);
+    border-bottom-color: #8e0000;
+}
+
+body.dark-mode .btn__save__acc {
+    background: linear-gradient(135deg, #2c9d92, #1f7b74);
+    border-bottom-color: #185f5a;
+}
+
+body.dark-mode .btn__return__list {
+    background: linear-gradient(135deg, #7d5daf, #644a91);
+    border-bottom-color: #4a3774;
+}
+
+/* Estilos para modo daltónico */
+body.colorblind-mode .btn__disable__acc {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: #000;
+    border: 2px solid #e65100;
+    border-bottom-width: 3px;
+}
+
+body.colorblind-mode .btn__save__acc {
+    background: linear-gradient(135deg, #30c8c8, #00b6b6);
+    color: #000;
+    border: 2px solid #008b8b;
+    border-bottom-width: 3px;
+}
+
+body.colorblind-mode .btn__return__list {
+    background: linear-gradient(135deg, var(--colorblind-primary), #0077e6);
+    color: #fff;
+    border: 2px solid #004c99;
+    border-bottom-width: 3px;
+}
+
+.profile-btn-icon {
+    margin-right: 0.5rem;
 }
