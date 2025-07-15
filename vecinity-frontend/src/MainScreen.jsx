@@ -1,7 +1,7 @@
 import './css/MainScreen.css';
 import './css/Settings.css';
 import './css/UserProfile.css';
-import logo from './images/logo.png';
+import logo from './images/logo.svg';
 import login__img from './images/icono-login.png';
 import ajustes__img from './images/icono-ajustes.png';
 import profile__img from './images/icono-profile.png';
