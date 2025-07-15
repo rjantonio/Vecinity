@@ -68,11 +68,19 @@ function CrearEvento({ token }){
                 throw new Error('No se pudo extraer el UID del usuario del token');
             }
             
+            // Convertir imágenes a base64
+            const imagenesBase64 = await Promise.all(
+                formData.imagenes.map(file => convertToBase64(file))
+            );
+            
+            console.log('Imágenes convertidas a base64:', imagenesBase64.length);
+            
             const dataToSend = {
                 titulo: formData.titulo,
                 descripcion: formData.descripcion,
                 fechaEvento: formData.fechaEvento,
                 ubicacion: formData.ubicacion
+                // Removemos images e imagenPortada de aquí
             };
 
             console.log('Datos a enviar:', dataToSend);
@@ -102,6 +110,56 @@ function CrearEvento({ token }){
             const result = await response.json();
             console.log('✅ Evento creado exitosamente:', result);
             
+            // Enviar imágenes al endpoint separado si existen
+            if (imagenesBase64.length > 0 && result.id) {
+                console.log('Enviando imágenes al endpoint separado...');
+                console.log('ID del evento:', result.id);
+                console.log('Token para imágenes:', token);
+                console.log('Número de imágenes:', imagenesBase64.length);
+                
+                // Enviar cada imagen por separado ya que el backend espera @RequestParam
+                for (let i = 0; i < imagenesBase64.length; i++) {
+                    const imageBase64 = imagenesBase64[i];
+                    const descripcion = i === 0 ? 'Imagen principal' : `Imagen ${i + 1}`;
+                    
+                    const params = new URLSearchParams();
+                    params.append('imagenBase64', imageBase64);
+                    params.append('descripcion', descripcion);
+                    
+                    console.log(`Enviando imagen ${i + 1}/${imagenesBase64.length}`);
+                    console.log('Token completo que se envía:', token);
+                    console.log('Longitud del token:', token.length);
+                    console.log('Primeros 50 caracteres del token:', token.substring(0, 50));
+                    
+                    const imageResponse = await fetch(`http://localhost:8080/event-images/${result.id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: params
+                    });
+                    
+                    console.log(`Respuesta imagen ${i + 1}:`, imageResponse.status);
+                    
+                    if (!imageResponse.ok) {
+                        let imageErrorText = '';
+                        try {
+                            imageErrorText = await imageResponse.text();
+                            console.log('Texto completo del error:', imageErrorText);
+                        } catch (readError) {
+                            imageErrorText = 'No se pudo leer el error del servidor';
+                            console.error('Error leyendo respuesta:', readError);
+                        }
+                        console.error(`Error al subir imagen ${i + 1}:`, imageResponse.status, imageErrorText);
+                        alert(`Advertencia: Error al subir imagen ${i + 1}: ${imageResponse.status} - ${imageErrorText}`);
+                    } else {
+                        const imageResult = await imageResponse.json();
+                        console.log(`✅ Imagen ${i + 1} enviada exitosamente:`, imageResult);
+                    }
+                }
+            }
+
             // Limpiar formulario después del envío exitoso
             setFormData({
                 titulo: '',
@@ -120,6 +178,20 @@ function CrearEvento({ token }){
         } finally {
             setLoading(false);
         }
+    };
+
+    // Función para convertir archivo a base64
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                // Extraer solo la parte base64 (sin el prefijo data:image/...)
+                const base64String = reader.result.split(',')[1];
+                resolve(base64String);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
     };
 
     // Si no hay token, mostrar mensaje
