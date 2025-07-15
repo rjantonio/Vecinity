@@ -6,7 +6,7 @@ import login__img from './images/icono-login.png';
 import ajustes__img from './images/icono-ajustes.png';
 import profile__img from './images/icono-profile.png';
 import logout__img from './images/icono-logout.png';
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import ErrorScreen from "./components/ErrorScreen";
@@ -15,11 +15,12 @@ import Register from "./components/Register";
 import { useAuth } from "./context/AuthContext";
 import { auth } from "./utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
+import HomePage from "./components/HomePage";
 import React, { useEffect, useState } from 'react';
 import CrearEvento from './components/CrearEvento';
 import Editarevento from './components/EditarEvento';
 import Evento from './components/Evento';
+import SettingsDropdown from "./components/SettingsDropdown";
 
 function EventRegistrationsList({ token }) {
   const [registrations, setRegistrations] = useState([]);
@@ -27,7 +28,7 @@ function EventRegistrationsList({ token }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) return; // No hacer la petición sin token
 
     fetch('http://localhost:8080/event-registration', {
       headers: {
@@ -57,11 +58,11 @@ function EventRegistrationsList({ token }) {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="enrolled__events__list">
+    <div>
       <h2>Inscripciones a eventos</h2>
       <ul>
         {registrations.map(reg => (
-          <li key={reg.id} className="enrolled__event__item">
+          <li key={reg.id}>
             Usuario ID: {reg.userId}, Evento ID: {reg.eventId}, Fecha: {reg.fechaInscripcion}
           </li>
         ))}
@@ -72,33 +73,13 @@ function EventRegistrationsList({ token }) {
 
 function MainScreen() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { user, logout } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
+  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
   
-  // Autenticación para obtener el token
-  useEffect(() => {
-    if (user) {
-      user.getIdToken()
-        .then(token => {
-          console.log("Token:", token);
-          setToken(token);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error("Error getting token:", error);
-          setError("Error al obtener el token");
-          setLoading(false);
-        });
-    } else {
-      setToken(null);
-      setLoading(false);
-    }
-  }, [user]);
-
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     const savedColorBlindMode = localStorage.getItem('colorBlindMode') === 'true';
@@ -111,12 +92,21 @@ function MainScreen() {
     }
   }, []);
 
+  // Obtener token cuando el usuario esté autenticado
+  useEffect(() => {
+    if (user) {
+      user.getIdToken().then(userToken => {
+        setToken(userToken);
+      });
+    } else {
+      setToken(null);
+    }
+  }, [user]);
+
   // Fetch de eventos con autenticación
   useEffect(() => {
     if (!token) return; // No hacer la petición sin token
 
-    setLoading(true); // Resetear loading cuando se hace una nueva petición
-    
     fetch('http://localhost:8080/event', {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -129,36 +119,9 @@ function MainScreen() {
         }
         return response.json();
       })
-      .then(async data => {
+      .then(data => {
         console.log('Eventos obtenidos:', data);
-        
-        // Obtener imágenes para cada evento
-        const eventosConImagenes = await Promise.all(
-          data.map(async evento => {
-            try {
-              const imageResponse = await fetch(`http://localhost:8080/event-images/${evento.id}`, {
-                headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-                }
-              });
-              
-              if (imageResponse.ok) {
-                const imagenes = await imageResponse.json();
-                return {
-                  ...evento,
-                  imagenes: imagenes.map(img => `data:image/jpeg;base64,${img.imagenBase64}`)
-                };
-              }
-              return evento;
-            } catch (error) {
-              console.error(`Error obteniendo imágenes para evento ${evento.id}:`, error);
-              return evento;
-            }
-          })
-        );
-        
-        setItems(eventosConImagenes);
+        setItems(data);
         setLoading(false);
       })
       .catch(err => {
@@ -166,25 +129,32 @@ function MainScreen() {
         setError(err.message);
         setLoading(false);
       });
-  }, [token, location.pathname]); // Agregar location.pathname como dependencia
-      
+  }, [token]);
+
   return (
     <div className="main__screen">
       <div className="barrnav">
         <button
           onClick={() => navigate("/")}
           className="logo"
-          title="Ir a la lista"
+          title="Ir al inicio"
         >
           <img className="logo__img" src={logo} alt="" />
         </button>
         <div className="barrnav__rigth">
-          <button className="btn__settings"
-            onClick={() => navigate("/settings")}
-            title="Preferencias"
+          <div 
+            className="settings__container"
+            onMouseEnter={() => setShowSettingsDropdown(true)}
+            onMouseLeave={() => setShowSettingsDropdown(false)}
           >
-            <img className="settings__icon" src={ajustes__img} alt="" />
-          </button>
+            <button 
+              className="btn__settings"
+              title="Preferencias"
+            >
+              <img className="settings__icon" src={ajustes__img} alt="" />
+            </button>
+            <SettingsDropdown isVisible={showSettingsDropdown} />
+          </div>
           {!user ? (
             <button
               className="btn__login"
@@ -215,12 +185,11 @@ function MainScreen() {
       </div>
       <div className="main__content">
         <Routes>
-          <Route path="/" element={
+          <Route path="/" element={<HomePage />} />
+          <Route path="/eventos" element={
             <>
-              <h2 className='tittle'>Lista de objetos</h2>
-              {!user ? (
-                <div>Por favor, inicia sesión para ver los eventos</div>
-              ) : !token ? (
+              <h2>Lista de eventos</h2>
+              {!token ? (
                 <div>Autenticando...</div>
               ) : loading ? (
                 <div>Cargando eventos...</div>
@@ -233,28 +202,24 @@ function MainScreen() {
                       key={item.id}
                       name={item.titulo}
                       fechaEvento={item.fechaEvento}
-                      images={item.imagenes || []}
+                      images={[item.imagen]}
                       description={item.descripcion}
                       ubicacion={item.ubicacion}
                     />
                   ))}
                 </ul>
               )}
-              {user && (
-                <>
-                  <button className="create__event__btn" onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
-                  <button className="edit__event__btn" onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
-                  <EventRegistrationsList token={token} />
-                </>
-              )}
+              <button onClick={()=>navigate("/crear-evento")}>Crear Evento</button>
+              <button onClick={()=>navigate("/editar-evento")}>Editar Evento</button>
+              <EventRegistrationsList token={token} />
             </>
           } />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
-          <Route path="/crear-evento" element={<CrearEvento token={token} />} />
-          <Route path="/editar-evento" element={<Editarevento/>}/>
+          <Route path="/crear-evento" element={<CrearEvento token={token}/>}/>
+          <Route path="/editar-evento" element={<Editarevento token={token}/>}/>
           <Route path="*" element={<ErrorScreen/>}/>
         </Routes>
       </div>
@@ -263,5 +228,3 @@ function MainScreen() {
 }
 
 export default MainScreen;
-
-//randmo comment

@@ -1,0 +1,163 @@
+.settings__dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    min-width: 220px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.settings__dropdown.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown__title {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--last-color);
+    text-align: center;
+    border-bottom: 1px solid rgba(126, 127, 154, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.dropdown__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.setting__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.setting__label {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+    flex: 1;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--last-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.colorblind-slider {
+    background-color: #ccc;
+}
+
+input:checked + .colorblind-slider {
+    background-color: var(--colorblind-primary);
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode .settings__dropdown {
+    background-color: var(--dark-secondary);
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .dropdown__title {
+    color: var(--dark-text);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .setting__label {
+    color: var(--dark-text);
+}
+
+body.dark-mode .slider {
+    background-color: #555;
+}
+
+body.dark-mode input:checked + .slider {
+    background-color: #4a9ca3;
+}
+
+/* Estilos para modo daltónico */
+body.colorblind-mode .settings__dropdown {
+    border: 2px solid var(--colorblind-primary);
+    box-shadow: 0 4px 20px rgba(0, 102, 204, 0.2);
+}
+
+body.colorblind-mode .dropdown__title {
+    color: var(--colorblind-primary);
+    font-weight: bold;
+}
+
+body.colorblind-mode .setting__label {
+    color: var(--colorblind-text);
+    font-weight: 500;
+}
+
+body.colorblind-mode input:checked + .slider {
+    background-color: var(--colorblind-secondary);
+}
+
+/* Combinación modo oscuro y daltónico */
+body.dark-mode.colorblind-mode .settings__dropdown {
+    background-color: #0f3460;
+    border-color: var(--colorblind-secondary);
+}
+
+body.dark-mode.colorblind-mode .dropdown__title {
+    color: #ffffff;
+}
+
+body.dark-mode.colorblind-mode .setting__label {
+    color: #ffffff;
+}

@@ -618,3 +618,14 @@ body.dark-mode.colorblind-mode .enrolled__event__item:hover {
     background-color: #0f3460;
     border-color: var(--colorblind-accent);
 }
+
+.settings__container {
+    position: relative;
+    display: inline-block;
+}
+
+.barrnav__rigth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
