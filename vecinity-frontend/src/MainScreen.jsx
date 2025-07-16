@@ -112,7 +112,6 @@ function MainScreen() {
       </div>
 
       {/* Contenido principal con rutas */}
-      <div className="main__content">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/eventos" element={<EventList user={user} token={token} />} />
@@ -126,7 +125,6 @@ function MainScreen() {
           <Route path="/editar-evento/:id" element={<Editarevento token={token} />} />
           <Route path="*" element={<ErrorScreen />} />
         </Routes>
-      </div>
     </div>
   );
 }
