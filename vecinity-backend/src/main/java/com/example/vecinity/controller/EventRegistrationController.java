@@ -1,5 +1,6 @@
 package com.example.vecinity.controller;
 
+import com.example.vecinity.dtos.EventRegistrationDto;
 import com.example.vecinity.dtos.UserEventDto;
 import com.example.vecinity.model.Event;
 import com.example.vecinity.model.EventRegistration;
@@ -7,6 +8,7 @@ import com.example.vecinity.model.User;
 import com.example.vecinity.service.EventRegistrationService;
 import com.example.vecinity.service.EventService;
 import com.example.vecinity.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/event-registration")
@@ -42,11 +45,24 @@ public class EventRegistrationController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<EventRegistration> listarPorUsuario(@PathVariable Long userId) {
-        Optional<User> user = userService.findById(userId);
-        return user.map(u -> eventRegistrationService.findByUsuario(u))
-                .orElse(Collections.emptyList());
+    public List<UserEventDto> listarPorUsuario(@PathVariable String userId) {
+        Optional<User> user = userService.findByFirebaseUid(userId);
+        if (user.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<EventRegistration> regs = eventRegistrationService.findByUsuario(user.get());
+        // Mapear a DTO
+        return regs.stream()
+                .map(reg -> new UserEventDto(
+                        reg.getId(),
+                        reg.getUsuario().getId(),
+                        reg.getEvento().getId(),
+                        reg.getFechaInscripcion()
+                ))
+                .collect(Collectors.toList());
     }
+
+
 
     @GetMapping("/event/{eventId}")
     public List<EventRegistration> listarPorEvento(@PathVariable Long eventId) {
@@ -56,8 +72,8 @@ public class EventRegistrationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registrarAEvento(@RequestParam Long userId, @RequestParam Long eventId) {
-        Optional<User> user = userService.findById(userId);
+    public ResponseEntity<?> registrarAEvento(@RequestParam String userId, @RequestParam Long eventId) {
+        Optional<User> user = userService.findByFirebaseUid(userId);
         Optional<Event> event = eventService.findById(eventId);
 
         if (user.isEmpty()) {
@@ -96,12 +112,13 @@ public class EventRegistrationController {
         }
     }
 
+    @Transactional
     @DeleteMapping("/user/{userId}/event/{eventId}")
     public ResponseEntity<Void> cancelarInscripcionPorUsuarioYEvento(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @PathVariable Long eventId) {
 
-        Optional<User> user = userService.findById(userId);
+        Optional<User> user = userService.findByFirebaseUid(userId);
         Optional<Event> event = eventService.findById(eventId);
 
         if (user.isEmpty() || event.isEmpty()) {
@@ -118,4 +135,21 @@ public class EventRegistrationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/is-registered")
+    public ResponseEntity<Boolean> isUserRegistered(
+            @RequestParam String userId,
+            @RequestParam Long eventId) {
+
+        Optional<User> user = userService.findByFirebaseUid(userId);
+        Optional<Event> event = eventService.findById(eventId);
+
+        if (user.isEmpty() || event.isEmpty()) {
+            return ResponseEntity.ok(false);
+        }
+
+        boolean exists = eventRegistrationService.existsByUsuarioAndEvento(user.get(), event.get());
+        return ResponseEntity.ok(exists);
+    }
+
 }

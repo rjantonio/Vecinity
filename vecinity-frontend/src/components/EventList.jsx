@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Evento from "./Evento";
 import EventRegistrationsList from "./EventRegistrationsList";
-import SearchBar from "./SearchBar"; 
+import SearchBar from "./SearchBar";
 
 function EventList({ user, token }) {
   const navigate = useNavigate();
@@ -11,7 +11,10 @@ function EventList({ user, token }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [joinedEvents, setJoinedEvents] = useState(new Set());
+  const [joiningEventIds, setJoiningEventIds] = useState(new Set());
 
+  // Cargar eventos
   useEffect(() => {
     if (!token) return;
 
@@ -50,13 +53,37 @@ function EventList({ user, token }) {
           })
         );
         setItems(eventosConImagenes);
-        setFilteredItems(eventosConImagenes); // ✅ Inicializa también la lista filtrada
+        setFilteredItems(eventosConImagenes);
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
   }, [token]);
 
-  // 🔍 Lógica de filtrado por búsqueda
+  // Cargar eventos en los que el usuario ya está inscrito
+  useEffect(() => {
+    if (!token || !user) return;
+
+    fetch(`http://localhost:8080/event-registration/user/${user.uid}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Error al obtener inscripciones");
+        return res.json();
+      })
+      .then(data => {
+        // Asumo que data es un array de registros, cada uno con un objeto evento con id
+        const ids = new Set(data.map(reg => reg.eventId));
+        setJoinedEvents(ids);
+      })
+      .catch(err => {
+        console.error(err);
+        // No interrumpir la app solo por este error
+      });
+  }, [token, user]);
+
+  // Manejo del filtro de búsqueda
   const handleSearch = (term) => {
     setSearchTerm(term);
 
@@ -72,6 +99,44 @@ function EventList({ user, token }) {
     setFilteredItems(filtered);
   };
 
+  // Función para unirse a un evento
+  function handleJoin(eventId) {
+    if (!user || !token) {
+      alert("Debes iniciar sesión para unirte al evento");
+      return;
+    }
+
+    if (joinedEvents.has(eventId)) {
+      alert("Ya estás inscrito en este evento");
+      return;
+    }
+
+    setJoiningEventIds(prev => new Set(prev).add(eventId));
+
+    fetch(`http://localhost:8080/event-registration/register?userId=${user.uid}&eventId=${eventId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("No se pudo unir al evento");
+        return res.json();
+      })
+      .then(() => {
+        setJoinedEvents(prev => new Set(prev).add(eventId));
+        alert("¡Te has unido al evento!");
+      })
+      .catch(err => alert(err.message))
+      .finally(() => {
+        setJoiningEventIds(prev => {
+          const copy = new Set(prev);
+          copy.delete(eventId);
+          return copy;
+        });
+      });
+  }
+
   if (!user) return <div>Por favor, inicia sesión para ver los eventos</div>;
   if (!token) return <div>Autenticando...</div>;
   if (loading) return <div>Cargando eventos...</div>;
@@ -81,10 +146,8 @@ function EventList({ user, token }) {
     <>
       <h2 className="tittle">Lista de eventos</h2>
 
-      {/* 🔎 Barra de búsqueda */}
       <SearchBar onSearch={handleSearch} placeholder="Buscar eventos por título..." />
 
-      {/* Mostrar resultados de búsqueda */}
       {searchTerm && (
         <p className="search-results">
           Resultados para "{searchTerm}": {filteredItems.length} eventos
@@ -101,6 +164,10 @@ function EventList({ user, token }) {
             description={item.descripcion}
             ubicacion={item.ubicacion}
             onClick={() => navigate(`/event/${item.id}`)}
+            showJoinButton={true}
+            onJoin={() => handleJoin(item.id)}
+            isJoined={joinedEvents.has(item.id)}
+            isJoining={joiningEventIds.has(item.id)}
           />
         ))}
       </ul>

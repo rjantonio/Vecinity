@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 function Evento({
   name = "",
   images = [],
@@ -7,13 +5,16 @@ function Evento({
   fechaEvento = "",
   ubicacion = "",
   showJoinButton = true,
-  onClick, // 🆕 Añadido
+  onClick,
+  onJoin,
+  isJoined = false,
+  isJoining = false,
 }) {
   return (
     <li
       className="event__list__item"
-      onClick={onClick} // 🆕 Aplicar el click
-      style={{ cursor: 'pointer' }} // 🆕 Visual feedback
+      onClick={onClick}
+      style={{ cursor: 'pointer' }}
     >
       <h3 className="event__title">{name}</h3>
       <h4 className="event__location">{ubicacion}</h4>
@@ -31,29 +32,39 @@ function Evento({
                 e.target.style.display = 'none';
                 console.log('Error cargando imagen:', image);
               }}
-              onLoad={() =>
-                console.log(`Imagen ${index + 1} cargada correctamente`)
-              }
             />
           ))}
         </div>
       )}
 
       <p className="event__description">{description}</p>
+
       {showJoinButton && (
-        <button
-          className="event__join__btn"
-          onClick={(e) => {
-            e.stopPropagation(); // Para que no dispare el onClick del <li>
-            console.log("Unirse al evento");
-          }}
-        >
-          Unirse al Evento
-        </button>
+        <>
+          {isJoined ? (
+            <button
+              className="event__joined__btn"
+              disabled
+              onClick={(e) => e.stopPropagation()}
+            >
+              ✔ Registrado
+            </button>
+          ) : (
+            <button
+              className="event__join__btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isJoining) onJoin();
+              }}
+              disabled={isJoining}
+            >
+              {isJoining ? "Uniendo..." : "Unirse al Evento"}
+            </button>
+          )}
+        </>
       )}
     </li>
   );
 }
-
 
 export default Evento;

@@ -414,6 +414,20 @@ body.dark-mode.colorblind-mode .event-detail-description p {
   color: #e0e0e0;
 }
 
+.leave-event-btn {
+  background-color: #e74c3c; /* rojo */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.leave-event-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .event-detail {
@@ -490,3 +504,4 @@ body.dark-mode.colorblind-mode .event-detail-description p {
     min-width: auto;
   }
 }
+

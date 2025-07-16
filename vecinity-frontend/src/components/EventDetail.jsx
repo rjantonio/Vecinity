@@ -11,12 +11,13 @@ function EventDetail({ token, user }) {
   const [error, setError] = useState(null);
   const [joining, setJoining] = useState(false);
   const [joined, setJoined] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, setDeleting] = useState(false); // También usado para salir
 
   useEffect(() => {
-    if (!token || !id) return;
+    if (!token || !id || !user?.uid) return;
 
     setLoading(true);
+
     Promise.all([
       fetch(`http://localhost:8080/event/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -26,16 +27,22 @@ function EventDetail({ token, user }) {
       }),
       fetch(`http://localhost:8080/event-images/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
+      }).then(res => (res.ok ? res.json() : [])),
+      fetch(`http://localhost:8080/event-registration/is-registered?userId=${user.uid}&eventId=${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(res => {
+        if (!res.ok) throw new Error('No se pudo verificar inscripción');
+        return res.json(); // true o false
       })
-        .then(res => (res.ok ? res.json() : []))
     ])
-      .then(([eventData, imgData]) => {
+      .then(([eventData, imgData, isRegistered]) => {
         eventData.imagenes = imgData.map(img => `data:image/jpeg;base64,${img.imagenBase64}`);
         setEvento(eventData);
+        setJoined(isRegistered);
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id, token]);
+  }, [id, token, user?.uid]);
 
   // Función para unirse al evento
   const handleJoin = () => {
@@ -44,13 +51,11 @@ function EventDetail({ token, user }) {
       return;
     }
     setJoining(true);
-    fetch('http://localhost:8080/event-registration', {
+    fetch(`http://localhost:8080/event-registration/register?userId=${user.uid}&eventId=${id}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ eventId: id })
+        Authorization: `Bearer ${token}`
+      }
     })
       .then(res => {
         if (!res.ok) throw new Error('Error al unirse al evento');
@@ -61,7 +66,32 @@ function EventDetail({ token, user }) {
       .finally(() => setJoining(false));
   };
 
-  // Función para eliminar evento
+  // Función para salir (cancelar inscripción) del evento
+  const handleLeave = () => {
+    if (!token) {
+      alert('Debes iniciar sesión para cancelar la inscripción.');
+      return;
+    }
+    if (!window.confirm('¿Seguro que quieres salir del evento?')) return;
+
+    setDeleting(true);
+
+    fetch(`http://localhost:8080/event-registration/user/${user.uid}/event/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Error al cancelar la inscripción');
+        setJoined(false);
+        alert('Te has salido del evento');
+      })
+      .catch(err => alert(err.message))
+      .finally(() => setDeleting(false));
+  };
+
+  // Función para eliminar evento (creador)
   const handleDelete = () => {
     if (!window.confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.')) {
       return;
@@ -71,7 +101,7 @@ function EventDetail({ token, user }) {
     fetch(`http://localhost:8080/event/${id}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     })
       .then(res => {
@@ -91,13 +121,11 @@ function EventDetail({ token, user }) {
   if (!evento) return <div>No existe ese evento.</div>;
 
   const isCreator = user && evento.creadorId === user.uid;
-  console.log("User ID:", user?.uid);
-  console.log("Evento creadorId:", evento.creadorId);
 
   return (
     <div className="event-detail">
       <h2>{evento.titulo}</h2>
-      
+
       <div className="event-detail-info">
         <div className="event-detail-info-item">
           <strong>📍 Ubicación</strong>
@@ -124,17 +152,16 @@ function EventDetail({ token, user }) {
 
       <div className="event-detail-actions">
         {isCreator ? (
-          // Botones para el creador del evento
           <>
-            <button 
-              className="edit-event-btn" 
+            <button
+              className="edit-event-btn"
               onClick={() => navigate(`/editar-evento/${id}`)}
               title="Editar este evento"
             >
               ✏️ Editar Evento
             </button>
-            <button 
-              className="delete-event-btn" 
+            <button
+              className="delete-event-btn"
               onClick={handleDelete}
               disabled={deleting}
               title="Eliminar este evento"
@@ -143,15 +170,25 @@ function EventDetail({ token, user }) {
             </button>
           </>
         ) : (
-          // Botón para usuarios que no son creadores
-          <button
-            className="join-event-btn"
-            onClick={handleJoin}
-            disabled={joining || joined}
-            title={joined ? "Ya estás inscrito en este evento" : "Unirse al evento"}
-          >
-            {joining ? "⏳ Uniendo..." : joined ? "✅ Inscrito" : "🤝 Unirse al Evento"}
-          </button>
+          joined ? (
+            <button
+              className="leave-event-btn"
+              onClick={handleLeave}
+              disabled={deleting}
+              title="Cancelar inscripción"
+            >
+              {deleting ? "⏳ Cancelando..." : "❌ Salir del Evento"}
+            </button>
+          ) : (
+            <button
+              className="join-event-btn"
+              onClick={handleJoin}
+              disabled={joining}
+              title="Unirse al evento"
+            >
+              {joining ? "⏳ Uniendo..." : "🤝 Unirse al Evento"}
+            </button>
+          )
         )}
       </div>
     </div>

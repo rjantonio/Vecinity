@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import com.example.vecinity.dtos.EventRegistrationDto;
+import java.util.stream.Collectors;
 
 @Service
 public class EventRegistrationService {
@@ -99,5 +101,15 @@ public class EventRegistrationService {
      */
     public List<EventRegistration> findByFechaInscripcionAfter(LocalDateTime fecha) {
         return eventRegistrationRepository.findByFechaInscripcionAfter(fecha);
+    }
+
+    public List<EventRegistrationDto> mapToDtoList(List<EventRegistration> registrations) {
+        return registrations.stream()
+                .map(reg -> new EventRegistrationDto(
+                        reg.getId(),
+                        reg.getEvento().getId(),
+                        reg.getFechaInscripcion()
+                ))
+                .collect(Collectors.toList());
     }
 }
