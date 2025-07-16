@@ -2,6 +2,7 @@ import './css/MainScreen.css';
 import './css/Settings.css';
 import './css/UserProfile.css';
 import logo from './images/logo.svg';
+import videoFondo from './images/limpieza-comunitaria.mp4';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
@@ -31,6 +32,13 @@ function MainScreen() {
   const { user, logout } = useAuth();
   const [token, setToken] = useState(null);
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  
+  // Manejador para cuando el video ha cargado
+  const handleVideoLoad = () => {
+    console.log("Video cargado correctamente");
+    setVideoLoaded(true);
+  };
 
   // Obtener token del usuario autenticado
   useEffect(() => {
@@ -56,7 +64,30 @@ function MainScreen() {
 
   return (
     <div className="main__screen">
-      {/* Barra de navegación */}
+      {/* Video de fondo para toda la página */}
+      <div className={`video-background-full ${videoLoaded ? 'loaded' : ''}`}>
+        {!videoLoaded && (
+          <div className="video-loading">
+            <span>Cargando video...</span>
+          </div>
+        )}
+        <video 
+          autoPlay 
+          muted 
+          loop 
+          playsInline 
+          className="video-hero-full" 
+          key={videoFondo}
+          onLoadedData={handleVideoLoad}
+          onError={(e) => console.error("Error al cargar el video:", e)}
+          preload="auto"
+        >
+          <source src={videoFondo} type="video/mp4" />
+          Tu navegador no soporta videos HTML5.
+        </video>
+      </div>
+      
+      {/* Barra de navegación sticky */}
       <div className="barrnav">
         <button
           onClick={() => navigate("/")}
@@ -108,6 +139,14 @@ function MainScreen() {
               </button>
             </>
           )}
+        </div>
+      </div>
+      
+      {/* Cabecera con mensaje principal */}
+      <div className="main-header">
+        <div className="video-overlay">
+          <h1>Vecinity</h1>
+          <p>Unidos por una comunidad mejor</p>
         </div>
       </div>
 
