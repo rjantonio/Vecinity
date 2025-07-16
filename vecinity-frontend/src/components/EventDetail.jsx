@@ -11,7 +11,9 @@ function EventDetail({ token, user }) {
   const [error, setError] = useState(null);
   const [joining, setJoining] = useState(false);
   const [joined, setJoined] = useState(false);
-  const [deleting, setDeleting] = useState(false); // También usado para salir
+  const [deleting, setDeleting] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [attendeesCount, setAttendeesCount] = useState(20); // contador provisional
 
   useEffect(() => {
     if (!token || !id || !user?.uid) return;
@@ -32,7 +34,7 @@ function EventDetail({ token, user }) {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => {
         if (!res.ok) throw new Error('No se pudo verificar inscripción');
-        return res.json(); // true o false
+        return res.json();
       })
     ])
       .then(([eventData, imgData, isRegistered]) => {
@@ -42,14 +44,32 @@ function EventDetail({ token, user }) {
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id, token, user?.uid]);
+  }, [id, token, user?.uid]); // ✅ CIERRE CORRECTO AQUÍ
 
-  // Función para unirse al evento
+  // Carrusel de imágenes
+  const nextImage = () => {
+    if (evento?.imagenes?.length > 1) {
+      setCurrentImageIndex(prev => (prev === evento.imagenes.length - 1 ? 0 : prev + 1));
+    }
+  };
+
+  const prevImage = () => {
+    if (evento?.imagenes?.length > 1) {
+      setCurrentImageIndex(prev => (prev === 0 ? evento.imagenes.length - 1 : prev - 1));
+    }
+  };
+
   const handleJoin = () => {
     if (!token) {
       alert('Debes iniciar sesión para unirte al evento.');
       return;
     }
+
+    if (joined) {
+      alert('Ya estás registrado en este evento.');
+      return;
+    }
+
     setJoining(true);
     fetch(`http://localhost:8080/event-registration/register?userId=${user.uid}&eventId=${id}`, {
       method: 'POST',
@@ -60,13 +80,16 @@ function EventDetail({ token, user }) {
       .then(res => {
         if (!res.ok) throw new Error('Error al unirse al evento');
         setJoined(true);
-        alert('¡Te has unido al evento!');
+        setAttendeesCount(prev => prev + 1);
+        alert('¡Te has unido al evento exitosamente!');
       })
-      .catch(err => alert(err.message))
+      .catch(err => {
+        console.error('Error joining event:', err);
+        alert('Error al unirse al evento: ' + err.message);
+      })
       .finally(() => setJoining(false));
   };
 
-  // Función para salir (cancelar inscripción) del evento
   const handleLeave = () => {
     if (!token) {
       alert('Debes iniciar sesión para cancelar la inscripción.');
@@ -75,7 +98,6 @@ function EventDetail({ token, user }) {
     if (!window.confirm('¿Seguro que quieres salir del evento?')) return;
 
     setDeleting(true);
-
     fetch(`http://localhost:8080/event-registration/user/${user.uid}/event/${id}`, {
       method: 'DELETE',
       headers: {
@@ -91,7 +113,6 @@ function EventDetail({ token, user }) {
       .finally(() => setDeleting(false));
   };
 
-  // Función para eliminar evento (creador)
   const handleDelete = () => {
     if (!window.confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.')) {
       return;
@@ -107,89 +128,234 @@ function EventDetail({ token, user }) {
       .then(res => {
         if (!res.ok) throw new Error('Error al eliminar el evento');
         alert('¡Evento eliminado exitosamente!');
-        navigate('/eventos'); // Redirigir a la lista de eventos
+        navigate('/eventos');
       })
       .catch(err => {
+        console.error('Error deleting event:', err);
         alert('Error al eliminar el evento: ' + err.message);
       })
       .finally(() => setDeleting(false));
   };
 
-  if (!token) return <div>Autenticación requerida para ver este evento.</div>;
-  if (loading) return <div>Cargando detalles del evento...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!evento) return <div>No existe ese evento.</div>;
+  const formatEventDate = (dateString) => {
+    const date = new Date(dateString);
+    const dateFormatted = date.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const dayOfWeek = date.toLocaleDateString('es-ES', { weekday: 'long' });
+    const time = date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    return {
+      date: dateFormatted,
+      fullDateTime: `${dayOfWeek}, ${time}`
+    };
+  };
+
+  const handleBookmark = () => {
+    alert('Evento guardado en marcadores (funcionalidad pendiente)');
+  };
+
+  if (!token) {
+    return (
+      <div className="error-container">
+        <h2>Autenticación requerida</h2>
+        <p>Debes iniciar sesión para ver los detalles del evento.</p>
+        <button onClick={() => navigate('/login')}>Iniciar Sesión</button>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner">🔄</div>
+        <p>Cargando detalles del evento...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <h2>Error</h2>
+        <p>{error}</p>
+        <button onClick={() => navigate('/eventos')}>Volver a Eventos</button>
+      </div>
+    );
+  }
+
+  if (!evento) {
+    return (
+      <div className="error-container">
+        <h2>Evento no encontrado</h2>
+        <p>El evento que buscas no existe o ha sido eliminado.</p>
+        <button onClick={() => navigate('/eventos')}>Volver a Eventos</button>
+      </div>
+    );
+  }
 
   const isCreator = user && evento.creadorId === user.uid;
+  const eventDate = formatEventDate(evento.fechaEvento);
 
   return (
-    <div className="event-detail">
-      <h2>{evento.titulo}</h2>
+    <div className="event-detail-desktop">
+      <div className="event-image-section">
+        {evento.imagenes?.length > 0 ? (
+          <div className={`image-carousel ${evento.imagenes.length === 1 ? 'single-image' : ''}`}>
+            <div className="image-container">
+              <img
+                src={evento.imagenes[currentImageIndex]}
+                alt={`Imagen ${currentImageIndex + 1} del evento ${evento.titulo}`}
+                className="event-image"
+                onError={(e) => {
+                  e.target.src = '/images/default-event.jpg';
+                }}
+              />
+            </div>
 
-      <div className="event-detail-info">
-        <div className="event-detail-info-item">
-          <strong>📍 Ubicación</strong>
-          <span>{evento.ubicacion}</span>
-        </div>
-        <div className="event-detail-info-item">
-          <strong>📅 Fecha y Hora</strong>
-          <span>{new Date(evento.fechaEvento).toLocaleString('es-ES')}</span>
-        </div>
-      </div>
-
-      {evento.imagenes?.length > 0 && (
-        <div className="event-detail-images">
-          {evento.imagenes.map((src, i) => (
-            <img key={i} src={src} alt={`Imagen ${i + 1}`} className="event-detail-img" />
-          ))}
-        </div>
-      )}
-
-      <div className="event-detail-description">
-        <h3>📝 Descripción del Evento</h3>
-        <p>{evento.descripcion}</p>
-      </div>
-
-      <div className="event-detail-actions">
-        {isCreator ? (
-          <>
-            <button
-              className="edit-event-btn"
-              onClick={() => navigate(`/editar-evento/${id}`)}
-              title="Editar este evento"
-            >
-              ✏️ Editar Evento
-            </button>
-            <button
-              className="delete-event-btn"
-              onClick={handleDelete}
-              disabled={deleting}
-              title="Eliminar este evento"
-            >
-              {deleting ? "🗑️ Eliminando..." : "🗑️ Eliminar Evento"}
-            </button>
-          </>
+            {evento.imagenes.length > 1 && (
+              <>
+                <button className="carousel-btn prev-btn" onClick={prevImage} aria-label="Imagen anterior">
+                  &#8249;
+                </button>
+                <button className="carousel-btn next-btn" onClick={nextImage} aria-label="Siguiente imagen">
+                  &#8250;
+                </button>
+                <div className="image-indicators">
+                  {evento.imagenes.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
+                      onClick={() => setCurrentImageIndex(index)}
+                      aria-label={`Ir a imagen ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         ) : (
-          joined ? (
-            <button
-              className="leave-event-btn"
-              onClick={handleLeave}
-              disabled={deleting}
-              title="Cancelar inscripción"
-            >
-              {deleting ? "⏳ Cancelando..." : "❌ Salir del Evento"}
-            </button>
-          ) : (
-            <button
-              className="join-event-btn"
-              onClick={handleJoin}
-              disabled={joining}
-              title="Unirse al evento"
-            >
-              {joining ? "⏳ Uniendo..." : "🤝 Unirse al Evento"}
-            </button>
-          )
+          <div className="no-image-container">
+            <div className="no-image-placeholder">
+              <span>📷</span>
+              <p>Sin imágenes disponibles</p>
+            </div>
+          </div>
         )}
+
+        <button className="back-btn" onClick={() => navigate('/eventos')} aria-label="Volver a eventos">
+          &#8249; Volver
+        </button>
+
+        <button className="bookmark-btn" onClick={handleBookmark} aria-label="Guardar evento">
+          🔖
+        </button>
+
+        <div className="attendees-overlay">
+          <div className="attendees-counter">
+            <div className="attendees-avatars">
+              <div className="avatar" title="Asistente">👤</div>
+              <div className="avatar" title="Asistente">👤</div>
+              <div className="avatar" title="Asistente">👤</div>
+            </div>
+            <span className="attendees-text">+{attendeesCount} Asistiendo</span>
+            {!isCreator && (
+              <button
+                className="invite-btn"
+                onClick={handleJoin}
+                disabled={joining || joined}
+                aria-label={joined ? "Ya unido al evento" : "Unirse al evento"}
+              >
+                {joining ? "..." : joined ? "✓ Unido" : "Unirse"}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="event-content-section">
+        <div className="event-content">
+          <div className="content-header">
+            <h1 className="event-title">{evento.titulo}</h1>
+          </div>
+
+          <div className="event-info-section">
+            <div className="info-item">
+              <div className="info-icon" aria-hidden="true">📅</div>
+              <div className="info-details">
+                <div className="info-title">{eventDate.date}</div>
+                <div className="info-subtitle">{eventDate.fullDateTime}</div>
+              </div>
+            </div>
+
+            <div className="info-item">
+              <div className="info-icon" aria-hidden="true">📍</div>
+              <div className="info-details">
+                <div className="info-title">{evento.ubicacion || 'Ubicación no especificada'}</div>
+                <div className="info-subtitle">Consultar detalles con el organizador</div>
+              </div>
+            </div>
+
+            <div className="info-item">
+              <div className="info-icon" aria-hidden="true">👤</div>
+              <div className="info-details">
+                <div className="info-title">{evento.creadorNombre || 'Organizador'}</div>
+                <div className="info-subtitle">Organizador del evento</div>
+              </div>
+              {!isCreator && (
+                <button className="follow-btn" aria-label="Seguir organizador">
+                  Seguir
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="event-description-section">
+            <h3>Acerca del Evento</h3>
+            <p>{evento.descripcion || "Únete a nosotros para disfrutar de una experiencia increíble."}</p>
+          </div>
+
+          <div className="action-buttons">
+            {isCreator ? (
+                <button
+                className="danger-btn delete-btn"
+                onClick={handleDelete}
+                disabled={deleting}
+                aria-label="Eliminar evento"
+                >
+                {deleting ? "Eliminando..." : "🗑️ Eliminar Evento"}
+                </button>
+            ) : (
+                <>
+                {joined ? (
+                    <button
+                    className="exit-btn leave-btn"
+                    onClick={handleLeave}
+                    disabled={deleting}
+                    aria-label="Salir del evento"
+                    >
+                    {deleting ? "Saliendo..." : "🚪 Salir del evento"}
+                    </button>
+                ) : (
+                    <button
+                    className="primary-btn join-btn"
+                    onClick={handleJoin}
+                    disabled={joining}
+                    aria-label="Registrarse en el evento"
+                    >
+                    {joining ? "Registrando..." : "Registrarse"}
+                    </button>
+                )}
+                </>
+            )}
+            </div>
+
+        </div>
       </div>
     </div>
   );
