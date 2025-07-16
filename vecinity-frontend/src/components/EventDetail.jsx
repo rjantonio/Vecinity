@@ -202,6 +202,7 @@ function EventDetail({ token, user }) {
   const isCreator = user && evento.creadorId === user.uid;
   const eventDate = formatEventDate(evento.fechaEvento);
 
+  console.log(user, user.uid, evento);
   return (
     <div className="event-detail-desktop">
       <div className="event-image-section">
@@ -264,15 +265,23 @@ function EventDetail({ token, user }) {
               <div className="avatar" title="Asistente">👤</div>
             </div>
             <span className="attendees-text">+{attendeesCount} Asistiendo</span>
-            {!isCreator && (
-              <button
+            {isCreator ? (
+            <button
+                className="edit-btn"
+                onClick={() => navigate(`/editar-evento/${evento.id}`)}
+                aria-label="Editar evento"
+            >
+                ✏️ Editar
+            </button>
+            ) : (
+            <button
                 className="invite-btn"
                 onClick={handleJoin}
                 disabled={joining || joined}
                 aria-label={joined ? "Ya unido al evento" : "Unirse al evento"}
-              >
+            >
                 {joining ? "..." : joined ? "✓ Unido" : "Unirse"}
-              </button>
+            </button>
             )}
           </div>
         </div>
