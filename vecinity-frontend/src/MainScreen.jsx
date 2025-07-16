@@ -1,7 +1,9 @@
 import './css/MainScreen.css';
 import './css/Settings.css';
 import './css/UserProfile.css';
+import './css/scroll-indicator.css';
 import logo from './images/logo.svg';
+import videoFondo from './images/limpieza-comunitaria.mp4';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
@@ -16,6 +18,7 @@ import SettingsDropdown from "./components/SettingsDropdown";
 import HomePage from "./components/HomePage";
 import { useAuth } from "./context/AuthContext";
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // ✅ FontAwesome icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,14 +26,26 @@ import {
   faUserCircle,
   faSignInAlt,
   faSignOutAlt,
-  faCogs
+  faCogs,
+  faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 
 function MainScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
   const [token, setToken] = useState(null);
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  
+  // Verificar si estamos en la página principal
+  const isHomePage = location.pathname === '/';
+  
+  // Manejador para cuando el video ha cargado
+  const handleVideoLoad = () => {
+    console.log("Video cargado correctamente");
+    setVideoLoaded(true);
+  };
 
   // Obtener token del usuario autenticado
   useEffect(() => {
@@ -56,8 +71,49 @@ function MainScreen() {
 
   return (
     <div className="main__screen">
-      {/* Barra de navegación */}
-      <div className="barrnav">
+      {/* Video de fondo solo para la página principal */}
+      {isHomePage && (
+        <div className={`video-background-full ${videoLoaded ? 'loaded' : ''}`}>
+          {!videoLoaded && (
+            <div className="video-loading">
+              <span>Cargando video...</span>
+            </div>
+          )}
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="video-hero-full" 
+            key={videoFondo}
+            onLoadedData={handleVideoLoad}
+            onError={(e) => console.error("Error al cargar el video:", e)}
+            preload="auto"
+          >
+            <source src={videoFondo} type="video/mp4" />
+            Tu navegador no soporta videos HTML5.
+          </video>
+          
+          {/* Contenido sobre el video */}
+          <div className="hero-content">
+            <h1 className="hero-title">Vecinity</h1>
+            <p className="hero-description">Conecta con tu comunidad y participa en eventos locales</p>
+            <button className="home__cta__button" onClick={() => navigate("/eventos")}>
+              Explorar Eventos
+            </button>
+          </div>
+          
+          {/* Indicador de scroll */}
+          <div className="scroll-indicator" onClick={() => window.scrollTo({top: window.innerHeight, behavior: 'smooth'})}>
+            <div className="scroll-arrow">
+              <FontAwesomeIcon icon={faChevronDown} />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Barra de navegación sticky */}
+      <div className="main-header">
         <button
           onClick={() => navigate("/")}
           className="logo"
@@ -110,6 +166,8 @@ function MainScreen() {
           )}
         </div>
       </div>
+      
+
 
       {/* Contenido principal con rutas */}
       <div className="main__content">
