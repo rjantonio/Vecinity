@@ -10,7 +10,8 @@ function EventDetail({ token, user }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [joining, setJoining] = useState(false);
-  const [joined, setJoined] = useState(false); // Para mostrar feedback si ya está inscrito o tras inscribirse
+  const [joined, setJoined] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!token || !id) return;
@@ -60,6 +61,30 @@ function EventDetail({ token, user }) {
       .finally(() => setJoining(false));
   };
 
+  // Función para eliminar evento
+  const handleDelete = () => {
+    if (!window.confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.')) {
+      return;
+    }
+
+    setDeleting(true);
+    fetch(`http://localhost:8080/event/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Error al eliminar el evento');
+        alert('¡Evento eliminado exitosamente!');
+        navigate('/eventos'); // Redirigir a la lista de eventos
+      })
+      .catch(err => {
+        alert('Error al eliminar el evento: ' + err.message);
+      })
+      .finally(() => setDeleting(false));
+  };
+
   if (!token) return <div>Autenticación requerida para ver este evento.</div>;
   if (loading) return <div>Cargando detalles del evento...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -67,35 +92,68 @@ function EventDetail({ token, user }) {
 
   const isCreator = user && evento.creadorId === user.uid;
   console.log("User ID:", user?.uid);
-console.log("Evento creadorId:", evento.creadorId);
-
+  console.log("Evento creadorId:", evento.creadorId);
 
   return (
     <div className="event-detail">
       <h2>{evento.titulo}</h2>
-      <p><strong>Ubicación:</strong> {evento.ubicacion}</p>
-      <p><strong>Fecha:</strong> {evento.fechaEvento}</p>
-      <div className="event-detail-images">
-        {evento.imagenes.map((src, i) => (
-          <img key={i} src={src} alt={`Imagen ${i + 1}`} className="event-detail-img" />
-        ))}
+      
+      <div className="event-detail-info">
+        <div className="event-detail-info-item">
+          <strong>📍 Ubicación</strong>
+          <span>{evento.ubicacion}</span>
+        </div>
+        <div className="event-detail-info-item">
+          <strong>📅 Fecha y Hora</strong>
+          <span>{new Date(evento.fechaEvento).toLocaleString('es-ES')}</span>
+        </div>
       </div>
-      <p>{evento.descripcion}</p>
 
-      {isCreator ? (
-        <button className="edit-event-btn" onClick={() => navigate(`/editar-evento/${id}`)}>
-          Editar Evento
-        </button>
-      ) : (
-        <button
-          className="join-event-btn"
-          onClick={handleJoin}
-          disabled={joining || joined}
-          title={joined ? "Ya estás inscrito en este evento" : "Unirse al evento"}
-        >
-          {joining ? "Uniendo..." : joined ? "Inscrito" : "Unirse al Evento"}
-        </button>
+      {evento.imagenes?.length > 0 && (
+        <div className="event-detail-images">
+          {evento.imagenes.map((src, i) => (
+            <img key={i} src={src} alt={`Imagen ${i + 1}`} className="event-detail-img" />
+          ))}
+        </div>
       )}
+
+      <div className="event-detail-description">
+        <h3>📝 Descripción del Evento</h3>
+        <p>{evento.descripcion}</p>
+      </div>
+
+      <div className="event-detail-actions">
+        {isCreator ? (
+          // Botones para el creador del evento
+          <>
+            <button 
+              className="edit-event-btn" 
+              onClick={() => navigate(`/editar-evento/${id}`)}
+              title="Editar este evento"
+            >
+              ✏️ Editar Evento
+            </button>
+            <button 
+              className="delete-event-btn" 
+              onClick={handleDelete}
+              disabled={deleting}
+              title="Eliminar este evento"
+            >
+              {deleting ? "🗑️ Eliminando..." : "🗑️ Eliminar Evento"}
+            </button>
+          </>
+        ) : (
+          // Botón para usuarios que no son creadores
+          <button
+            className="join-event-btn"
+            onClick={handleJoin}
+            disabled={joining || joined}
+            title={joined ? "Ya estás inscrito en este evento" : "Unirse al evento"}
+          >
+            {joining ? "⏳ Uniendo..." : joined ? "✅ Inscrito" : "🤝 Unirse al Evento"}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

@@ -170,7 +170,7 @@ function CrearEvento({ token }){
             });
             
             alert('¡Evento creado exitosamente!');
-            navigate('/');
+            navigate('/eventos'); // Cambio de '/' a '/eventos'
             
         } catch (error) {
             console.error('Error completo al crear evento:', error);
@@ -246,7 +246,7 @@ function CrearEvento({ token }){
                 >
                     {loading ? 'Creando...' : 'Crear Evento'}
                 </button>
-                <button type="button" onClick={()=>navigate("/")} disabled={loading}>
+                <button type="button" onClick={()=>navigate("/eventos")} disabled={loading}>
                     Volver
                 </button>
             </form>
