@@ -1,6 +1,7 @@
 import './css/MainScreen.css';
 import './css/Settings.css';
 import './css/UserProfile.css';
+import './css/scroll-indicator.css';
 import logo from './images/logo.svg';
 import videoFondo from './images/limpieza-comunitaria.mp4';
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import SettingsDropdown from "./components/SettingsDropdown";
 import HomePage from "./components/HomePage";
 import { useAuth } from "./context/AuthContext";
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // ✅ FontAwesome icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,15 +26,20 @@ import {
   faUserCircle,
   faSignInAlt,
   faSignOutAlt,
-  faCogs
+  faCogs,
+  faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 
 function MainScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
   const [token, setToken] = useState(null);
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  
+  // Verificar si estamos en la página principal
+  const isHomePage = location.pathname === '/';
   
   // Manejador para cuando el video ha cargado
   const handleVideoLoad = () => {
@@ -64,31 +71,49 @@ function MainScreen() {
 
   return (
     <div className="main__screen">
-      {/* Video de fondo para toda la página */}
-      <div className={`video-background-full ${videoLoaded ? 'loaded' : ''}`}>
-        {!videoLoaded && (
-          <div className="video-loading">
-            <span>Cargando video...</span>
+      {/* Video de fondo solo para la página principal */}
+      {isHomePage && (
+        <div className={`video-background-full ${videoLoaded ? 'loaded' : ''}`}>
+          {!videoLoaded && (
+            <div className="video-loading">
+              <span>Cargando video...</span>
+            </div>
+          )}
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="video-hero-full" 
+            key={videoFondo}
+            onLoadedData={handleVideoLoad}
+            onError={(e) => console.error("Error al cargar el video:", e)}
+            preload="auto"
+          >
+            <source src={videoFondo} type="video/mp4" />
+            Tu navegador no soporta videos HTML5.
+          </video>
+          
+          {/* Contenido sobre el video */}
+          <div className="hero-content">
+            <h1 className="hero-title">Vecinity</h1>
+            <p className="hero-description">Conecta con tu comunidad y participa en eventos locales</p>
+            <button className="home__cta__button" onClick={() => navigate("/eventos")}>
+              Explorar Eventos
+            </button>
           </div>
-        )}
-        <video 
-          autoPlay 
-          muted 
-          loop 
-          playsInline 
-          className="video-hero-full" 
-          key={videoFondo}
-          onLoadedData={handleVideoLoad}
-          onError={(e) => console.error("Error al cargar el video:", e)}
-          preload="auto"
-        >
-          <source src={videoFondo} type="video/mp4" />
-          Tu navegador no soporta videos HTML5.
-        </video>
-      </div>
+          
+          {/* Indicador de scroll */}
+          <div className="scroll-indicator" onClick={() => window.scrollTo({top: window.innerHeight, behavior: 'smooth'})}>
+            <div className="scroll-arrow">
+              <FontAwesomeIcon icon={faChevronDown} />
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Barra de navegación sticky */}
-      <div className="barrnav">
+      <div className="main-header">
         <button
           onClick={() => navigate("/")}
           className="logo"
@@ -142,13 +167,7 @@ function MainScreen() {
         </div>
       </div>
       
-      {/* Cabecera con mensaje principal */}
-      <div className="main-header">
-        <div className="video-overlay">
-          <h1>Vecinity</h1>
-          <p>Unidos por una comunidad mejor</p>
-        </div>
-      </div>
+
 
       {/* Contenido principal con rutas */}
       <div className="main__content">

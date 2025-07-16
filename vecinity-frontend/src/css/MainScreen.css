@@ -16,8 +16,9 @@
 .main__screen{
     margin: 0;
     padding: 0;
-    /* Hacemos transparente el fondo en lugar de usar color */
-    background-color: transparent;
+    /* Fondo degradado que se verá después del video */
+    background-color: #f8f9fa; /* Color de fondo base */
+    background-image: linear-gradient(180deg, transparent 0%, #f8f9fa 100vh); /* Transición suave desde transparente */
     min-height: 100vh;
     padding-bottom: 3rem;
     transition: background-color 0.3s ease;
@@ -25,13 +26,13 @@
     z-index: 1;
 }
 
-/* Estilos para el video de fondo a pantalla completa */
+/* Estilos para el video de fondo solo en la parte superior */
 .video-background-full {
-    position: fixed;
+    position: absolute; /* Cambiado de fixed a absolute para que no siga al scroll */
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh; /* Altura limitada a la altura de la ventana */
     overflow: hidden;
     z-index: 0; /* Por debajo de todo el contenido */
     background-color: var(--last-color); /* Color de fondo mientras se carga el video */
@@ -108,6 +109,7 @@
     display: block; /* Garantiza que el video se muestre como bloque */
     z-index: 0; /* Por debajo de todo el contenido */
     opacity: 0.85; /* Hacemos el video ligeramente transparente para mejor legibilidad del contenido */
+    max-height: 100vh; /* Limita la altura del video a la altura de la ventana */
 }
 
 /* Mantenemos los estilos antiguos para compatibilidad */
@@ -128,7 +130,7 @@
 /* Cabecera principal con mensaje de bienvenida */
 .main-header {
     position: relative;
-    height: 500px;
+    height: 100vh; /* Altura completa de la ventana para coincidir con el video */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -165,6 +167,100 @@
 .video-overlay p {
     font-size: 1.5rem;
     font-weight: 400;
+}
+
+.main-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(236, 248, 248, 0.1); /* Header completamente transparente */
+    backdrop-filter: blur(5px); /* Efecto de desenfoque sutil */
+    -webkit-backdrop-filter: blur(5px); /* Para compatibilidad con Safari */
+    color: #fff;
+    position: sticky; /* Hacemos que la barra sea sticky */
+    top: 0; /* Se queda pegada al borde superior */
+    left: 0;
+    width: 100%;
+    z-index: 100; /* Aumentamos el z-index para que esté por encima de todo */
+    box-shadow: none; /* Sin sombra para mantener transparencia */
+    padding: 0.5rem 1.5rem; /* Padding reducido para mejor ajuste */
+    height: 3.5rem; /* Altura fija en vez de min-height */
+    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+    transition: all 0.3s ease;
+    animation: navbar-show 0.5s ease;
+}
+
+@keyframes navbar-show {
+    from {
+        opacity: 0.7;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-header {
+    border-bottom: none; /* Sin borde para mantener transparencia */
+}
+
+/* Contenido hero sobre el video */
+.hero-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.hero-title {
+    position: absolute;
+    top: 6rem;
+    left: 2rem;
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
+.hero-description {
+    font-size: 1.5rem;
+    margin: 0 0 2rem 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+.home__cta__button {
+    background: linear-gradient(135deg, var(--last-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.home__cta__button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, var(--secondary-color), var(--last-color));
 }
 
 .barrnav{
@@ -254,9 +350,11 @@
     transform: scale(0.7);
 }
 .main__content{
-    max-width: 75vw;
-    min-height: 250px;
-    margin: 4rem auto;
+    max-width: fit-content;
+    width: auto;
+    min-height: auto;
+    margin: 0 auto; /* Eliminamos el margen superior para que esté justo después del video */
+    margin-top: 100vh; /* Empuja el contenido hacia abajo, después del video de altura 100vh */
     background-color: rgba(255, 255, 255, 0.85); /* Fondo semi-transparente */
     backdrop-filter: blur(10px); /* Efecto de desenfoque para mejorar legibilidad */
     -webkit-backdrop-filter: blur(10px);
@@ -270,15 +368,17 @@
     transition: all 0.3s ease;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(126, 127, 154, 0.1);
+    position: relative; /* Asegura que esté en el flujo normal del documento */
+    z-index: 2; /* Por encima del video */
 }
 .event__list{
     list-style: none;
     padding: 0;
     margin: 2rem 0;
-    width: 100%;
+    width: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 .event__list__item{
     background-color: #ffffff;
@@ -498,7 +598,7 @@ body.dark-mode.colorblind-mode .event__images .event__image:hover {
     margin: 2rem 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.05);
-    width: 95%;
+    width: auto;
     max-width: 100%;
 }
 
@@ -589,6 +689,7 @@ body.dark-mode.colorblind-mode .tittle::after {
 /* Estilos para modo oscuro */
 body.dark-mode .main__screen {
     background-color: var(--dark-bg);
+    background-image: linear-gradient(180deg, transparent 0%, var(--dark-bg) 100vh); /* Transición suave desde transparente */
     color: var(--dark-text);
 }
 
@@ -678,6 +779,7 @@ body.dark-mode .enrolled__event__item:hover {
 /* Estilos para modo daltónico */
 body.colorblind-mode .main__screen {
     background-color: var(--colorblind-bg);
+    background-image: linear-gradient(180deg, transparent 0%, var(--colorblind-bg) 100vh); /* Transición suave desde transparente */
     color: var(--colorblind-text);
 }
 
@@ -734,7 +836,8 @@ body.colorblind-mode h6 {
 
 /* Combinación de modos nocturno y daltónico */
 body.dark-mode.colorblind-mode .main__screen {
-    background-color: transparent;
+    background-color: #16213e; /* Color de fondo para modo combinado */
+    background-image: linear-gradient(180deg, transparent 0%, #16213e 100vh); /* Transición suave desde transparente */
     color: #ffffff;
 }
 
