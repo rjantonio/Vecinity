@@ -1,19 +1,21 @@
 package com.example.vecinity.controller;
 
 import com.example.vecinity.dtos.EventDetailDto;
+import com.example.vecinity.dtos.EventImageDto;
 import com.example.vecinity.dtos.UserEventDto;
 import com.example.vecinity.model.Event;
 import com.example.vecinity.model.User;
+import com.example.vecinity.repository.EventImageRepository;
 import com.example.vecinity.repository.EventRegistrationRepository;
 import com.example.vecinity.repository.UserRepository;
 import com.example.vecinity.service.EventService;
-import com.google.firebase.auth.FirebaseToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/event")
@@ -24,6 +26,9 @@ public class EventController {
 
     @Autowired
     private UserRepository userRepository; // Inyección del repo
+
+    @Autowired
+    private EventImageRepository eventImageRepository; // NUEVO: repo para las imágenes
 
     @GetMapping
     public List<Event> list() {
@@ -43,35 +48,55 @@ public class EventController {
         return ResponseEntity.ok(saved);
     }
 
-
     @GetMapping("{id}")
     public ResponseEntity<EventDetailDto> buscar(@PathVariable Long id) {
         return eventService.findById(id)
                 .map(event -> {
+                    // Obtener las imágenes del evento
+                    List<EventImageDto> imagenes = eventImageRepository.findByEventId(event.getId())
+                            .stream()
+                            .map(img -> new EventImageDto(
+                                    img.getId(),
+                                    img.getImagenBase64(),
+                                    img.getDescripcion(),
+                                    img.getEvent().getId()
+                            ))
+                            .collect(Collectors.toList());
+
                     EventDetailDto dto = new EventDetailDto(
                             event.getId(),
                             event.getTitulo(),
                             event.getDescripcion(),
                             event.getFechaEvento(),
                             event.getUbicacion(),
-                            event.getCreador().getFirebaseUid(), // UID de Firebase
-                            event.getFechaCreacion()
+                            event.getCreador().getFirebaseUid(),
+                            event.getFechaCreacion(),
+                            imagenes  // Aquí pasamos las imágenes al DTO
                     );
                     return ResponseEntity.ok(dto);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<Event> actualizar(@PathVariable Long id, @RequestBody Event event) {
         return eventService.findById(id)
                 .map(e -> {
-                    event.setId(id);
-                    return ResponseEntity.ok(eventService.save(event));
+                    // Actualiza los campos que deseas cambiar:
+                    e.setTitulo(event.getTitulo());
+                    e.setDescripcion(event.getDescripcion());
+                    e.setFechaEvento(event.getFechaEvento());
+                    e.setUbicacion(event.getUbicacion());
+                    // No tocamos el creador, lo dejamos igual
+                    // e.setCreador(e.getCreador());
+
+                    // Guarda el evento actualizado
+                    Event updated = eventService.save(e);
+                    return ResponseEntity.ok(updated);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
