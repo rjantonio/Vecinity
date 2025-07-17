@@ -1,5 +1,6 @@
 package com.example.vecinity.controller;
 
+import com.example.vecinity.dtos.EventDetailDto;
 import com.example.vecinity.dtos.UserEventDto;
 import com.example.vecinity.model.Event;
 import com.example.vecinity.model.User;
@@ -44,11 +45,23 @@ public class EventController {
 
 
     @GetMapping("{id}")
-    public ResponseEntity<Event> buscar(@PathVariable Long id) {
+    public ResponseEntity<EventDetailDto> buscar(@PathVariable Long id) {
         return eventService.findById(id)
-                .map(ResponseEntity::ok)
+                .map(event -> {
+                    EventDetailDto dto = new EventDetailDto(
+                            event.getId(),
+                            event.getTitulo(),
+                            event.getDescripcion(),
+                            event.getFechaEvento(),
+                            event.getUbicacion(),
+                            event.getCreador().getFirebaseUid(), // UID de Firebase
+                            event.getFechaCreacion()
+                    );
+                    return ResponseEntity.ok(dto);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Event> actualizar(@PathVariable Long id, @RequestBody Event event) {

@@ -20,7 +20,6 @@
     background-color: #f8f9fa; /* Color de fondo base */
     background-image: linear-gradient(180deg, transparent 0%, #f8f9fa 100vh); /* Transición suave desde transparente */
     min-height: 100vh;
-    padding-bottom: 3rem;
     transition: background-color 0.3s ease;
     position: relative;
     z-index: 1;
@@ -356,11 +355,9 @@
     background-color: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-radius: 12px;
     padding: 2rem;
     display: flex;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
     flex-direction: column;
     align-items: center;
     transition: all 0.3s ease;
@@ -372,7 +369,7 @@
 
 /* Clase específica para homepage */
 .homepage .main__content {
-    margin-top: 100vh; /* Empuja el contenido hacia abajo, después del video de altura 100vh */
+    margin-top: calc(100vh - 4rem); /* Empuja el contenido hacia abajo, después del video de altura 100vh */
 }
 
 .event__list{
