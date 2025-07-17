@@ -2,19 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/HomePage.css';
 
-function HomePage() {
+function HomePage({ user, token }) {
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    if (!token) return;
 
     fetch("http://localhost:8080/event", {
       headers: {
@@ -27,12 +22,8 @@ function HomePage() {
         return res.json();
       })
       .then(async data => {
-        // Obtener solo los primeros 3 eventos
-        const eventosLimitados = data.slice(0, 3);
-        
-        // Obtener imágenes para cada evento igual que en EventList
         const eventosConImagenes = await Promise.all(
-          eventosLimitados.map(async evento => {
+          data.map(async evento => {
             try {
               const imgRes = await fetch(`http://localhost:8080/event-images/${evento.id}`, {
                 headers: {
@@ -54,12 +45,11 @@ function HomePage() {
             }
           })
         );
-        
-        setEventos(eventosConImagenes);
+        setEventos(eventosConImagenes.slice(0, 3));
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [token]);
 
   return (
     <>
