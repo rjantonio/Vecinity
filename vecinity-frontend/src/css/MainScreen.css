@@ -1229,3 +1229,56 @@ body.colorblind-mode .event__date i,
 body.colorblind-mode .event__description i {
   color: var(--colorblind-secondary);
 }
+
+/* Eliminar bordes de enfoque en todos los elementos de navegación */
+.logo,
+.logo *,
+.btn__settings,
+.btn__settings *,
+.btn__login,
+.btn__login *,
+.btn__logout,
+.btn__logout *,
+.barrnav *,
+.main-header *,
+.event__list__item *,
+.event__carousel__btn,
+.event__indicator {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Estados de focus */
+.logo:focus,
+.logo:active,
+.logo:focus-visible,
+.btn__settings:focus,
+.btn__settings:active,
+.btn__settings:focus-visible,
+.btn__login:focus,
+.btn__login:active,
+.btn__login:focus-visible,
+.btn__logout:focus,
+.btn__logout:active,
+.btn__logout:focus-visible {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Para iconos específicamente */
+.nav-icon,
+.fa-user-circle,
+.fa-sign-in-alt,
+.fa-sign-out-alt,
+.fa-cogs,
+.fa-chevron-down {
+    outline: none !important;
+    border: none !important;
+    -webkit-appearance: none !important;
+}
