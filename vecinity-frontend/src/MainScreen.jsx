@@ -41,6 +41,12 @@ function MainScreen() {
   // Verificar si estamos en la página principal
   const isHomePage = location.pathname === '/';
   
+  // Función de logout personalizada que redirige al home
+  const handleLogout = async () => {
+    await logout();
+    navigate('/'); // Redirigir al home después del logout
+  };
+  
   // Manejador para cuando el video ha cargado
   const handleVideoLoad = () => {
     console.log("Video cargado correctamente");
@@ -148,7 +154,7 @@ function MainScreen() {
               </button>
               <button
                 className="btn__logout"
-                onClick={logout}
+                onClick={handleLogout} // Usar la función personalizada
                 title="Cerrar sesión"
               >
                 <FontAwesomeIcon icon={faSignOutAlt} className="nav-icon" />
