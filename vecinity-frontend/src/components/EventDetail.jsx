@@ -287,6 +287,10 @@ function EventDetail({ token, user }) {
           </div>
 
           <div className="event-info-section">
+          <div className="event-description-section">
+            <h3>Acerca del Evento</h3>
+            <p>{evento.descripcion || "Únete a nosotros para disfrutar de una experiencia increíble."}</p>
+          </div>
             <div className="info-item">
               <div className="info-icon" aria-hidden="true">📅</div>
               <div className="info-details">
@@ -317,10 +321,6 @@ function EventDetail({ token, user }) {
             </div>
           </div>
 
-          <div className="event-description-section">
-            <h3>Acerca del Evento</h3>
-            <p>{evento.descripcion || "Únete a nosotros para disfrutar de una experiencia increíble."}</p>
-          </div>
 
           <div className="action-buttons">
             {isCreator ? (
