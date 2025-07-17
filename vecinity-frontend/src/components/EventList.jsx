@@ -148,6 +148,10 @@ function EventList({ user, token }) {
 
       <SearchBar onSearch={handleSearch} placeholder="Buscar eventos por título..." />
 
+      <button className="create__event__btn" onClick={() => navigate("/crear-evento")}>
+        Crear Evento
+      </button>
+
       <ul className="event__list">
         {filteredItems.map(item => (
           <Evento
@@ -166,18 +170,6 @@ function EventList({ user, token }) {
         ))}
       </ul>
 
-      {searchTerm && filteredItems.length === 0 && (
-        <p className="no-results">No se encontraron eventos que coincidan con tu búsqueda</p>
-      )}
-
-      <button className="create__event__btn" onClick={() => navigate("/crear-evento")}>
-        Crear Evento
-      </button>
-      <button className="edit__event__btn" onClick={() => navigate("/editar-evento")}>
-        Editar Evento
-      </button>
-
-      <EventRegistrationsList token={token} />
     </>
   );
 }
