@@ -237,11 +237,11 @@ function Editarevento({ token }) {
       ) : (
         <form className="editar-evento-form" onSubmit={handleGuardarCambios}>
           <div className="form-group">
-            <label className="form-label" htmlFor="nombre">Nombre del evento:</label>
+            <label className="form-label" htmlFor="titulo">Nombre del evento:</label>
             <input
               id="titulo"
               type="text"
-              name="nombre"
+              name="titulo"
               className="form-input"
               value={formData.titulo}
               onChange={handleInputChange}
