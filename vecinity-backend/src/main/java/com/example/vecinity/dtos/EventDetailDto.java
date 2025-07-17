@@ -1,6 +1,7 @@
 package com.example.vecinity.dtos;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EventDetailDto {
     private Long id;
@@ -10,11 +11,13 @@ public class EventDetailDto {
     private LocalDateTime fechaCreacion;
     private String ubicacion;
     private String creadorId;
+    private List<EventImageDto> imagenes;  // NUEVO campo para las imágenes
 
-    // Constructor completo
+    // Constructor completo con imágenes
     public EventDetailDto(Long id, String titulo, String descripcion,
                           LocalDateTime fechaEvento, String ubicacion,
-                          String creadorId, LocalDateTime fechaCreacion) {
+                          String creadorId, LocalDateTime fechaCreacion,
+                          List<EventImageDto> imagenes) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -22,11 +25,11 @@ public class EventDetailDto {
         this.ubicacion = ubicacion;
         this.creadorId = creadorId;
         this.fechaCreacion = fechaCreacion;
+        this.imagenes = imagenes;
     }
 
     // Constructor vacío (necesario para serialización, si usas frameworks como Jackson)
-    public EventDetailDto() {
-    }
+    public EventDetailDto() {}
 
     // Getters
     public Long getId() {
@@ -57,6 +60,10 @@ public class EventDetailDto {
         return fechaCreacion;
     }
 
+    public List<EventImageDto> getImagenes() {
+        return imagenes;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -84,5 +91,9 @@ public class EventDetailDto {
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public void setImagenes(List<EventImageDto> imagenes) {
+        this.imagenes = imagenes;
     }
 }

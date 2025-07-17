@@ -175,7 +175,7 @@ function MainScreen() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/crear-evento" element={<CrearEvento token={token} />} />
-          <Route path="/editar-evento" element={<Editarevento />} />
+          <Route path="/editar-evento" element={<Editarevento  />} />
           <Route path="/editar-evento/:id" element={<Editarevento token={token} />} />
           <Route path="*" element={<ErrorScreen />} />
         </Routes>

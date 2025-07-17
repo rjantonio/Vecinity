@@ -331,7 +331,7 @@ function EventDetail({ token, user }) {
                 <div className="creator-buttons">
                 <button
                     className="small-btn edit-btn"
-                    onClick={() => navigate(`/event/${evento.id}`)}
+                    onClick={() => navigate(`/editar-evento/${evento.id}`)}
                     aria-label="Editar evento"
                 >
                     ✏️ Editar
