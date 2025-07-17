@@ -443,6 +443,66 @@
   box-shadow: none;
 }
 
+.creator-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 30px;
+  min-width: 140px;
+  max-width: 180px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.edit-btn {
+  background: #6c63ff; /* Un tono morado o el que prefieras para editar */
+  color: white;
+  border: none;
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+}
+
+.edit-btn:hover:not(:disabled) {
+  background: #5750d8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(87, 80, 216, 0.4);
+}
+
+.delete-btn {
+  background: #e17055;
+  color: white;
+  border: none;
+  box-shadow: 0 6px 20px rgba(225, 112, 85, 0.3);
+}
+
+.delete-btn:hover:not(:disabled) {
+  background: #d63031;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(214, 49, 31, 0.4);
+}
+
+@media (max-width: 480px) {
+  .creator-buttons {
+    flex-direction: column;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    width: 100%;
+    max-width: none;
+  }
+}
+
 
 /* Responsive para pantallas más grandes */
 @media (min-width: 768px) {
