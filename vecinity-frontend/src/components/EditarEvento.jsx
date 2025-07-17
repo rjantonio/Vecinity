@@ -21,6 +21,14 @@ function Editarevento({ token }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Función para agregar prefijo a imágenes base64
+  const formatearImagen = (imagen) => {
+    if (!imagen || typeof imagen !== 'string') return imagen;
+    if (imagen.startsWith('data:')) return imagen;
+    if (imagen.startsWith('blob:')) return imagen;
+    return `data:image/jpeg;base64,${imagen}`;
+  };
+
   useEffect(() => {
     if (!id) {
       setError("No se especificó el ID del evento");
@@ -44,12 +52,16 @@ function Editarevento({ token }) {
       .then(data => {
         setEventoOriginal(data);
         console.log(data);
+        
+        // Formatear imágenes base64
+        const imagenesFormateadas = data.imagenes ? data.imagenes.map(formatearImagen) : [];
+        
         setFormData({
           titulo: data.titulo || "",
           descripcion: data.descripcion || "",
           fechaEvento: data.fechaEvento || "",
           ubicacion: data.ubicacion || "",
-          imagenes: data.imagenes || []
+          imagenes: imagenesFormateadas
         });
         setModoEdicion(true);
       })
@@ -80,12 +92,20 @@ function Editarevento({ token }) {
     setError(null);
 
     try {
+      // Convertir imágenes con prefijo data: de vuelta a base64 puro
+      const imagenesParaBackend = formData.imagenes.map(imagen => {
+        if (imagen.startsWith('data:image/')) {
+          return imagen.split(',')[1]; // Extraer solo la parte base64
+        }
+        return imagen;
+      });
+
       const eventData = {
         titulo: formData.titulo,
         descripcion: formData.descripcion,
         fechaEvento: formData.fechaEvento,
         ubicacion: formData.ubicacion,
-        imagenes: formData.imagenes
+        imagenes: imagenesParaBackend
       };
 
       const response = await fetch(`http://localhost:8080/event/${id}`, {
@@ -149,12 +169,13 @@ function Editarevento({ token }) {
 
   const handleCancelarEdicion = () => {
     if (eventoOriginal) {
+      const imagenesFormateadas = eventoOriginal.imagenes ? eventoOriginal.imagenes.map(formatearImagen) : [];
       setFormData({
         titulo: eventoOriginal.titulo,
         descripcion: eventoOriginal.descripcion,
         fechaEvento: eventoOriginal.fechaEvento,
         ubicacion: eventoOriginal.ubicacion,
-        imagenes: [...eventoOriginal.imagenes]
+        imagenes: imagenesFormateadas
       });
     }
     setModoEdicion(false);
