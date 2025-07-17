@@ -1,17 +1,6 @@
-/*===========================================
-  COMPONENTE DE BARRA DE BÚSQUEDA
-  
-  Proporciona una interfaz para que los usuarios
-  busquen eventos por título. Incluye un campo
-  de entrada de texto y un botón de búsqueda.
-=============================================*/
-
 import React, { useState } from 'react';
 import '../css/SearchBar.css'; // Importación de estilos específicos
 
-// Componente SearchBar que recibe:
-// - onSearch: función que maneja la búsqueda en el componente padre
-// - placeholder: texto de ayuda para el campo de búsqueda (opcional)
 const SearchBar = ({ onSearch, placeholder = "Buscar eventos..." }) => {
   // Estado local para almacenar el término de búsqueda actual
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,14 +12,10 @@ const SearchBar = ({ onSearch, placeholder = "Buscar eventos..." }) => {
   };
 
   // Función para manejar cambios en el campo de entrada
-  const handleInputChange = (e) => {
+ const handleInputChange = (e) => {
     const value = e.target.value;
-    setSearchTerm(value); // Actualiza el estado local
-    
-    // Reset automático de la búsqueda cuando el campo está vacío
-    if (value === '') {
-      onSearch(''); // Limpia los resultados de búsqueda
-    }
+    setSearchTerm(value);
+    onSearch(value); // Ejecuta búsqueda en tiempo real
   };
 
   return (
