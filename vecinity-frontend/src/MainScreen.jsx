@@ -161,7 +161,7 @@ function MainScreen() {
       {/* Contenido principal con rutas */}
       <div className="main__content">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage user={user} token={token} />} />
           <Route path="/eventos" element={<EventList user={user} token={token} />} />
           <Route path="/event/:id" element={<EventDetail token={token} user={user} />} />
           <Route path="/settings" element={<Settings />} />
