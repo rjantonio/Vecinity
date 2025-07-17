@@ -1,100 +1,113 @@
-/*===========================================
-  ESTILOS PARA EL COMPONENTE DE CREAR EVENTO
-=============================================*/
-
 /* Contenedor principal */
 .crear-evento-container {
-  max-width: 800px;
+  max-width: 1200px; /* Aumentado de 800px a 1200px */
   margin: 2rem auto;
-  padding: 2rem;
+  padding: 3rem 4rem; /* Aumentado el padding */
   background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px; /* Bordes más redondeados */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
   transition: all 0.3s ease;
 }
 
 /* Título del formulario */
 .crear-evento-title {
   color: var(--last-color);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem; /* Más espacio */
   text-align: center;
-  font-size: 2rem;
-  font-weight: 600;
-  border-bottom: 2px solid var(--secondary-color);
-  padding-bottom: 0.75rem;
+  font-size: 2.5rem; /* Título más grande */
+  font-weight: 700;
+  border-bottom: 3px solid var(--secondary-color);
+  padding-bottom: 1rem;
 }
 
-/* Formulario */
+/* Formulario en layout de grid para aprovechar el ancho */
 .crear-evento-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas para campos */
+  gap: 2rem 3rem; /* Más espacio entre elementos */
+  align-items: start;
+}
+
+/* Campos que ocupan todo el ancho */
+.form-group.full-width {
+  grid-column: 1 / -1; /* Ocupa ambas columnas */
 }
 
 /* Contenedor para cada campo del formulario */
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 /* Etiquetas de los campos */
 .form-label {
-  font-weight: 500;
+  font-weight: 600;
   color: #333;
-  font-size: 1rem;
+  font-size: 1.1rem; /* Texto un poco más grande */
 }
 
 /* Campos de entrada de texto */
 .form-input {
-  padding: 0.75rem 1rem;
-  border: 1.5px solid var(--secondary-color);
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+  padding: 1rem 1.25rem; /* Más padding */
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px; /* Bordes más redondeados */
+  font-size: 1.1rem; /* Texto más grande */
+  transition: all 0.3s ease;
+  background-color: #fafafa;
 }
 
 .form-input:focus {
   outline: none;
   border-color: var(--last-color);
-  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
+  box-shadow: 0 0 0 3px rgba(26, 94, 99, 0.15);
+  background-color: #ffffff;
+  transform: translateY(-1px); /* Ligero efecto de elevación */
 }
 
 /* Área de texto para la descripción */
 .form-textarea {
-  padding: 0.75rem 1rem;
-  border: 1.5px solid var(--secondary-color);
-  border-radius: 4px;
-  font-size: 1rem;
-  min-height: 120px;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  min-height: 150px; /* Más altura */
   resize: vertical;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
 }
 
 .form-textarea:focus {
   outline: none;
   border-color: var(--last-color);
-  box-shadow: 0 0 0 2px rgba(26, 94, 99, 0.2);
+  box-shadow: 0 0 0 3px rgba(26, 94, 99, 0.15);
+  background-color: #ffffff;
+  transform: translateY(-1px);
 }
 
 /* Selector de archivos personalizado */
 .file-input-container {
   position: relative;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .file-input-label {
   display: inline-block;
-  padding: 0.75rem 1.25rem;
-  background-color: var(--secondary-color);
+  padding: 1rem 2rem; /* Más padding */
+  background: linear-gradient(135deg, var(--secondary-color), #6a6b83);
   color: white;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .file-input-label:hover {
-  background-color: #6a6b83;
+  background: linear-gradient(135deg, #6a6b83, var(--secondary-color));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .file-input {
@@ -103,27 +116,37 @@
 }
 
 .file-input-text {
-  margin-left: 0.5rem;
+  margin-left: 1rem;
   color: #666;
-  font-size: 0.875rem;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 /* Contenedor de vista previa de imágenes */
 .image-preview-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Grid responsivo */
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
 }
 
 /* Tarjeta de vista previa de imagen */
 .image-preview-card {
   position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 6px;
+  width: 100%;
+  height: 150px; /* Altura fija para mantener uniformidad */
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.image-preview-card:hover {
+  transform: scale(1.05);
 }
 
 .image-preview {
@@ -134,89 +157,101 @@
 
 .image-delete-btn {
   position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  width: 1.75rem;
-  height: 1.75rem;
-  background-color: rgba(255, 0, 0, 0.7);
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  background-color: rgba(255, 0, 0, 0.8);
   color: white;
   border: none;
   border-radius: 50%;
-  font-size: 1rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .image-delete-btn:hover {
   background-color: rgba(220, 0, 0, 0.9);
+  transform: scale(1.1);
 }
 
 /* Contenedor de botones */
 .form-buttons {
+  grid-column: 1 / -1; /* Ocupa todo el ancho */
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 2rem;
+  margin-top: 2rem;
   justify-content: center;
 }
 
 /* Botón principal */
 .btn-primary {
-  background-color: var(--last-color);
+  background: linear-gradient(135deg, var(--last-color), #146a70);
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 4px;
+  padding: 1rem 3rem; /* Botones más grandes */
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(26, 94, 99, 0.3);
+  min-width: 180px;
 }
 
 .btn-primary:hover {
-  background-color: #146a70;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #146a70, var(--last-color));
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(26, 94, 99, 0.4);
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(-1px);
 }
 
 .btn-primary:disabled {
-  background-color: #cccccc;
+  background: linear-gradient(135deg, #cccccc, #aaaaaa);
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 /* Botón secundario */
 .btn-secondary {
-  background-color: #f2f2f2;
+  background: linear-gradient(135deg, #f2f2f2, #e5e5e5);
   color: #333;
-  border: 1px solid #ddd;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 4px;
+  border: 2px solid #ddd;
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
 }
 
 .btn-secondary:hover {
-  background-color: #e5e5e5;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #e5e5e5, #d5d5d5);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: #bbb;
 }
 
 .btn-secondary:active {
-  transform: translateY(0);
+  transform: translateY(-1px);
 }
 
 .btn-secondary:disabled {
-  background-color: #f7f7f7;
+  background: linear-gradient(135deg, #f7f7f7, #f0f0f0);
   color: #aaa;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 /*===========================================
@@ -226,7 +261,7 @@
 /* Modo oscuro */
 body.dark-mode .crear-evento-container {
   background-color: var(--dark-secondary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 body.dark-mode .crear-evento-title {
@@ -248,29 +283,35 @@ body.dark-mode .form-textarea {
 body.dark-mode .form-input:focus,
 body.dark-mode .form-textarea:focus {
   border-color: #4aacb3;
-  box-shadow: 0 0 0 2px rgba(74, 172, 179, 0.2);
+  box-shadow: 0 0 0 3px rgba(74, 172, 179, 0.2);
+  background-color: #2a2a2a;
 }
 
 body.dark-mode .file-input-label {
-  background-color: #4a4a4a;
+  background: linear-gradient(135deg, #4a4a4a, #5a5a5a);
 }
 
 body.dark-mode .file-input-label:hover {
-  background-color: #5a5a5a;
+  background: linear-gradient(135deg, #5a5a5a, #6a6a6a);
 }
 
 body.dark-mode .file-input-text {
   color: #aaa;
 }
 
+body.dark-mode .image-preview-container {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
 body.dark-mode .btn-secondary {
-  background-color: #333;
+  background: linear-gradient(135deg, #333, #3d3d3d);
   color: #ddd;
   border-color: #555;
 }
 
 body.dark-mode .btn-secondary:hover {
-  background-color: #3d3d3d;
+  background: linear-gradient(135deg, #3d3d3d, #4a4a4a);
 }
 
 /* Modo daltónico */
@@ -281,19 +322,19 @@ body.colorblind-mode .crear-evento-title {
 body.colorblind-mode .form-input:focus,
 body.colorblind-mode .form-textarea:focus {
   border-color: var(--colorblind-primary);
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
 }
 
 body.colorblind-mode .file-input-label {
-  background-color: var(--colorblind-secondary);
+  background: linear-gradient(135deg, var(--colorblind-secondary), #5a7a99);
 }
 
 body.colorblind-mode .btn-primary {
-  background-color: var(--colorblind-primary);
+  background: linear-gradient(135deg, var(--colorblind-primary), #0055aa);
 }
 
 body.colorblind-mode .btn-primary:hover {
-  background-color: #0055aa;
+  background: linear-gradient(135deg, #0055aa, var(--colorblind-primary));
 }
 
 body.colorblind-mode .image-delete-btn {
@@ -304,9 +345,52 @@ body.colorblind-mode .image-delete-btn {
   DISEÑO RESPONSIVE
 =============================================*/
 
+@media (max-width: 1024px) {
+  .crear-evento-container {
+    max-width: 900px;
+    padding: 2.5rem 3rem;
+  }
+  
+  .crear-evento-form {
+    gap: 1.5rem 2rem;
+  }
+}
+
 @media (max-width: 768px) {
   .crear-evento-container {
     margin: 1rem;
+    padding: 2rem;
+    max-width: none;
+  }
+  
+  .crear-evento-form {
+    grid-template-columns: 1fr; /* Una sola columna en tablet */
+    gap: 1.5rem;
+  }
+  
+  .crear-evento-title {
+    font-size: 2rem;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-primary, 
+  .btn-secondary {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .image-preview-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .crear-evento-container {
+    margin: 0.5rem;
     padding: 1.5rem;
   }
   
@@ -314,28 +398,15 @@ body.colorblind-mode .image-delete-btn {
     font-size: 1.75rem;
   }
   
-  .form-buttons {
-    flex-direction: column;
-  }
-  
-  .btn-primary, 
-  .btn-secondary {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .crear-evento-container {
-    margin: 0.5rem;
-    padding: 1rem;
-  }
-  
-  .crear-evento-title {
-    font-size: 1.5rem;
-  }
-  
   .form-input,
   .form-textarea {
-    font-size: 0.9rem;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
   }
 }

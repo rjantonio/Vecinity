@@ -166,7 +166,7 @@ function CrearEvento({ token }) {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group full-width">
                     <label className="form-label">Ubicación</label>
                     <input
                         type="text"
@@ -178,7 +178,7 @@ function CrearEvento({ token }) {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group full-width">
                     <label className="form-label">Descripción</label>
                     <textarea
                         name="descripcion"
@@ -189,7 +189,7 @@ function CrearEvento({ token }) {
                     ></textarea>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group full-width">
                     <label className="form-label">Imágenes del evento</label>
                     <div className="file-input-container">
                         <label className="file-input-label">
@@ -209,28 +209,30 @@ function CrearEvento({ token }) {
                 </div>
 
                 {formData.imagenes.length > 0 && (
-                    <div className="image-preview-container">
-                        {formData.imagenes.map((file, index) => (
-                            <div className="image-preview-card" key={index}>
-                                <img
-                                    src={URL.createObjectURL(file)}
-                                    alt={`Preview ${index}`}
-                                    className="image-preview"
-                                />
-                                <button
-                                    type="button"
-                                    className="image-delete-btn"
-                                    onClick={() =>
-                                        setFormData(prev => ({
-                                            ...prev,
-                                            imagenes: prev.imagenes.filter((_, i) => i !== index)
-                                        }))
-                                    }
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                        ))}
+                    <div className="form-group full-width">
+                        <div className="image-preview-container">
+                            {formData.imagenes.map((file, index) => (
+                                <div className="image-preview-card" key={index}>
+                                    <img
+                                        src={URL.createObjectURL(file)}
+                                        alt={`Preview ${index}`}
+                                        className="image-preview"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="image-delete-btn"
+                                        onClick={() =>
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                imagenes: prev.imagenes.filter((_, i) => i !== index)
+                                            }))
+                                        }
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
 
