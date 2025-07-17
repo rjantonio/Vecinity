@@ -53,7 +53,36 @@ function HomePage({ user, token }) {
 
   return (
     <>
-      <p>Sobre nosotros</p>
+      <div className="about-section">
+        <h2 className="about-title">Sobre nosotros</h2>
+        <div className="about-content">
+          <p className="about-text">
+            Somos un equipo de 4 estudiantes apasionados del bootcamp de Java de 
+            <strong> Fundación Esplai</strong>, comprometidos con la innovación tecnológica 
+            y el impacto social positivo.
+          </p>
+          <p className="about-text">
+            Como proyecto final de nuestro bootcamp, hemos desarrollado <strong>Vecinity</strong>, 
+            una aplicación que busca contribuir a varios <strong>Objetivos de Desarrollo Sostenible</strong> 
+            de la ONU, especialmente:
+          </p>
+          <div className="ods-list">
+            <div className="ods-item">
+              <span className="ods-number">11</span>
+              <span className="ods-text">Ciudades y Comunidades Sostenibles</span>
+            </div>
+            <div className="ods-item">
+              <span className="ods-number">17</span>
+              <span className="ods-text">Alianzas para lograr los Objetivos</span>
+            </div>
+          </div>
+          <p className="about-text">
+            Nuestra misión es fortalecer los vínculos comunitarios y promover la participación 
+            ciudadana a través de la tecnología, creando espacios digitales que fomenten 
+            la colaboración y el bienestar social.
+          </p>
+        </div>
+      </div>
       
       <div className="eventos-ejemplo">
         <h3 className="eventos-ejemplo-titulo">Eventos Destacados</h3>
