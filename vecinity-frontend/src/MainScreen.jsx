@@ -70,25 +70,16 @@ function MainScreen() {
   }, []);
 
   return (
-    <div className="main__screen">
-      {/* Video de fondo solo para la página principal */}
+    <div className={`main__screen ${isHomePage ? 'homepage' : ''}`}>
+      {/* Video de fondo solo en homepage */}
       {isHomePage && (
-        <div className={`video-background-full ${videoLoaded ? 'loaded' : ''}`}>
-          {!videoLoaded && (
-            <div className="video-loading">
-              <span>Cargando video...</span>
-            </div>
-          )}
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline 
-            className="video-hero-full" 
-            key={videoFondo}
+        <div className="video-background-full">
+          <video
+            className="video-hero-full"
+            autoPlay
+            loop
+            muted
             onLoadedData={handleVideoLoad}
-            onError={(e) => console.error("Error al cargar el video:", e)}
-            preload="auto"
           >
             <source src={videoFondo} type="video/mp4" />
             Tu navegador no soporta videos HTML5.
@@ -167,8 +158,6 @@ function MainScreen() {
         </div>
       </div>
       
-
-
       {/* Contenido principal con rutas */}
       <div className="main__content">
         <Routes>
