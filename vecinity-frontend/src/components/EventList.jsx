@@ -148,12 +148,6 @@ function EventList({ user, token }) {
 
       <SearchBar onSearch={handleSearch} placeholder="Buscar eventos por título..." />
 
-      {searchTerm && (
-        <p className="search-results">
-          Resultados para "{searchTerm}": {filteredItems.length} eventos
-        </p>
-      )}
-
       <ul className="event__list">
         {filteredItems.map(item => (
           <Evento
