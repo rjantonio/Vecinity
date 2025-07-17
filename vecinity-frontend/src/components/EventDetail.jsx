@@ -160,6 +160,10 @@ function EventDetail({ token, user }) {
     alert('Evento guardado en marcadores (funcionalidad pendiente)');
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (!token) {
     return (
       <div className="error-container">
