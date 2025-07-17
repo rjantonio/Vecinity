@@ -161,7 +161,10 @@ function EventList({ user, token }) {
             images={item.imagenes || []}
             description={item.descripcion}
             ubicacion={item.ubicacion}
-            onClick={() => navigate(`/event/${item.id}`)}
+            onClick={() => {
+              navigate(`/event/${item.id}`);
+              setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
+            }}
             showJoinButton={true}
             onJoin={() => handleJoin(item.id)}
             isJoined={joinedEvents.has(item.id)}
