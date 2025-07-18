@@ -38,6 +38,7 @@ function Editarevento({ token }) {
     setLoading(true);
     setError(null);
 
+    // Obtener datos del evento
     fetch(`http://localhost:8080/event/${id}`, {
       headers: {
         Authorization: token ? `Bearer ${token}` : undefined,
@@ -49,12 +50,28 @@ function Editarevento({ token }) {
         }
         return response.json();
       })
-      .then(data => {
+      .then(async data => {
         setEventoOriginal(data);
         console.log(data);
         
-        // Formatear imágenes base64
-        const imagenesFormateadas = data.imagenes ? data.imagenes.map(formatearImagen) : [];
+        // Obtener imágenes del evento usando el mismo método que EventList
+        let imagenesFormateadas = [];
+        try {
+          const imgRes = await fetch(`http://localhost:8080/event-images/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          });
+          if (imgRes.ok) {
+            const imagenes = await imgRes.json();
+            imagenesFormateadas = imagenes.map(img => `data:image/jpeg;base64,${img.imagenBase64}`);
+          }
+        } catch (err) {
+          console.error(`Error al obtener imágenes para evento ${id}:`, err);
+          // Si falla, usar las imágenes del evento original si existen
+          imagenesFormateadas = data.imagenes ? data.imagenes.map(formatearImagen) : [];
+        }
         
         setFormData({
           titulo: data.titulo || "",
@@ -93,12 +110,14 @@ function Editarevento({ token }) {
 
     try {
       // Convertir imágenes con prefijo data: de vuelta a base64 puro
-      const imagenesParaBackend = formData.imagenes.map(imagen => {
-        if (imagen.startsWith('data:image/')) {
-          return imagen.split(',')[1]; // Extraer solo la parte base64
-        }
-        return imagen;
-      });
+      const imagenesParaBackend = formData.imagenes
+        .filter(imagen => imagen && typeof imagen === 'string') // Filtrar solo strings válidos
+        .map(imagen => {
+          if (imagen.startsWith('data:image/')) {
+            return imagen.split(',')[1]; // Extraer solo la parte base64
+          }
+          return imagen;
+        });
 
       const eventData = {
         titulo: formData.titulo,
@@ -169,14 +188,36 @@ function Editarevento({ token }) {
 
   const handleCancelarEdicion = () => {
     if (eventoOriginal) {
-      const imagenesFormateadas = eventoOriginal.imagenes ? eventoOriginal.imagenes.map(formatearImagen) : [];
-      setFormData({
-        titulo: eventoOriginal.titulo,
-        descripcion: eventoOriginal.descripcion,
-        fechaEvento: eventoOriginal.fechaEvento,
-        ubicacion: eventoOriginal.ubicacion,
-        imagenes: imagenesFormateadas
-      });
+      // Recargar las imágenes originales del servidor
+      fetch(`http://localhost:8080/event-images/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.ok ? res.json() : [])
+        .then(imagenes => {
+          const imagenesFormateadas = imagenes.map(img => `data:image/jpeg;base64,${img.imagenBase64}`);
+          setFormData({
+            titulo: eventoOriginal.titulo,
+            descripcion: eventoOriginal.descripcion,
+            fechaEvento: eventoOriginal.fechaEvento,
+            ubicacion: eventoOriginal.ubicacion,
+            imagenes: imagenesFormateadas
+          });
+        })
+        .catch(err => {
+          console.error('Error al recargar imágenes:', err);
+          // Fallback a las imágenes originales
+          const imagenesFormateadas = eventoOriginal.imagenes ? eventoOriginal.imagenes.map(formatearImagen) : [];
+          setFormData({
+            titulo: eventoOriginal.titulo,
+            descripcion: eventoOriginal.descripcion,
+            fechaEvento: eventoOriginal.fechaEvento,
+            ubicacion: eventoOriginal.ubicacion,
+            imagenes: imagenesFormateadas
+          });
+        });
     }
     setModoEdicion(false);
   };
