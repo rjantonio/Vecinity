@@ -172,16 +172,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(236, 248, 248, 0.1); /* Header completamente transparente */
-    backdrop-filter: blur(5px); /* Efecto de desenfoque sutil */
-    -webkit-backdrop-filter: blur(5px); /* Para compatibilidad con Safari */
-    color: #fff;
+    background-color: rgba(255, 255, 255, 0.75); /* Cambiado para que coincida con barrnav */
+    backdrop-filter: blur(10px); /* Aumentado para mejor legibilidad */
+    -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
+    color: #333; /* Cambiado a color oscuro para mejor contraste */
     position: sticky; /* Hacemos que la barra sea sticky */
     top: 0; /* Se queda pegada al borde superior */
     left: 0;
     width: 100%;
     z-index: 100; /* Aumentamos el z-index para que esté por encima de todo */
-    box-shadow: none; /* Sin sombra para mantener transparencia */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2); /* Añadida sombra para consistencia */
     padding: 0.5rem 25%; /* Separamos 25% de los márgenes laterales */
     height: 4rem; /* Altura más grande */
     box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
@@ -278,7 +278,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco semi-transparente */
+    background-color: rgba(255, 255, 255, 0.75); /* Aumentada opacidad de 0.2 a 0.75 para que se vea más blanca */
     backdrop-filter: blur(10px); /* Efecto de desenfoque mejorado para legibilidad */
     -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
     color: #333;
@@ -313,8 +313,8 @@
     border: none;
     background-color: transparent; /* Fondo transparente */
     cursor: pointer;
-    max-width: 4.5rem; /* Tamaño aún más grande para que resalte */
-    max-height: 4.5rem; /* Tamaño aún más grande para que resalte */
+    max-width: 6rem; /* Aumentado de 5rem a 6rem */
+    max-height: 6rem; /* Aumentado de 5rem a 6rem */
     transition: all 0.3s ease;
     display: flex; /* Asegura centrado del contenido */
     align-items: center;
@@ -323,8 +323,8 @@
 }
 
 .logo__img{
-    max-width: 4.5rem; /* Tamaño aún más grande para que resalte */
-    max-height: 4.5rem; /* Tamaño aún más grande para que resalte */
+    max-width: 6rem; /* Aumentado de 5rem a 6rem */
+    max-height: 6rem; /* Aumentado de 5rem a 6rem */
     width: auto;
     height: auto;
     filter: brightness(0) saturate(100%) invert(18%) sepia(57%) saturate(3156%) hue-rotate(169deg) brightness(95%) contrast(87%); /* Aplica color --last-color (#1a5e63) */
