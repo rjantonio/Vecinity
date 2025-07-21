@@ -151,4 +151,24 @@ public class Event {
                 ", ubicacion='" + ubicacion + '\'' +
                 '}';
     }
+
+    // Método para añadir imagen
+    public void addImage(EventImage img) {
+        images.add(img);
+        img.setEvent(this);
+    }
+
+    // Método para eliminar una imagen
+    public void removeImage(EventImage img) {
+        images.remove(img);
+        img.setEvent(null);
+    }
+
+    public Set<EventImage> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<EventImage> images) {
+        this.images = images;
+    }
 }

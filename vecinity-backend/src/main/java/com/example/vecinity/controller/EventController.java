@@ -70,6 +70,7 @@ public class EventController {
                             event.getFechaEvento(),
                             event.getUbicacion(),
                             event.getCreador().getFirebaseUid(),
+                            event.getCreador().getNombre(),
                             event.getFechaCreacion(),
                             imagenes  // Aquí pasamos las imágenes al DTO
                     );
