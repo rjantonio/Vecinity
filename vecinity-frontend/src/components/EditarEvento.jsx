@@ -66,7 +66,7 @@ function Editarevento({ token }) {
           });
           if (imgRes.ok) {
             const imagenes = await imgRes.json();
-            imagenesFormateadas = imagenes.map(img => `data:image/jpeg;base64,${img.imagenBase64}`);
+            imagenesFormateadas = imagenes.map(img => `${img.imagenBase64}`);
           }
         } catch (err) {
           console.error(`Error al obtener imágenes para evento ${id}:`, err);
@@ -95,14 +95,28 @@ function Editarevento({ token }) {
     }));
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const imageUrls = files.map(file => URL.createObjectURL(file));
-    setFormData(prev => ({
-      ...prev,
-      imagenes: [...prev.imagenes, ...imageUrls]
-    }));
+  const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64String = reader.result.split(',')[1];
+                resolve(base64String);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
   };
+
+
+  const handleFileChange = async (e) => {
+  const files = Array.from(e.target.files);
+  const base64List = await Promise.all(files.map(convertToBase64));
+  setFormData(prev => ({
+    ...prev,
+    imagenes: [...prev.imagenes, ...base64List]
+  }));
+};
+
 
   const handleGuardarCambios = async (e) => {
     e.preventDefault();
@@ -136,6 +150,16 @@ function Editarevento({ token }) {
         },
         body: JSON.stringify(eventData)
       });
+
+      const imagesDto = formData.imagenes.map(b64 => ({ imagenBase64: b64, descripcion: "" }));
+        await fetch(`http://localhost:8080/event-images/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : undefined,
+        },
+        body: JSON.stringify(imagesDto)
+        });
 
       if (!response.ok) {
         throw new Error(`Error al actualizar el evento: ${response.status}`);
@@ -369,7 +393,7 @@ function Editarevento({ token }) {
               {formData.imagenes.map((imagen, index) => (
                 <div className="image-card" key={index}>
                   <img
-                    src={imagen}
+                    src={`data:image/jpeg;base64,${imagen}`}
                     alt={`Imagen ${index + 1}`}
                     className="event-image"
                   />
