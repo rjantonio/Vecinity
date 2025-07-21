@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Evento from "./Evento";
 import '../css/EditarEvento.css'
+import { toast } from 'react-toastify';
 
 function Editarevento({ token }) {
   const { id } = useParams();
@@ -143,12 +144,12 @@ function Editarevento({ token }) {
       const result = await response.json();
       console.log('Evento actualizado:', result);
       setModoEdicion(false);
-      alert('Evento actualizado correctamente');
+      toast.success('Evento actualizado correctamente');
       navigate(`/event/${id}`);
     } catch (error) {
       console.error('Error al actualizar evento:', error);
       setError(error.message);
-      alert('Error al actualizar el evento: ' + error.message);
+      toast.error(`Error al actualizar el evento: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -174,12 +175,12 @@ function Editarevento({ token }) {
 
         console.log('Evento eliminado correctamente');
         setEventoEliminado(true);
-        alert('Evento eliminado correctamente');
+        toast.success('Evento eliminado correctamente');
         navigate('/');
       } catch (error) {
         console.error('Error al eliminar evento:', error);
         setError(error.message);
-        alert('Error al eliminar el evento: ' + error.message);
+        toast.error('Error al eliminar el evento: ' + error.message);
       } finally {
         setLoading(false);
       }
