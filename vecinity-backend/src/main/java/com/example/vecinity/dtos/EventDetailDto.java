@@ -11,12 +11,13 @@ public class EventDetailDto {
     private LocalDateTime fechaCreacion;
     private String ubicacion;
     private String creadorId;
+    private String creadorNombre;
     private List<EventImageDto> imagenes;  // NUEVO campo para las imágenes
 
     // Constructor completo con imágenes
     public EventDetailDto(Long id, String titulo, String descripcion,
                           LocalDateTime fechaEvento, String ubicacion,
-                          String creadorId, LocalDateTime fechaCreacion,
+                          String creadorId, String creadorNombre, LocalDateTime fechaCreacion,
                           List<EventImageDto> imagenes) {
         this.id = id;
         this.titulo = titulo;
@@ -24,6 +25,7 @@ public class EventDetailDto {
         this.fechaEvento = fechaEvento;
         this.ubicacion = ubicacion;
         this.creadorId = creadorId;
+        this.creadorNombre = creadorNombre;
         this.fechaCreacion = fechaCreacion;
         this.imagenes = imagenes;
     }
@@ -54,6 +56,10 @@ public class EventDetailDto {
 
     public String getCreadorId() {
         return creadorId;
+    }
+
+    public String getCreadorNombre() {
+        return creadorNombre;
     }
 
     public LocalDateTime getFechaCreacion() {
@@ -87,6 +93,10 @@ public class EventDetailDto {
 
     public void setCreadorId(String creadorId) {
         this.creadorId = creadorId;
+    }
+
+    public void setCreadorNombre(String creadorNombre) {
+        this.creadorNombre = creadorNombre;
     }
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {

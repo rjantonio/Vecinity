@@ -41,9 +41,9 @@ public class EventImageController {
         return ResponseEntity.status(201).body(dto);
     }
 
-    @DeleteMapping("/{eventId}")
-    public ResponseEntity<Void> deleteImagesByEvent(@PathVariable Long eventId) {
-        eventImageService.deleteImagesByEventId(eventId);
+    @PutMapping("/{eventId}")
+    public ResponseEntity<Void> updateImagesById(@PathVariable Long eventId, @RequestBody List<EventImageDto> nuevasImagenes) {
+        eventImageService.actualizarImagenesEvento(eventId, nuevasImagenes);
         return ResponseEntity.noContent().build();
     }
 }

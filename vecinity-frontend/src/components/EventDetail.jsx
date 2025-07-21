@@ -313,7 +313,7 @@ function EventDetail({ token, user }) {
 
             <div className="info-item">
               <div className="info-icon" aria-hidden="true">👤</div>
-              <div className="info-details">
+              <div className="info-details">{console.log(evento)}
                 <div className="info-title">{evento.creadorNombre || 'Organizador'}</div>
                 <div className="info-subtitle">Organizador del evento</div>
               </div>

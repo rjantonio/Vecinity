@@ -63,7 +63,7 @@ function HomePage({ user, token }) {
           </p>
           <p className="about-text">
             Como proyecto final de nuestro bootcamp, hemos desarrollado <strong>Vecinity</strong>, 
-            una aplicación que busca contribuir a varios <strong>Objetivos de Desarrollo Sostenible</strong> 
+            una aplicación que busca contribuir a varios <strong>Objetivos de Desarrollo Sostenible </strong> 
             de la ONU, especialmente:
           </p>
           <div className="ods-list">
