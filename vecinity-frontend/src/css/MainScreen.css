@@ -1,4 +1,29 @@
+body.dark-mode .main-header {
+    background-color: rgba(24, 28, 36, 0.75) !important;
+    color: var(--dark-text) !important;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.3) !important;
+    border-bottom: 2px solid var(--dark-border) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
 :root{
+body.colorblind-mode .main-header {
+    background-color: rgba(255, 152, 0, 0.75) !important;
+    color: var(--colorblind-text) !important;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.3) !important;
+    border-bottom: 2px solid var(--colorblind-secondary) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+body.dark-mode.colorblind-mode .main-header {
+    background-color: rgba(22, 33, 62, 0.75) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.3) !important;
+    border-bottom: 2px solid var(--colorblind-secondary) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
     --main-color: #ECF8F8;
     --secondary-color: #7e7f9a;
     --last-color: #1a5e63;
@@ -11,6 +36,29 @@
     --colorblind-accent: #4caf50;
     --colorblind-bg: #f8f8f8;
     --colorblind-text: #333333;
+}
+
+/* Eliminar borde de focus/click en barrnav, botones, iconos y logo sin afectar alineación */
+.barrnav:focus,
+.barrnav *:focus,
+.btn__settings:focus,
+.btn__login:focus,
+.btn__logout:focus,
+.logo:focus,
+.settings__icon:focus,
+.login__icon:focus,
+.nav-icon:focus,
+.barrnav:active,
+.barrnav *:active,
+.btn__settings:active,
+.btn__login:active,
+.btn__logout:active,
+.logo:active,
+.settings__icon:active,
+.login__icon:active,
+.nav-icon:active {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .main__screen{
@@ -207,7 +255,7 @@
 /* Contenido hero sobre el video */
 .hero-content {
     position: absolute;
-    top: 0;
+    top: -6rem; /* Subido aún más arriba */
     left: 0;
     width: 100%;
     height: 100%;
@@ -225,7 +273,7 @@
 .hero-title {
     position: relative;
     top: 8rem;
-    margin: 0 0 6rem 0; /* Más separación con el contenido de abajo */
+    margin: 0 0 8rem 0; /* Mucha más separación con el contenido de abajo */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -243,7 +291,7 @@
 
 .hero-description {
     position: relative;
-    top: 4rem; /* Posicionado más arriba, reducido de 6rem a 4rem */
+    top: 0.5rem; /* Mucho más arriba */
     font-size: 1.5rem;
     margin: 0 0 2rem 0;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
@@ -253,7 +301,7 @@
 
 .home__cta__button {
     position: relative;
-    top: 4rem; /* Alineado con hero-description, reducido de 6rem a 4rem */
+    top: 0.5rem; /* Mucho más arriba */
     background: linear-gradient(135deg, var(--last-color), var(--secondary-color));
     color: white;
     border: none;
@@ -893,7 +941,7 @@ body.dark-mode .main__screen {
 }
 
 body.dark-mode .barrnav {
-    background-color: rgba(45, 45, 45, 0.9);
+    background-color: #181c24; /* Fondo aún más oscuro para modo oscuro */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom-color: var(--dark-border);
@@ -906,7 +954,7 @@ body.dark-mode .logo {
 }
 
 body.dark-mode .logo__img {
-    filter: brightness(0) saturate(100%) invert(18%) sepia(57%) saturate(3156%) hue-rotate(169deg) brightness(95%) contrast(87%); /* Mantiene color --last-color en modo oscuro */
+    filter: brightness(0) invert(1); /* Convierte el logo a blanco en modo oscuro */
 }
 
 body.dark-mode .logo:hover .logo__img {
@@ -1010,7 +1058,7 @@ body.colorblind-mode .logo {
 }
 
 body.colorblind-mode .logo__img {
-    filter: brightness(0) saturate(100%) invert(18%) sepia(57%) saturate(3156%) hue-rotate(169deg) brightness(95%) contrast(87%); /* Mantiene color --last-color */
+    filter: brightness(0) saturate(100%) invert(34%) sepia(99%) saturate(2000%) hue-rotate(190deg) brightness(95%) contrast(87%); /* Cambia el logo al color --colorblind-primary */
 }
 
 body.colorblind-mode .logo:hover .logo__img {
@@ -1086,7 +1134,7 @@ body.dark-mode.colorblind-mode .main__screen {
 }
 
 body.dark-mode.colorblind-mode .barrnav {
-    background-color: rgba(22, 33, 62, 0.85);
+    background-color: #003366; /* Fondo azul accesible para modo oscuro + daltónico */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom-color: var(--colorblind-secondary);
@@ -1095,7 +1143,7 @@ body.dark-mode.colorblind-mode .barrnav {
 }
 
 body.dark-mode.colorblind-mode .logo__img {
-    filter: brightness(0) saturate(100%) invert(18%) sepia(57%) saturate(3156%) hue-rotate(169deg) brightness(95%) contrast(87%); /* Mantiene color --last-color */
+    filter: brightness(0) invert(1); /* Convierte el logo a blanco en modo oscuro + daltónico */
 }
 
 body.dark-mode.colorblind-mode .logo:hover .logo__img {
