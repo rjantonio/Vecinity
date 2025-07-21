@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import '../css/EventDetail.css';
 
 function EventDetail({ token, user }) {
@@ -61,12 +62,12 @@ function EventDetail({ token, user }) {
 
   const handleJoin = () => {
     if (!token) {
-      toast.success('Debes iniciar sesión para unirte al evento.');
+      toast.error('Debes iniciar sesión para unirte al evento.');
       return;
     }
 
     if (joined) {
-      alert('Ya estás registrado en este evento.');
+      toast.info('Ya estás registrado en este evento.');
       return;
     }
 
@@ -81,21 +82,20 @@ function EventDetail({ token, user }) {
         if (!res.ok) throw new Error('Error al unirse al evento');
         setJoined(true);
         setAttendeesCount(prev => prev + 1);
-        alert('¡Te has unido al evento exitosamente!');
+        toast.success('¡Te has unido al evento exitosamente!');
       })
       .catch(err => {
         console.error('Error joining event:', err);
-        alert('Error al unirse al evento: ' + err.message);
+        toast.error('Error al unirse al evento: ' + err.message);
       })
       .finally(() => setJoining(false));
   };
 
   const handleLeave = () => {
     if (!token) {
-      alert('Debes iniciar sesión para cancelar la inscripción.');
+      toast.error('Debes iniciar sesión para cancelar la inscripción.');
       return;
     }
-    if (!window.confirm('¿Seguro que quieres salir del evento?')) return;
 
     setDeleting(true);
     fetch(`http://localhost:8080/event-registration/user/${user.uid}/event/${id}`, {
@@ -107,9 +107,9 @@ function EventDetail({ token, user }) {
       .then(res => {
         if (!res.ok) throw new Error('Error al cancelar la inscripción');
         setJoined(false);
-        alert('Te has salido del evento');
+        toast.success('Te has salido del evento');
       })
-      .catch(err => alert(err.message))
+      .catch(err => toast.error(err.message))
       .finally(() => setDeleting(false));
   };
 
@@ -127,12 +127,12 @@ function EventDetail({ token, user }) {
     })
       .then(res => {
         if (!res.ok) throw new Error('Error al eliminar el evento');
-        alert('¡Evento eliminado exitosamente!');
+        toast.success('¡Evento eliminado exitosamente!');
         navigate('/eventos');
       })
       .catch(err => {
         console.error('Error deleting event:', err);
-        alert('Error al eliminar el evento: ' + err.message);
+        toast.error('Error al eliminar el evento: ' + err.message);
       })
       .finally(() => setDeleting(false));
   };
@@ -157,7 +157,7 @@ function EventDetail({ token, user }) {
   };
 
   const handleBookmark = () => {
-    alert('Evento guardado en marcadores (funcionalidad pendiente)');
+    toast.info('Evento guardado en marcadores (funcionalidad pendiente)');
   };
 
   useEffect(() => {

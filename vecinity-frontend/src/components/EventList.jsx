@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Evento from "./Evento";
-import EventRegistrationsList from "./EventRegistrationsList";
-import SearchBar from "./SearchBar";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Evento from './Evento';
+import SearchBar from './SearchBar';
+import '../css/MainScreen.css';
 
 function EventList({ user, token }) {
   const navigate = useNavigate();
@@ -102,12 +103,12 @@ function EventList({ user, token }) {
   // Función para unirse a un evento
   function handleJoin(eventId) {
     if (!user || !token) {
-      alert("Debes iniciar sesión para unirte al evento");
+      toast.error("Debes iniciar sesión para unirte al evento");
       return;
     }
 
     if (joinedEvents.has(eventId)) {
-      alert("Ya estás inscrito en este evento");
+      toast.info("Ya estás inscrito en este evento");
       return;
     }
 
@@ -125,14 +126,14 @@ function EventList({ user, token }) {
       })
       .then(() => {
         setJoinedEvents(prev => new Set(prev).add(eventId));
-        alert("¡Te has unido al evento!");
+        toast.success("¡Te has unido al evento!");
       })
-      .catch(err => alert(err.message))
+      .catch(err => toast.error(err.message))
       .finally(() => {
         setJoiningEventIds(prev => {
-          const copy = new Set(prev);
-          copy.delete(eventId);
-          return copy;
+          const newSet = new Set(prev);
+          newSet.delete(eventId);
+          return newSet;
         });
       });
   }
