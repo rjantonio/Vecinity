@@ -1229,3 +1229,101 @@ body.colorblind-mode .event__date i,
 body.colorblind-mode .event__description i {
   color: var(--colorblind-secondary);
 }
+
+/* Estilos para modo daltónico - conservar diseño original */
+body.colorblind-mode .event__list {
+    /* Mantener el grid original sin cambios */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+body.colorblind-mode .event__list__item {
+    /* Conservar el estilo original de las tarjetas */
+    background-color: #ffffff;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-height: 320px;
+    cursor: pointer;
+    max-width: 600px;
+    width: 100%;
+    overflow: hidden;
+}
+
+body.colorblind-mode .event__list__item:hover {
+    /* Mantener el efecto hover original */
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Solo cambiar colores específicos para accesibilidad */
+body.colorblind-mode .event__title {
+    color: var(--colorblind-primary);
+    font-weight: bold;
+}
+
+body.colorblind-mode .event__location {
+    color: var(--colorblind-secondary);
+    font-weight: 500;
+}
+
+body.colorblind-mode .event__date {
+    color: var(--colorblind-text);
+}
+
+body.colorblind-mode .event__description {
+    color: var(--colorblind-text);
+}
+
+body.colorblind-mode .event__join__btn {
+    background: var(--colorblind-secondary);
+    color: var(--colorblind-text);
+    border: 2px solid var(--colorblind-primary);
+    font-weight: bold;
+    /* Mantener el padding y border-radius originales */
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+}
+
+body.colorblind-mode .event__join__btn:hover {
+    background: var(--colorblind-accent);
+    border-color: var(--colorblind-secondary);
+    /* Mantener la transformación original */
+    transform: translateY(-2px);
+}
+
+/* Asegurar que el responsive se mantenga igual */
+@media (min-width: 1200px) {
+    body.colorblind-mode .event__list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        padding: 0 2rem;
+        max-width: 1600px;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+    body.colorblind-mode .event__list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 767px) {
+    body.colorblind-mode .event__list {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 1rem auto;
+        padding: 0 1rem;
+    }
+}
