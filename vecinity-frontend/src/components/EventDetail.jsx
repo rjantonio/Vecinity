@@ -61,7 +61,7 @@ function EventDetail({ token, user }) {
 
   const handleJoin = () => {
     if (!token) {
-      alert('Debes iniciar sesión para unirte al evento.');
+      toast.success('Debes iniciar sesión para unirte al evento.');
       return;
     }
 

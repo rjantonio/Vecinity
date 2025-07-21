@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../css/CrearEvento.css'
+import { toast } from 'react-toastify';
 
 function CrearEvento({ token }) {
     const navigate = useNavigate();
@@ -99,7 +100,7 @@ function CrearEvento({ token }) {
 
                     if (!imageResponse.ok) {
                         const errorText = await imageResponse.text();
-                        alert(`Error al subir imagen ${i + 1}: ${errorText}`);
+                        toast.error(`Error al subir imagen ${i + 1}: ${errorText}`);
                     }
                 }
             }
@@ -112,11 +113,11 @@ function CrearEvento({ token }) {
                 imagenes: []
             });
 
-            alert('¡Evento creado exitosamente!');
+            toast.success('¡Evento creado exitosamente!');
             navigate('/eventos');
         } catch (error) {
             console.error('Error al crear evento:', error);
-            alert(`Error: ${error.message}`);
+            toast.error(`Error: ${error.message}`);
         } finally {
             setLoading(false);
         }
