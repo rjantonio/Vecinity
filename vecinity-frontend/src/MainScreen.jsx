@@ -93,7 +93,9 @@ function MainScreen() {
           
           {/* Contenido sobre el video */}
           <div className="hero-content">
-            <h1 className="hero-title">Vecinity</h1>
+            <h1 className="hero-title">
+              <img src={logo} alt="Vecinity Logo" />
+            </h1>
             <p className="hero-description">Conecta con tu comunidad y participa en eventos locales</p>
             <button className="home__cta__button" onClick={() => navigate("/eventos")}>
               Explorar Eventos
