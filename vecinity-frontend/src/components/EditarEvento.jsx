@@ -313,7 +313,7 @@ function Editarevento({ token }) {
             </button>
             <button
               className="btn btn-secondary"
-              onClick={() => navigate('/')}
+              onClick={() => navigate(-1)}
               style={{ marginLeft: '10px' }}
               disabled={loading}
             >
