@@ -233,11 +233,11 @@ function Profile() {
                 <div className="profile-stats">
                   <div className="stat-item">
                     <span className="stat-label">Miembro desde</span>
-                    <span className="stat-value">Enero 2024</span>
+                    <span className="stat-value">Julio 2025</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">Eventos creados</span>
-                    <span className="stat-value">12</span>
+                    <span className="stat-value">0</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-label">Eventos asistidos</span>
