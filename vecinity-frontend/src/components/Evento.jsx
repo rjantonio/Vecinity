@@ -17,6 +17,22 @@ function Evento({
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // --- NUEVO: Formatear fecha y hora ---
+  let fecha = "";
+  let hora = "";
+  if (fechaEvento) {
+    const dateObj = new Date(fechaEvento);
+    fecha = dateObj.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+    hora = dateObj.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
   const nextImage = () => {
     if (images.length > 1) {
       setCurrentImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
@@ -95,8 +111,15 @@ function Evento({
       <div className="event__info">
         <h3 className="event__title">{name}</h3>
         <h4 className="event__location">{ubicacion}</h4>
-        <p className="event__date">{fechaEvento}</p>
         <p className="event__description">{description}</p>
+        <div className="event__datetime">
+          <span className="event__date">
+            <span className="event__date-icon" aria-hidden="true">📅</span> {fecha}
+          </span>
+          <span className="event__time">
+            <span className="event__time-icon" aria-hidden="true">⏰</span> {hora}
+          </span>
+        </div>
         
         {showEditButton && (
             <button
