@@ -608,6 +608,39 @@ body.dark-mode.colorblind-mode .main-header {
     min-height: 100px; /* Altura mínima para la información */
 }
 
+/* --- NUEVO: Fecha y hora en la misma línea con iconos y separación --- */
+.event__datetime {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.event__date, .event__time {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #666;
+  gap: 0.3rem;
+}
+
+.event__date-icon, .event__time-icon {
+  font-size: 1.2rem;
+  margin-right: 0.2rem;
+}
+
+body.dark-mode .event__date, body.dark-mode .event__time {
+  color: #a0a0a0;
+}
+
+body.colorblind-mode .event__date, body.colorblind-mode .event__time {
+  color: var(--colorblind-text);
+}
+
 /* Eliminar estilos antiguos de imágenes */
 .event__images {
     display: none; /* Ocultamos el contenedor anterior */
