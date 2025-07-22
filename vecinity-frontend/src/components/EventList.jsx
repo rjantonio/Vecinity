@@ -84,6 +84,40 @@ function EventList({ user, token }) {
       });
   }, [token, user]);
 
+  function handleLeave(eventId) {
+  if (!user || !token) {
+    toast.error("Debes iniciar sesión para salir del evento");
+    return;
+  }
+
+  setJoiningEventIds(prev => new Set(prev).add(eventId));
+
+  fetch(`http://localhost:8080/event-registration/user/${user.uid}/event/${eventId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("No se pudo salir del evento");
+      setJoinedEvents(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(eventId);
+        return newSet;
+      });
+      toast.success("Te has salido del evento");
+    })
+    .catch(err => toast.error(err.message))
+    .finally(() => {
+      setJoiningEventIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(eventId);
+        return newSet;
+      });
+    });
+}
+
+
   // Manejo del filtro de búsqueda
   const handleSearch = (term) => {
     setSearchTerm(term);
@@ -153,6 +187,8 @@ function EventList({ user, token }) {
         Crear Evento
       </button>
 
+      {console.log(user)}
+
       <ul className="event__list">
         {filteredItems.map(item => (
           <Evento
@@ -166,8 +202,11 @@ function EventList({ user, token }) {
               navigate(`/event/${item.id}`);
               setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
             }}
-            showJoinButton={true}
+            showJoinButton={item.creadorId !== user.uid}
+            showEditButton={item.creadorId === user.uid}
             onJoin={() => handleJoin(item.id)}
+            onLeave={() => handleLeave(item.id)}
+            onEdit={() => navigate(`/editar-evento/${item.id}`)}
             isJoined={joinedEvents.has(item.id)}
             isJoining={joiningEventIds.has(item.id)}
           />

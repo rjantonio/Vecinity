@@ -828,6 +828,41 @@ body.dark-mode.colorblind-mode .event__images .event__image:hover {
     transform: translateY(-2px);
 }
 
+.event__edit__btn {
+    background: linear-gradient(135deg, #35477d, #6c5b7b);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1.3rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: auto;
+}
+
+.event__edit__btn:hover {
+    background: linear-gradient(135deg, #6c5b7b, #35477d);
+    transform: translateY(-2px);
+}
+
+
+.event__leave__btn {
+  background: linear-gradient(135deg, #ff4e50, #c41616); /* rojo-anaranjado */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: auto;
+}
+
+.event__leave__btn:hover {
+  background: linear-gradient(135deg, #c41616, #ff4e50);
+  transform: translateY(-2px);
+}
+
 .create__event__btn,
 .edit__event__btn {
     background: linear-gradient(135deg, var(--last-color), #2a8a90);
