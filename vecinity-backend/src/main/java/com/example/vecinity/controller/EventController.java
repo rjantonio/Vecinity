@@ -8,6 +8,7 @@ import com.example.vecinity.model.User;
 import com.example.vecinity.repository.EventImageRepository;
 import com.example.vecinity.repository.EventRegistrationRepository;
 import com.example.vecinity.repository.UserRepository;
+import com.example.vecinity.service.EventImageService;
 import com.example.vecinity.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,43 @@ public class EventController {
     private EventService eventService;
 
     @Autowired
+    private EventImageService eventImageService;
+
+    @Autowired
     private UserRepository userRepository; // Inyección del repo
 
     @Autowired
     private EventImageRepository eventImageRepository; // NUEVO: repo para las imágenes
 
     @GetMapping
-    public List<Event> list() {
-        return eventService.listAll();
+    public List<EventDetailDto> listAllEvents(@RequestHeader(name = "Authorization", required = false) String authHeader) {
+        List<Event> eventos = eventService.listAll();
+
+        return eventos.stream().map(event -> {
+            // Obtener las imágenes asociadas al evento
+            List<EventImageDto> imagenes = eventImageRepository.findByEventId(event.getId())
+                    .stream()
+                    .map(img -> new EventImageDto(
+                            img.getId(),
+                            img.getImagenBase64(),
+                            img.getDescripcion(),
+                            img.getEvent().getId()  // ← ahora se incluye el eventId
+                    ))
+                    .collect(Collectors.toList());
+
+            // Mapear el evento al EventDetailDto
+            return new EventDetailDto(
+                    event.getId(),
+                    event.getTitulo(),
+                    event.getDescripcion(),
+                    event.getFechaEvento(),
+                    event.getUbicacion(),
+                    event.getCreador().getFirebaseUid(),
+                    event.getCreador().getNombre(),
+                    event.getFechaCreacion(),
+                    imagenes
+            );
+        }).collect(Collectors.toList());
     }
 
     @PostMapping

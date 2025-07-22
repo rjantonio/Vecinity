@@ -7,8 +7,11 @@ function Evento({
   fechaEvento = "",
   ubicacion = "",
   showJoinButton = true,
+  showEditButton = false,
   onClick,
   onJoin,
+  onLeave,
+  onEdit,
   isJoined = false,
   isJoining = false,
 }) {
@@ -95,29 +98,42 @@ function Evento({
         <p className="event__date">{fechaEvento}</p>
         <p className="event__description">{description}</p>
         
-        {showJoinButton && (
-          <>
-            {isJoined ? (
-              <button
-                className="event__joined__btn"
-                disabled
-                onClick={(e) => e.stopPropagation()}
-              >
-                ✔ Registrado
-              </button>
-            ) : (
-              <button
-                className="event__join__btn"
+        {showEditButton && (
+            <button
+                className="event__edit__btn"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  if (!isJoining) onJoin();
+                e.stopPropagation(); // Para que no se dispare el onClick del li
+                onEdit();            // Lógica de navegación hacia /editar-evento/:id
+                }}
+            >
+                ✏️ Editar Evento
+            </button>
+        )}
+
+        {showJoinButton && (
+            isJoined ? (
+                <button
+                className="event__leave__btn"
+                onClick={(e) => {
+                    e.stopPropagation(); // ⛔ no navegues al evento
+                    onLeave();
                 }}
                 disabled={isJoining}
-              >
-                {isJoining ? "Uniendo..." : "Unirse al Evento"}
-              </button>
-            )}
-          </>
+                >
+                {isJoining ? "Saliendo..." : "🚪 Salir"}
+                </button>
+            ) : (
+                <button
+                className="event__join__btn"
+                onClick={(e) => {
+                    e.stopPropagation(); // ⛔ no navegues al evento
+                    onJoin();
+                }}
+                disabled={isJoining}
+                >
+                {isJoining ? "Uniendo..." : "Unirse"}
+                </button>
+            )
         )}
       </div>
     </li>
