@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 
 function Register({ onBack }) {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, login } = useAuth(); // <-- agrega login aquí
   const [form, setForm] = useState({
     nombre: "",
     foto: "",
@@ -35,7 +35,7 @@ function Register({ onBack }) {
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
     if (!form.nombre) newErrors.nombre = "El nombre es obligatorio";
@@ -45,14 +45,9 @@ function Register({ onBack }) {
     
     if (Object.keys(newErrors).length === 0) {
       try {
-        // 1. Registrar en Firebase primero
         const userCredential = await register(form.email, form.password, form.nombre, form.foto);
-        
-        // 2. Si Firebase fue exitoso, obtener el token y registrar en Spring Boot
         if (userCredential?.user) {
           const token = await userCredential.user.getIdToken();
-          
-          // 3. Enviar datos al backend de Spring Boot
           await fetch("http://localhost:8080/user", {
             method: "POST",
             headers: {
@@ -65,10 +60,11 @@ function Register({ onBack }) {
               foto: form.foto
             })
           });
+          // Login automático
+          await login(form.email, form.password); // <--- LOGIN AUTOMÁTICO
+          setMessage("¡Registro exitoso! Redirigiendo a inicio...");
+          setTimeout(() => navigate("/"), 1500);
         }
-        
-        console.log("¡Registro exitoso!");
-        setTimeout(() => navigate("/login"), 1500);
       } catch (error) {
         setMessage("Error: " + error.message);
       }

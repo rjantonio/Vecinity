@@ -7,18 +7,58 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login, logout, user } = useAuth();
+  const { register, login } = useAuth(); // Asegúrate de tener login aquí
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      if (user) await logout(); // Cierra sesión si ya hay usuario autenticado
       await login(email, password);
       navigate("/"); // Redirige a la lista al iniciar sesión
     } catch (err) {
       setError("Correo o contraseña incorrectos");
+    }
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const newErrors = {};
+    if (!form.nombre) newErrors.nombre = "El nombre es obligatorio";
+    if (!form.email) newErrors.email = "El correo es obligatorio";
+    if (!form.password) newErrors.password = "La contraseña es obligatoria";
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        // 1. Registrar en Firebase primero
+        const userCredential = await register(form.email, form.password, form.nombre, form.foto);
+
+        // 2. Si Firebase fue exitoso, obtener el token y registrar en Spring Boot
+        if (userCredential?.user) {
+          const token = await userCredential.user.getIdToken();
+
+          // 3. Enviar datos al backend de Spring Boot
+          await fetch("http://localhost:8080/user", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              nombre: form.nombre,
+              email: form.email,
+              foto: form.foto
+            })
+          });
+
+          // 4. Hacer login automático
+          await login(form.email, form.password);
+          navigate("/"); // Redirige a la página principal
+        }
+      } catch (error) {
+        setMessage("Error: " + error.message);
+      }
     }
   };
 
