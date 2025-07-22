@@ -151,6 +151,7 @@
   width: 100%;
   background: linear-gradient(135deg, var(--last-color), #2a8a90); /* Mismo gradiente que el botón */
   padding: 2rem;
+  padding-bottom: 8rem;
   border-radius: 0;
 }
 
