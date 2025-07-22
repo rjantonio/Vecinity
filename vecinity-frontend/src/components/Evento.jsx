@@ -60,7 +60,7 @@ function Evento({
             alt={`Imagen ${currentImageIndex + 1} del evento ${name}`}
             onError={(e) => {
               e.target.style.display = 'none';
-              console.log('Error cargando imagen:', images[currentImageIndex]);
+              /* console.log('Error cargando imagen:', images[currentImageIndex]); */
             }}
           />
           

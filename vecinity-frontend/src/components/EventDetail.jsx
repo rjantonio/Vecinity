@@ -14,38 +14,45 @@ function EventDetail({ token, user }) {
   const [joined, setJoined] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [attendeesCount, setAttendeesCount] = useState(20); // contador provisional
+  const [attendeesCount, setAttendeesCount] = useState(0); // contador provisional
 
-  useEffect(() => {
+    useEffect(() => {
     if (!token || !id || !user?.uid) return;
 
     setLoading(true);
 
     Promise.all([
-      fetch(`http://localhost:8080/event/${id}`, {
+        fetch(`http://localhost:8080/event/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
-      }).then(res => {
+        }).then(res => {
         if (!res.ok) throw new Error('No se encontró el evento');
         return res.json();
-      }),
-      fetch(`http://localhost:8080/event-images/${id}`, {
+        }),
+        fetch(`http://localhost:8080/event-images/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
-      }).then(res => (res.ok ? res.json() : [])),
-      fetch(`http://localhost:8080/event-registration/is-registered?userId=${user.uid}&eventId=${id}`, {
+        }).then(res => (res.ok ? res.json() : [])),
+        fetch(`http://localhost:8080/event-registration/is-registered?userId=${user.uid}&eventId=${id}`, {
         headers: { Authorization: `Bearer ${token}` }
-      }).then(res => {
+        }).then(res => {
         if (!res.ok) throw new Error('No se pudo verificar inscripción');
         return res.json();
-      })
+        }),
+        fetch(`http://localhost:8080/event-registration/count/event/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+        }).then(res => {
+        if (!res.ok) throw new Error('No se pudo obtener el conteo de asistentes');
+        return res.json();
+        })
     ])
-      .then(([eventData, imgData, isRegistered]) => {
+        .then(([eventData, imgData, isRegistered, count]) => {
         eventData.imagenes = imgData.map(img => `data:image/jpeg;base64,${img.imagenBase64}`);
         setEvento(eventData);
         setJoined(isRegistered);
-      })
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [id, token, user?.uid]); // ✅ CIERRE CORRECTO AQUÍ
+        setAttendeesCount(count);
+        })
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false));
+    }, [id, token, user?.uid]);
 
   // Carrusel de imágenes
   const nextImage = () => {
@@ -85,33 +92,48 @@ function EventDetail({ token, user }) {
         toast.success('¡Te has unido al evento exitosamente!');
       })
       .catch(err => {
-        console.error('Error joining event:', err);
+        /* console.error('Error joining event:', err); */
         toast.error('Error al unirse al evento: ' + err.message);
       })
       .finally(() => setJoining(false));
   };
 
-  const handleLeave = () => {
-    if (!token) {
-      toast.error('Debes iniciar sesión para cancelar la inscripción.');
-      return;
-    }
+ const handleLeave = () => {
+  if (!token) {
+    toast.error('Debes iniciar sesión para cancelar la inscripción.');
+    return;
+  }
 
-    setDeleting(true);
-    fetch(`http://localhost:8080/event-registration/user/${user.uid}/event/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+  setDeleting(true);
+  fetch(`http://localhost:8080/event-registration/user/${user.uid}/event/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Error al cancelar la inscripción');
+      setJoined(false);
+      toast.success('Te has salido del evento');
+      // 🔄 Actualizar el contador al salir
+      return fetch(`http://localhost:8080/event-registration/count/event/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
     })
-      .then(res => {
-        if (!res.ok) throw new Error('Error al cancelar la inscripción');
-        setJoined(false);
-        toast.success('Te has salido del evento');
-      })
-      .catch(err => toast.error(err.message))
-      .finally(() => setDeleting(false));
-  };
+    .then(res => {
+      if (!res.ok) throw new Error('No se pudo obtener el nuevo conteo');
+      return res.json();
+    })
+    .then(count => {
+      setAttendeesCount(count);
+    })
+    .catch(err => {
+      /* console.error(err); */
+      toast.error(err.message);
+    })
+    .finally(() => setDeleting(false));
+};
+
 
   const handleDelete = () => {
     if (!window.confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.')) {
@@ -131,7 +153,7 @@ function EventDetail({ token, user }) {
         navigate('/eventos');
       })
       .catch(err => {
-        console.error('Error deleting event:', err);
+        /* console.error('Error deleting event:', err); */
         toast.error('Error al eliminar el evento: ' + err.message);
       })
       .finally(() => setDeleting(false));
@@ -156,9 +178,9 @@ function EventDetail({ token, user }) {
     };
   };
 
-  const handleBookmark = () => {
+/*   const handleBookmark = () => {
     toast.info('Evento guardado en marcadores (funcionalidad pendiente)');
-  };
+  }; */
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -206,7 +228,7 @@ function EventDetail({ token, user }) {
   const isCreator = user && evento.creadorId === user.uid;
   const eventDate = formatEventDate(evento.fechaEvento);
 
-  console.log(evento, user);
+  /* console.log(evento, user); */
 
   return (
     <div className="event-detail-desktop">
@@ -258,9 +280,9 @@ function EventDetail({ token, user }) {
           &#8249; Volver
         </button>
 
-        <button className="bookmark-btn" onClick={handleBookmark} aria-label="Guardar evento">
+{/*         <button className="bookmark-btn" onClick={handleBookmark} aria-label="Guardar evento">
           🔖
-        </button>
+        </button> */}
 
         <div className="attendees-overlay">
           <div className="attendees-counter">
@@ -313,15 +335,15 @@ function EventDetail({ token, user }) {
 
             <div className="info-item">
               <div className="info-icon" aria-hidden="true">👤</div>
-              <div className="info-details">{console.log(evento)}
+              <div className="info-details">{/* {console.log(evento)} */}
                 <div className="info-title">{evento.creadorNombre || 'Organizador'}</div>
                 <div className="info-subtitle">Organizador del evento</div>
               </div>
-              {!isCreator && (
+              {/* {!isCreator && (
                 <button className="follow-btn" aria-label="Seguir organizador">
                   Seguir
                 </button>
-              )}
+              )} */}
             </div>
           </div>
 

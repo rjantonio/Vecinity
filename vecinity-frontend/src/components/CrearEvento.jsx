@@ -21,7 +21,7 @@ function CrearEvento({ token }) {
             const payload = JSON.parse(atob(base64Payload));
             return payload.sub;
         } catch (error) {
-            console.error('Error decodificando token:', error);
+            /* console.error('Error decodificando token:', error); */
             return null;
         }
     };
@@ -116,7 +116,7 @@ function CrearEvento({ token }) {
             toast.success('¡Evento creado exitosamente!');
             navigate('/eventos');
         } catch (error) {
-            console.error('Error al crear evento:', error);
+            /* console.error('Error al crear evento:', error); */
             toast.error(`Error: ${error.message}`);
         } finally {
             setLoading(false);

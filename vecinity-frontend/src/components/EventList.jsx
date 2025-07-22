@@ -48,7 +48,7 @@ function EventList({ user, token }) {
               }
               return evento;
             } catch (err) {
-              console.error(`Error al obtener imágenes para evento ${evento.id}:`, err);
+              /* console.error(`Error al obtener imágenes para evento ${evento.id}:`, err); */
               return evento;
             }
           })
@@ -79,7 +79,7 @@ function EventList({ user, token }) {
         setJoinedEvents(ids);
       })
       .catch(err => {
-        console.error(err);
+        /* console.error(err); */
         // No interrumpir la app solo por este error
       });
   }, [token, user]);
@@ -187,7 +187,7 @@ function EventList({ user, token }) {
         Crear Evento
       </button>
 
-      {console.log(user)}
+      {/* {console.log(user)} */}
 
       <ul className="event__list">
         {filteredItems.map(item => (

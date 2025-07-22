@@ -152,4 +152,14 @@ public class EventRegistrationController {
         return ResponseEntity.ok(exists);
     }
 
+    @GetMapping("/count/event/{eventId}")
+    public ResponseEntity<Long> countByEvent(@PathVariable Long eventId) {
+        Optional<Event> event = eventService.findById(eventId);
+        if (event.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        long count = eventRegistrationService.countByEvento(event.get());
+        return ResponseEntity.ok(count);
+    }
+
 }

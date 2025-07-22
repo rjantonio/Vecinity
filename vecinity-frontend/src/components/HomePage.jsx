@@ -40,7 +40,7 @@ function HomePage({ user, token }) {
               }
               return evento;
             } catch (err) {
-              console.error(`Error al obtener imágenes para evento ${evento.id}:`, err);
+              /* console.error(`Error al obtener imágenes para evento ${evento.id}:`, err); */
               return evento;
             }
           })

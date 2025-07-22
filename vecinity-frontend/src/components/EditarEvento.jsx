@@ -53,7 +53,7 @@ function Editarevento({ token }) {
       })
       .then(async data => {
         setEventoOriginal(data);
-        console.log(data);
+        /* console.log(data); */
         
         // Obtener imágenes del evento usando el mismo método que EventList
         let imagenesFormateadas = [];
@@ -69,7 +69,7 @@ function Editarevento({ token }) {
             imagenesFormateadas = imagenes.map(img => `${img.imagenBase64}`);
           }
         } catch (err) {
-          console.error(`Error al obtener imágenes para evento ${id}:`, err);
+          /* console.error(`Error al obtener imágenes para evento ${id}:`, err); */
           // Si falla, usar las imágenes del evento original si existen
           imagenesFormateadas = data.imagenes ? data.imagenes.map(formatearImagen) : [];
         }
@@ -166,12 +166,12 @@ function Editarevento({ token }) {
       }
 
       const result = await response.json();
-      console.log('Evento actualizado:', result);
+      /* console.log('Evento actualizado:', result); */
       setModoEdicion(false);
       toast.success('Evento actualizado correctamente');
       navigate(`/event/${id}`);
     } catch (error) {
-      console.error('Error al actualizar evento:', error);
+      /* console.error('Error al actualizar evento:', error); */
       setError(error.message);
       toast.error(`Error al actualizar el evento: ${error.message}`);
     } finally {
@@ -197,12 +197,12 @@ function Editarevento({ token }) {
           throw new Error(`Error al eliminar el evento: ${response.status}`);
         }
 
-        console.log('Evento eliminado correctamente');
+        /* console.log('Evento eliminado correctamente'); */
         setEventoEliminado(true);
         toast.success('Evento eliminado correctamente');
         navigate('/');
       } catch (error) {
-        console.error('Error al eliminar evento:', error);
+        /* console.error('Error al eliminar evento:', error); */
         setError(error.message);
         toast.error('Error al eliminar el evento: ' + error.message);
       } finally {
@@ -232,7 +232,7 @@ function Editarevento({ token }) {
           });
         })
         .catch(err => {
-          console.error('Error al recargar imágenes:', err);
+          /* console.error('Error al recargar imágenes:', err); */
           // Fallback a las imágenes originales
           const imagenesFormateadas = eventoOriginal.imagenes ? eventoOriginal.imagenes.map(formatearImagen) : [];
           setFormData({

@@ -27,4 +27,6 @@ public interface EventRegistrationRepository extends JpaRepository<EventRegistra
     boolean existsByUsuarioAndEvento(User usuario, Event evento);
 
     void deleteByUsuarioAndEvento(User usuario, Event evento);
+
+    long countByEvento(Event event);
 }

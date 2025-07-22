@@ -21,7 +21,7 @@ function Login() {
       // 2. Obtener token de Firebase para autorización backend
       const token = await user.getIdToken();
 
-      console.log(user);
+      /* console.log(user); */
 
       // 3. Llamar backend para crear/actualizar usuario en MySQL
       await fetch("http://localhost:8080/user", {

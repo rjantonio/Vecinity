@@ -112,4 +112,9 @@ public class EventRegistrationService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public long countByEvento(Event event) {
+        return eventRegistrationRepository.countByEvento(event);
+    }
+
 }

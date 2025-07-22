@@ -33,7 +33,7 @@ function Profile() {
           setTemp(snap.data());
         }
       } catch (error) {
-        console.error("Error loading profile:", error);
+        /* console.error("Error loading profile:", error); */
       }
       setLoading(false);
     };
@@ -73,7 +73,7 @@ function Profile() {
         setEventosInscritos(eventosData);
 
       } catch (err) {
-        console.error("Error cargando eventos inscritos:", err);
+        /* console.error("Error cargando eventos inscritos:", err); */
       } finally {
         setLoadingEventos(false);
       }

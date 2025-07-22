@@ -49,7 +49,7 @@ function MainScreen() {
   
   // Manejador para cuando el video ha cargado
   const handleVideoLoad = () => {
-    console.log("Video cargado correctamente");
+    /* console.log("Video cargado correctamente"); */
     setVideoLoaded(true);
   };
 
@@ -59,7 +59,7 @@ function MainScreen() {
       user.getIdToken()
         .then(setToken)
         .catch(error => {
-          console.error("Error al obtener token:", error);
+          /* console.error("Error al obtener token:", error); */
         });
     } else {
       setToken(null);
