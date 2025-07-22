@@ -53,7 +53,6 @@ function HomePage({ user, token }) {
 
   return (
     <>
-      <div className="about-section">
         <h2 className="about-title">Sobre nosotros</h2>
         <div className="about-content">
           <p className="about-text">
@@ -82,7 +81,6 @@ function HomePage({ user, token }) {
             la colaboración y el bienestar social.
           </p>
         </div>
-      </div>
       
       <div className="eventos-ejemplo">
         <h3 className="eventos-ejemplo-titulo">Eventos Destacados</h3>
