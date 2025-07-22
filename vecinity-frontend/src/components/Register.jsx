@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 
 function Register({ onBack }) {
   const navigate = useNavigate();
-  const { register, login } = useAuth(); // <-- agrega login aquí
+  const { register, login } = useAuth();
   const [form, setForm] = useState({
     nombre: "",
     foto: "",
@@ -14,6 +14,24 @@ function Register({ onBack }) {
   });
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
+
+  // Función para validar contraseña
+  const validarContrasena = (password) => {
+    const errors = [];
+    
+    if (password.length < 8) {
+      errors.push("La contraseña debe tener al menos 8 caracteres");
+    }
+    
+    if (!/[A-Z]/.test(password)) {
+      errors.push("La contraseña debe tener al menos una letra mayúscula");
+    }
+    
+    return {
+      isValid: errors.length === 0,
+      errors: errors
+    };
+  };
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -32,15 +50,42 @@ function Register({ onBack }) {
         ...f,
         [name]: value
       }));
+      
+      // Validar contraseña en tiempo real
+      if (name === 'password') {
+        const validation = validarContrasena(value);
+        if (!validation.isValid) {
+          setErrors(prev => ({
+            ...prev,
+            password: validation.errors.join(', ')
+          }));
+        } else {
+          setErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors.password;
+            return newErrors;
+          });
+        }
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
+    
     if (!form.nombre) newErrors.nombre = "El nombre es obligatorio";
     if (!form.email) newErrors.email = "El correo es obligatorio";
     if (!form.password) newErrors.password = "La contraseña es obligatoria";
+    
+    // Validar contraseña antes de enviar
+    if (form.password) {
+      const passwordValidation = validarContrasena(form.password);
+      if (!passwordValidation.isValid) {
+        newErrors.password = passwordValidation.errors.join(', ');
+      }
+    }
+    
     setErrors(newErrors);
     
     if (Object.keys(newErrors).length === 0) {
@@ -61,7 +106,7 @@ function Register({ onBack }) {
             })
           });
           // Login automático
-          await login(form.email, form.password); // <--- LOGIN AUTOMÁTICO
+          await login(form.email, form.password);
           setMessage("¡Registro exitoso! Redirigiendo a inicio...");
           setTimeout(() => navigate("/"), 1500);
         }
@@ -84,6 +129,7 @@ function Register({ onBack }) {
           onChange={handleChange}
         />
         {errors.nombre && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.nombre}</span>}
+        
         <input
           className="input"
           type="file"
@@ -91,6 +137,7 @@ function Register({ onBack }) {
           accept="image/*"
           onChange={handleChange}
         />
+        
         <input
           className="input"
           type="email"
@@ -100,6 +147,7 @@ function Register({ onBack }) {
           onChange={handleChange}
         />
         {errors.email && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.email}</span>}
+        
         <input
           className="input"
           type="password"
@@ -109,6 +157,14 @@ function Register({ onBack }) {
           onChange={handleChange}
         />
         {errors.password && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.password}</span>}
+        
+        {/* Mostrar requisitos de contraseña */}
+        <div style={{ fontSize: "0.8em", color: "#666", marginTop: "5px", marginBottom: "10px" }}>
+          Requisitos de contraseña:
+          <div>• Mínimo 8 caracteres</div>
+          <div>• Al menos una letra mayúscula</div>
+        </div>
+        
         <button className="btn__submit" type="submit">
           Registrarse
         </button>
@@ -124,4 +180,5 @@ function Register({ onBack }) {
     </div>
   );
 }
+
 export default Register;
